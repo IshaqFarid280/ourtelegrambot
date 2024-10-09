@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "530545209911",
+    "project_id": "telegrambot-dbb20",
+    "storage_bucket": "telegrambot-dbb20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530545209911:android:48dd138f6ea793d54c45b2",
+        "android_client_info": {
+          "package_name": "com.ourteelgrambotapi.ourtelegrambot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA_t8wD5PlutXhnMLEzFFXIYZtqFYHBgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
