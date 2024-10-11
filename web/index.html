@@ -1,6 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>InfoHawk</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    function initTelegramWebApp() {
+      if (window.Telegram) {
+        Telegram.WebApp.ready();
+        return Telegram.WebApp.initDataUnsafe;
+      }
+      return null;
+    }
+
+    function sendTelegramData(data) {
+      if (window.Telegram) {
+        Telegram.WebApp.sendData(data);
+      }
+    }
+
+    function setMainButton(text, isVisible) {
+      if (window.Telegram) {
+        Telegram.WebApp.MainButton.setText(text);
+        if (isVisible) {
+          Telegram.WebApp.MainButton.show();
+        } else {
+          Telegram.WebApp.MainButton.hide();
+        }
+      }
+    }
+  </script>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -29,10 +57,31 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>ourtelegrambot</title>
+  <title>foruai_mini_app</title>
   <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+<script>
+  window.addEventListener('load', function(ev) {
+    // Download main.dart.js
+    _flutter.loader.loadEntrypoint({
+      serviceWorker: {
+        serviceWorkerVersion: serviceWorkerVersion,
+      },
+      onEntrypointLoaded: function(engineInitializer) {
+        engineInitializer.initializeEngine().then(function(appRunner) {
+          appRunner.runApp();
+        });
+      }
+    });
+  });
+</script>
 </body>
 </html>
