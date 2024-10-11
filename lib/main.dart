@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 
 void main() {
   runApp( ExpeditionToTheMoonApp());
+  Get.put(CoinController());
+  Get.put(TelegramController());
 }
 
 class ExpeditionToTheMoonApp extends StatelessWidget {
@@ -14,7 +16,7 @@ class ExpeditionToTheMoonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Expedition to the Moon',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),

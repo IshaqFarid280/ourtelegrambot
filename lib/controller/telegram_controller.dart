@@ -24,17 +24,14 @@ class TelegramController extends GetxController {
 
   // Function to initialize the Telegram WebApp
   static Map<String, dynamic>? initTelegramWebApp() {
-    if (js.context['initTelegramWebApp'] != null) {
-      final result = js.context.callMethod('initTelegramWebApp');
-      debugPrint("result: $result");
-      if (result != null) {
-        // Convert JsObject to JSON string and then parse it to a Map
-        String jsonString = js.context['JSON'].callMethod('stringify', [result]);
-        return jsonDecode(jsonString);
-      }
-    } else {
-      debugPrint("initTelegramWebApp is not defined.");
+    final result = js.context.callMethod('initTelegramWebApp');
+    debugPrint("result: $result");
+    if (result != null) {
+      // Convert JsObject to JSON string and then parse it to a Map
+      String jsonString = js.context['JSON'].callMethod('stringify', [result]);
+      return jsonDecode(jsonString);
     }
+
     return null;
   }
 
