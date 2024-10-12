@@ -35,6 +35,8 @@ dependencies:
   js: ^0.7.1
   shake_detector: ^0.1.2
   firedart:
+  firebase_core:
+  cloud_firestore:
 
 
 

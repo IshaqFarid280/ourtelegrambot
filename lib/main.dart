@@ -1,14 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/views/adventure_tab.dart';
 import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
+import 'package:ourtelegrambot/views/upgrades_tab.dart';
 
-void main() {
-  runApp( ExpeditionToTheMoonApp());
-  Get.put(CoinController());
-  Get.put(TelegramController());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+        apiKey: "AIzaSyBU4j3TedSqjR2lIlRIIam-kx5PMERfiHg",
+        authDomain: "telegrambot-dbb20.firebaseapp.com",
+        projectId: "telegrambot-dbb20",
+        storageBucket: "telegrambot-dbb20.appspot.com",
+        messagingSenderId: "530545209911",
+        appId: "1:530545209911:web:226956ff9690294d4c45b2"
+    ),
+  );
+  runApp(ExpeditionToTheMoonApp());
 }
 
 class ExpeditionToTheMoonApp extends StatelessWidget {
@@ -44,9 +55,9 @@ class HomeScreenState extends State<HomeScreen> {
     _widgetOptions = <Widget>[
       HomeTab(),
       const AdventureTab(),
+      UserAttributesScreen(),
       const Text('Earn Tab - Coming Soon'),
       const Text('Friend Tab - Coming Soon'),
-      const Text('Airdrop Tab - Coming Soon'),
     ];
   }
 
@@ -62,10 +73,6 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 20,
-        // title: Text(
-        //   'Expedition to the Moon',
-        //   style: TextStyle(fontSize: 18),
-        // ),
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -79,16 +86,16 @@ class HomeScreenState extends State<HomeScreen> {
             label: 'Adventure',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.upgrade),
+            label: 'Improve',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on),
             label: 'Earn',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            label: 'Friend',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.airplanemode_active),
-            label: 'Airdrop',
+            label: 'Friends',
           ),
         ],
         currentIndex: _selectedIndex,
