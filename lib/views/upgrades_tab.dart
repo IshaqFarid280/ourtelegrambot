@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/controller/upgradesCotroller.dart';
 import 'package:ourtelegrambot/serivices/firebase_services.dart';
 
@@ -8,11 +9,10 @@ class UserAttributesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var upgradesController = Get.put(UpgradesController());
-    String userId = '6080705595';
     return Scaffold(
       appBar: AppBar(title: Text('User Attributes')),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseServices.getUserData(userId: userId),
+        stream: FirebaseServices.getUserData(userId: userTelegramId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -32,7 +32,7 @@ class UserAttributesScreen extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
-                    upgradesController.upgradeAttribute(userId, 'tap_per_earn',context);
+                    upgradesController.upgradeAttribute(userTelegramId.toString(), 'tap_per_earn',context);
                   },
                 ),
                 Divider(),
@@ -48,7 +48,7 @@ class UserAttributesScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      upgradesController.upgradeAttribute(userId, 'hp',context);
+                      upgradesController.upgradeAttribute(userData.toString(), 'hp',context);
                     }),
                 Divider(),
                 ListTile(
@@ -64,8 +64,7 @@ class UserAttributesScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      upgradesController.upgradeAttribute(
-                          userId, 'coin_per_second',context);
+                      upgradesController.upgradeAttribute(userTelegramId.toString(), 'coin_per_second',context);
                     }),
               ],
             );

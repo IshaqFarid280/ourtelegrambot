@@ -10,7 +10,7 @@ import 'package:ourtelegrambot/views/upgrades_tab.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: FirebaseOptions(
+    options: const  FirebaseOptions(
         apiKey: "AIzaSyBU4j3TedSqjR2lIlRIIam-kx5PMERfiHg",
         authDomain: "telegrambot-dbb20.firebaseapp.com",
         projectId: "telegrambot-dbb20",
@@ -86,7 +86,7 @@ class HomeScreenState extends State<HomeScreen> {
             label: 'Adventure',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.upgrade),
+            icon: Icon(Icons.self_improvement_outlined),
             label: 'Improve',
           ),
           BottomNavigationBarItem(

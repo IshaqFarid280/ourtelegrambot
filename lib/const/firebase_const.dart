@@ -5,7 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
 // user const
-String ? userId ;
+
+String ? userTelegramId ;
 
 // user collection
 String user = 'users';

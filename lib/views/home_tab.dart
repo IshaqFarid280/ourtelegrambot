@@ -16,10 +16,10 @@ class HomeTab extends GetView<CoinController> {
     return GetBuilder<CoinController>(
       builder: (coinController) => ShakeDetectWrap(
         onShake: () {
-          coinController.increaseCoins(userId: userId.toString(), context: context);
+          coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
         },
         child: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseServices.getUserData(userId: userId.toString()),
+          stream: FirebaseServices.getUserData(userId: userTelegramId.toString()),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -29,7 +29,7 @@ class HomeTab extends GetView<CoinController> {
               coinController.earnPerTap.value = userData['tap_per_earn']['value'];
               coinController.coinPerSecond.value = userData['coin_per_second']['value'];
               coinController.hpCurrentValue.value = userData['hp']['value'];
-              coinController.makeCoinPerSecond(userId: userId.toString(), context: context);
+              coinController.makeCoinPerSecond(userId: userTelegramId.toString(), context: context);
               return Column(
                 children: <Widget>[
                   Padding(
@@ -113,7 +113,7 @@ class HomeTab extends GetView<CoinController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      coinController.increaseCoins(userId: userId.toString(), context: context);
+                      coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
                     },
                     child: AnimatedContainer(
                       duration: const Duration(seconds: 1),
@@ -143,7 +143,7 @@ class HomeTab extends GetView<CoinController> {
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
-                            coinController.buyHp(userId: userId.toString(), context: context);
+                            coinController.buyHp(userId: userTelegramId.toString(), context: context);
                           },
                           child: Text(
                               '${'Buy HP (-${coinController.upgradeCost}'} coins)'),

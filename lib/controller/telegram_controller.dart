@@ -19,15 +19,15 @@ class TelegramController extends GetxController {
       debugPrint('Telegram Data: $telegramData');
       var userId = telegramData?['user']?['id'].toString();
       var username = telegramData?['user']?['username'] ?? 'Unknown';
-      userId = userId ;
       if (userId != null) {
-        userId = userId ;
+        userTelegramId = userId ;
+        print(userTelegramId);
         saveUserData(userId: userId, userName: username);
       }
       userId = userId ;
     } else {
-      userId = '6080705595';
-      print(userId);
+      userTelegramId = '6080705595';
+      print(userTelegramId);
       debugPrint('Telegram data is null.');
     }
     update();
