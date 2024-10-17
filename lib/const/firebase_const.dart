@@ -14,3 +14,6 @@ String user = 'users';
 // daily tasks
 String dailyTasks = 'dailyTasks';
 
+// all tasks
+String allTasks = 'allTasks';
+

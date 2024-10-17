@@ -27,8 +27,6 @@ class TelegramController extends GetxController {
       userId = userId ;
     } else {
       userTelegramId = '6080705595';
-      print(userTelegramId);
-      debugPrint('Telegram data is null.');
     }
     update();
   }
@@ -65,7 +63,6 @@ class TelegramController extends GetxController {
       'user_name': userName,
       'user_id': userId,
       'coins': 500,
-      'energies':500,
       'tap_per_earn': {
         'level': 1,
         'value': 1,
@@ -93,7 +90,16 @@ class TelegramController extends GetxController {
           240000, 250000, 270000, 290000, 295000, 300000, 300000, 300000,
           300000, 300000, 300000
         ]
-      }
+      },
+      'energies': {
+        'level': 1,
+        'value': 500,
+        'costs': [
+          0, 1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
+          240000, 250000, 270000, 290000, 295000, 300000, 300000, 300000,
+          300000, 300000, 300000
+        ]
+      },
     });
   }
 }

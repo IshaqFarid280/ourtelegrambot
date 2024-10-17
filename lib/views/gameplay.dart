@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:get/get.dart';
 
@@ -46,6 +47,7 @@ class _GameScreenState extends State<GameScreen>
           obstacleSize = Random().nextDouble() * 100 + 20;
           // score++;
           coinController.coins.value += 100;
+          coinController.increaseCoinsInGame(userId: userTelegramId.toString(), context: context);
         } else {
           obstacleX -= 0.05;
         }
@@ -99,10 +101,10 @@ class _GameScreenState extends State<GameScreen>
       gameStarted = false;
       time = 0;
       // score = 0;
-
-      coinController.spaceshipLevel.value -= 1;
+      coinController.totalHp.value -= 1;
       obstacleX = 2;
       obstacleSize = 50;
+      coinController.consumeHpInGame(userId: userTelegramId.toString(), context: context);
     });
   }
 
@@ -195,7 +197,7 @@ class _GameScreenState extends State<GameScreen>
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      coinController.spaceshipLevel.value
+                                      coinController.totalHp.value
                                           .toString(),
                                       style: const TextStyle(
                                           fontSize: 16, color: Colors.white),

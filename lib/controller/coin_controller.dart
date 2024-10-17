@@ -12,10 +12,11 @@ class CoinController extends GetxController {
   var earnPerTap = 0.obs;
   var hpCurrentValue = 0.obs;
   var coinPerSecond = 0.obs;
+  var totalHp = 0.obs;
   var spaceshipLevel = 0.obs;
-  int upgradeCost = 5;
-  bool _isTimerRunning = false; // Track if timer is already running
-  Timer? _timer; // Store the Timer instance
+  int upgradeCost = 50;
+  bool _isTimerRunning = false;
+  Timer? _timer;
 
   String formatCoins(int coins) {
     if (coins >= 1000000000) {
@@ -45,12 +46,50 @@ class CoinController extends GetxController {
    }
   }
 
+  increaseCoinsInGame({required String userId, required BuildContext context}) async {
+    try{
+      var data = fireStore.collection(user).doc(userId);
+      await data.update({
+        'coins':FieldValue.increment(100),
+      });
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong'),
+        ),
+      );
+    }
+  }
+
+  consumeEnergies({required String userId, required BuildContext context}) async {
+    try {
+      if (coins.value >= 0) { // Ensure user has at least 5 coins
+        var data = fireStore.collection(user).doc(userId);
+        await data.update({
+          'energies.value': FieldValue.increment(-1),
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your energies are low'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong'),
+        ),
+      );
+    }
+  }
+
   buyHp({required String userId, required BuildContext context}) async {
     try {
       if (coins.value >= 5) { // Ensure user has at least 5 coins
         var data = fireStore.collection(user).doc(userId);
         await data.update({
-          'coins': FieldValue.increment(-5), // Deduct 5 coins
+          'coins': FieldValue.increment(-50), // Deduct 5 coins
           'hp.total_hp': FieldValue.increment(hpCurrentValue.value),
         });
       } else {
@@ -95,6 +134,21 @@ class CoinController extends GetxController {
         ),
       );
       _isTimerRunning = false; // Reset the flag in case of an exception
+    }
+  }
+
+  consumeHpInGame({required String userId, required BuildContext context}) async {
+    try {
+        var data = fireStore.collection(user).doc(userId);
+        await data.update({
+          'hp.total_hp': FieldValue.increment(-1),
+        });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong'),
+        ),
+      );
     }
   }
 

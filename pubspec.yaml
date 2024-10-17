@@ -37,6 +37,7 @@ dependencies:
   firedart:
   firebase_core:
   cloud_firestore:
+  url_launcher:
 
 
 

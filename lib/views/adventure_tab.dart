@@ -15,25 +15,25 @@ class AdventureTab extends StatefulWidget {
 class _AdventureTabState extends State<AdventureTab> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CoinController>(builder: (controller) {
-      if (controller.spaceshipLevel.value < 1) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/broken.jpg",
-                width: 200,
-                height: 200,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                  "Your spaceship not ready to ship!\nMinimum HP is 5 to play this game.")
-            ],
-          ),
-        );
-      }
-      return const GameScreen();
-    });
+    var coinController = Get.put(CoinController());
+    return Obx(
+        ()=> coinController.totalHp.value < 5 ?
+        Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/broken.jpg",
+                  width: 200,
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                    "Your spaceship not ready to ship!\nMinimum HP is 5 to play this game.")
+              ],
+            ),
+          ):
+         const GameScreen(),
+    );
   }
 }

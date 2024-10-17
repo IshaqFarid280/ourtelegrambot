@@ -63,6 +63,9 @@ class UpgradesController extends GetxController {
       case 'coin_per_second':
       // For coin_per_second, the value increases by 5 for each level
         return (level == 1) ? 5 : (calculateNewValue(attribute, level - 1) + 5); // Add 5 to the previous value
+      case 'energies':
+      // For energy, the value increases by 1000 with each level
+        return (level == 1) ? 250 : (calculateNewValue(attribute, level - 1) + 250); // Add 1000 to the previous value
       default:
         return 1; // Default case
     }

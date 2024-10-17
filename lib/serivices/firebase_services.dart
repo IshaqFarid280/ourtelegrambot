@@ -6,4 +6,10 @@ class FirebaseServices {
     return fireStore.collection(user).doc(userId).snapshots();
   }
 
+  static showDailyTasks(){
+    return fireStore.collection(dailyTasks).snapshots();
+  }
+
+
+
 }
