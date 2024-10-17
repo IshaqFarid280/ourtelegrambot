@@ -98,8 +98,6 @@ class _GameScreenState extends State<GameScreen>
       birdY = 0;
       gameStarted = false;
       time = 0;
-      // score = 0;
-
       coinController.spaceshipLevel.value -= 1;
       obstacleX = 2;
       obstacleSize = 50;
