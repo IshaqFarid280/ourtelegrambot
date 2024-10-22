@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/widgets/Rounder_buttons.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 
 class EraserGameScreen extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class EraserGameScreen extends StatefulWidget {
 
 class _EraserGameScreenState extends State<EraserGameScreen> {
   static const int gridSize = 4;
+
   final List<String> images = [
     'assets/infohawks.png',
     'assets/infohawks.png',
@@ -25,6 +27,7 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
     'assets/infohawks.png',
     'assets/infohawks.png',
   ];
+
   List<String> shuffledImages = [];
   List<bool> isVisible = [];
 
@@ -51,12 +54,29 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
     });
   }
 
-  Future<void> sendTelegramInvite(String chatId, String inviteLink, String botToken) async {
-    final messageText = '''Check out our web app! 
-      Title: InfoHawk
-        Description: A platform to explore exciting features and tools. Join us and start your journey!
-          $inviteLink
-          ''';
+  void shareInviteLink(String inviteLink) {
+    final messageText = '''
+Check out our web app! 
+Title: InfoHawk 
+Description: A platform to explore exciting features and tools. 
+Join us and start your journey! 
+$inviteLink
+''';
+
+    final uri = Uri.encodeFull(
+        'https://t.me/share/url?url=$inviteLink&text=$messageText');
+    launch(uri); // Open the URL in Telegram
+  }
+
+  Future<void> sendTelegramInvite(
+      String chatId, String inviteLink, String botToken) async {
+    final messageText = '''
+Check out our web app! 
+Title: InfoHawk 
+Description: A platform to explore exciting features and tools. 
+Join us and start your journey! 
+$inviteLink
+''';
 
     try {
       // Sending the invite message with an image and a button
@@ -65,7 +85,8 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "chat_id": chatId,
-          "photo": "assets/infohawks.png",
+          "photo":
+              "assets/infohawks.png", // Replace with a valid URL for the photo
           "caption": messageText,
           "reply_markup": jsonEncode({
             "inline_keyboard": [
@@ -119,14 +140,19 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
                     onTap: () {
                       print(controller.name.value);
                       print(controller.userId.value);
-                      var encodedUsername = Uri.encodeComponent(controller.name.value);
-                      final inviteLink = 'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
+                      var encodedUsername =
+                          Uri.encodeComponent(controller.name.value);
+                      final inviteLink =
+                          'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
                       controller.copyToClipboard(inviteLink, context);
 
-                      // Send the invite message to Telegram
-                      sendTelegramInvite('CHAT_ID_HERE', inviteLink, 'YOUR_BOT_TOKEN_HERE');
+                      // Option 1: Open Telegram share link
+                      shareInviteLink(inviteLink);
+
+                      // Option 2: Send the invite message to Telegram using the bot
+                      // sendTelegramInvite(controller.userId.value, inviteLink, 'YOUR_BOT_TOKEN_HERE');
                     },
-                    imagePath: '',
+                    imagePath: 'assets/infohawks.png',
                   ),
                 ],
               );
@@ -162,7 +188,8 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
                   child: AnimatedOpacity(
                     opacity: isVisible[index] ? 1.0 : 0.0,
                     duration: Duration(milliseconds: 200),
-                    child: Image.asset(shuffledImages[index]), // Using Image.asset for local assets
+                    child: Image.asset(shuffledImages[
+                        index]), // Using Image.asset for local assets
                   ),
                 );
               },
