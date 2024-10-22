@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/views/adventure_tab.dart';
-import 'package:ourtelegrambot/views/all_games/All_Games.dart';
+import 'package:ourtelegrambot/views/send_invite_screen.dart';
 import 'package:ourtelegrambot/views/earn_taks_screen.dart';
 import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
@@ -56,10 +56,10 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _widgetOptions = <Widget>[
       HomeTab(),
-      AllGames(),
+      const AdventureTab(),
       UserAttributesScreen(),
       TaskListScreen(),
-      const Text('Friend Tab - Coming Soon'),
+      EraserGameScreen()
     ];
   }
 

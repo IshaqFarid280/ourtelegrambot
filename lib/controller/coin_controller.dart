@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../const/firebase_const.dart';
@@ -17,6 +20,8 @@ class CoinController extends GetxController {
   int upgradeCost = 50;
   bool _isTimerRunning = false;
   Timer? _timer;
+
+
 
   String formatCoins(int coins) {
     if (coins >= 1000000000) {

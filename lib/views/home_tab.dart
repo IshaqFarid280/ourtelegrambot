@@ -24,7 +24,9 @@ class HomeTab extends GetView<CoinController> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
-            }else if(snapshot.hasData){
+            }
+            else if(snapshot.hasData)
+            {
               var userData = snapshot.data!.data() as Map<String, dynamic>;
               coinController.coins.value = userData['coins'];
               coinController.earnPerTap.value = userData['tap_per_earn']['value'];
@@ -173,7 +175,8 @@ class HomeTab extends GetView<CoinController> {
                   ],
                 ),
               );
-            }else{
+            }
+            else{
               return Text('Something went wrong');
             }
           },
