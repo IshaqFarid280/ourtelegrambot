@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
-import 'package:ourtelegrambot/views/gameplay.dart';
+import 'package:ourtelegrambot/views/all_games/gameplay.dart';
 import 'package:get/get.dart';
 
 class AdventureTab extends StatefulWidget {

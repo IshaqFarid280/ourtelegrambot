@@ -19,6 +19,11 @@ class TasksController extends GetxController {
         'completed': FieldValue.arrayUnion([
           userId
         ]),
+      }).then((value){
+        var data = fireStore.collection(user).doc(userId);
+        data.update({
+          'coins':FieldValue.increment(100),
+        });
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

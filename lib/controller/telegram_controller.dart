@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'dart:js' as js;
@@ -100,6 +101,7 @@ class TelegramController extends GetxController {
           300000, 300000, 300000
         ]
       },
+      'total_referrals':FieldValue.arrayUnion([]),
     });
   }
 }
