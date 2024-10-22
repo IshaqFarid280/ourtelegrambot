@@ -48,7 +48,7 @@ class UserAttributesScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      upgradesController.upgradeAttribute(userData.toString(), 'hp',context);
+                      upgradesController.upgradeAttribute(userTelegramId.toString(), 'hp',context);
                     }),
                 Divider(),
                 ListTile(
@@ -65,6 +65,22 @@ class UserAttributesScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       upgradesController.upgradeAttribute(userTelegramId.toString(), 'coin_per_second',context);
+                    }),
+                Divider(),
+                ListTile(
+                    title: Text('Energies'),
+                    subtitle:
+                    Text('Level: ${userData['energies']['level']}'),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('${userData['energies']['value']}'),
+                        Text(
+                            'Cost: ${userData['energies']['costs'][userData['energies']['level']]}'),
+                      ],
+                    ),
+                    onTap: () {
+                      upgradesController.upgradeAttribute(userTelegramId.toString(), 'energies',context);
                     }),
               ],
             );

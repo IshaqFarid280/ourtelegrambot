@@ -6,11 +6,14 @@ FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
 // user const
 
-String ? userTelegramId ;
+String ?  userTelegramId ;
 
 // user collection
 String user = 'users';
 
 // daily tasks
 String dailyTasks = 'dailyTasks';
+
+// all tasks
+String allTasks = 'allTasks';
 

@@ -37,6 +37,9 @@ dependencies:
   firedart:
   firebase_core:
   cloud_firestore:
+  url_launcher:
+  uni_links:
+  clipboard:
 
 
 
