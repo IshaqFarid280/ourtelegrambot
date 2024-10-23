@@ -18,12 +18,13 @@ class SpinWheelController extends GetxController {
   }
 
   // Update this function to increment the prize amount
-  increaseCoinsInGame({required String userId, required BuildContext context}) async {
+  Future<void> increaseCoinsInGame({required String userId, required BuildContext context}) async {
     try {
       int prizeAmount = int.parse(selectedItem.value);
       var data = fireStore.collection(user).doc(userId);
       await data.update({
         'coins': FieldValue.increment(prizeAmount),
+        'lastSpinTime': FieldValue.serverTimestamp(), // Update last spin time
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,34 +35,56 @@ class SpinWheelController extends GetxController {
     }
   }
 
-  void spinWheel(String userId, BuildContext context) {
-    final randomIndex = getRandomIndexBasedOnWeights();
-    selected.add(randomIndex);
-    selectedItem.value = items[randomIndex];
+  Future<bool> canSpinWheel(String userId) async {
+    var userDoc = await fireStore.collection(user).doc(userId).get();
+    if (userDoc.exists && userDoc.data() != null) {
+      Timestamp? lastSpin = userDoc['lastSpinTime'] as Timestamp?;
+      if (lastSpin != null) {
+        DateTime lastSpinDateTime = lastSpin.toDate();
+        DateTime now = DateTime.now();
+        return now.isAfter(lastSpinDateTime.add(Duration(hours: 24)));
+      }
+    }
+    return true; // Allow spin if no record exists
+  }
 
-    // Call the function to increment coins
-    increaseCoinsInGame(userId: userId, context: context);
+  Future<void> spinWheel(String userId, BuildContext context) async {
+    bool canSpin = await canSpinWheel(userId);
+    if (canSpin) {
+      final randomIndex = getRandomIndexBasedOnWeights();
+      selected.add(randomIndex);
+      selectedItem.value = items[randomIndex];
+      // Call the function to increment coins
+      await increaseCoinsInGame(userId: userId, context: context);
+      // Show a message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('You earned ${selectedItem.value} coins!'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You can spin again in 24 hours.'),
+        ),
+      );
+    }
   }
 
   int getRandomIndexBasedOnWeights() {
     final List<double> weights = [80.0, 40.0, 40.0, 20.0, 0.5]; // Cumulative weights (percent)
     final List<double> cumulativeWeights = [];
     double totalWeight = 0.0;
-
     for (var weight in weights) {
       totalWeight += weight;
       cumulativeWeights.add(totalWeight);
     }
-
     final randomValue = Random().nextDouble() * totalWeight;
-
     for (int i = 0; i < cumulativeWeights.length; i++) {
       if (randomValue < cumulativeWeights[i]) {
         return i; // Return the index of the selected item
       }
     }
-
     return 0; // Fallback (should not happen)
   }
 }
-

@@ -62,16 +62,20 @@ class _SlotMachineScreenState extends State<SlotMachineScreen> {
                 children: List.generate(3, (i) => buildStopButton(i)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Background color for START button
+            InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => _controller.start(userId: userTelegramId.toString(), context: context),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.green,
                 ),
-                child: Text('START'),
-                onPressed: () => _controller.start(userId: userTelegramId.toString(), context: context),
+                alignment: Alignment.center,
+                height: MediaQuery.sizeOf(context).height * 0.055,
+                width: MediaQuery.sizeOf(context).width * 0.15,
+                child:  Text('START'),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -79,18 +83,19 @@ class _SlotMachineScreenState extends State<SlotMachineScreen> {
   }
 
   Widget buildStopButton(int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: SizedBox(
-        width: 72,
-        height: 44,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red, // Background color for STOP buttons
-          ),
-          child: Text('STOP ${index + 1}'),
-          onPressed: () => _controller.stop(index,context),
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () => _controller.stop(index,context),
+      child: Container(
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.orange,
         ),
+        alignment: Alignment.center,
+        height: MediaQuery.sizeOf(context).height * 0.05,
+        width: MediaQuery.sizeOf(context).width * 0.15,
+        child:  Text('STOP ${index + 1}'),
       ),
     );
   }

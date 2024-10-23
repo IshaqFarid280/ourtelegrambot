@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:clipboard/clipboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,6 +119,7 @@ class TelegramController extends GetxController {
       'user_name': userName,
       'user_id': userId,
       'coins': 500,
+      'lastSpinTime':FieldValue.serverTimestamp(),
       'tap_per_earn': {
         'level': 1,
         'value': 1,
@@ -146,14 +148,33 @@ class TelegramController extends GetxController {
           300000, 300000, 300000
         ]
       },
-      'energies': {
-        'level': 1,
-        'value': 500,
-        'costs': [
-          0, 1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
-          240000, 250000, 270000, 290000, 295000, 300000, 300000, 300000,
-          300000, 300000, 300000
-        ]
+      "energies": {
+        "level": 1,                   // Represents the user's current level
+        "value": 500,                 // Represents the current energy value
+        "max_energies": 500,
+        "costs": [
+          0,                            // Cost for level 0
+          1000,                         // Cost for level 1
+          5000,                         // Cost for level 2
+          10000,                        // Cost for level 3
+          20000,                        // Cost for level 4
+          40000,                        // Cost for level 5
+          80000,                        // Cost for level 6
+          120000,                       // Cost for level 7
+          160000,                       // Cost for level 8
+          220000,                       // Cost for level 9
+          240000,                       // Cost for level 10
+          250000,                       // Cost for level 11
+          270000,                       // Cost for level 12
+          290000,                       // Cost for level 13
+          295000,                       // Cost for level 14
+          300000,                       // Cost for level 15
+          300000,                       // Cost for level 16
+          300000,                       // Cost for level 17
+          300000,                       // Cost for level 18
+          300000,                       // Cost for level 19
+          300000                        // Cost for level 20
+        ],
       },
     });
   }
