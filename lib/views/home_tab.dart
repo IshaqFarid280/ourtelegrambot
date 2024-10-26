@@ -45,81 +45,28 @@ class HomeTab extends GetView<CoinController> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          GetBuilder<TelegramController>(builder: (telegramController) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    const CircleAvatar(
-                                      backgroundImage: AssetImage('assets/captain.jpg'),
-                                      radius: 30.0,
-                                    ),
-                                    const SizedBox(height: 8.0),
-                                    Text(
-                                      'Capt. ' +
-                                          (telegramController.telegramData?['user']
-                                          ?['username'] ??
-                                              'Unknown'),
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                (telegramController.telegramData != null &&
-                                    telegramController.telegramData!['user'] !=
-                                        null)
-                                    ? Column(
-                                  children: [
-                                    Text(
-                                      telegramController.telegramData?['user']
-                                      ?['first_name'] ??
-                                          'Unknown',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      telegramController.telegramData?['user']
-                                      ?['id']
-                                          .toString() ??
-                                          'Unknown',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                )
-                                    : Container(),
-                              ],
-                            );
-                          }),
-                          const SizedBox(height: 20),
                           Row(
                             children: <Widget>[
                                HudView(
                                 label: 'Earn Per tap: ${userData['tap_per_earn']['value']}',
-                                icon: const Icon(
-                                  Icons.monetization_on,
-                                  color: Colors.grey,
-                                ),
+                                icon: Image.asset(coin,height: 30,width: 30,),
                               ),
                               const SizedBox(width: 8.0),
                               HudView(
                                 label: 'HP ${userData['hp']['total_hp']}',
-                                icon: const Icon(
-                                  Icons.favorite,
-                                  color: Colors.grey,
-                                ),
+                                icon: Image.asset(health,height: 30,width: 30,),
                               ),
                               const SizedBox(width: 8.0),
                                HudView(
                                 label: 'Coin per sec: ${userData['coin_per_second']['value']}',
-                                icon: Icon(
-                                  Icons.monetization_on,
-                                  color: Colors.grey,
-                                ),
+                                icon: Image.asset(coin,height: 30,width: 30,),
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
+                    CustomSized(height: 0.1,),
                     GestureDetector(
                       onTap: () {
                         coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
@@ -135,33 +82,35 @@ class HomeTab extends GetView<CoinController> {
                         ),
                       ),
                     ),
+                    CustomSized(height: 0.05,),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: <Widget>[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Image.asset(coin,height: 40,width: 40,),
-                              const SizedBox(width: 8),
+                              CustomSized(height: 0,width: 0.02,),
                               Text(
                                 'Coins: ${coinController.formatCoins(coinController.coins.value)}',
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          CustomSized(height: 0.05,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                    Image.network(energy,height: 40,width: 40,color: Colors.yellow,),
+                                    Image.network(energy,height: 40,width: 40),
                                     Text('${userData['energies']['value']}',style: TextStyle(color: Colors.white),),
                                 ],
                               ),
-                              CustomSized(width: 0.3,height: 0,),
+                              CustomSized(width: 0.2,height: 0,),
                               ElevatedButton(
                                 onPressed: () {
                                   coinController.buyHp(userId: userTelegramId.toString(), context: context);
