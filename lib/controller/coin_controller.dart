@@ -1,13 +1,8 @@
 import 'dart:async';
-
-import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import '../const/firebase_const.dart';
 
 class CoinController extends GetxController {
@@ -20,8 +15,8 @@ class CoinController extends GetxController {
   int upgradeCost = 50;
   bool _isTimerRunning = false;
   Timer? _timer;
-
-
+  bool _isTimerRunning1 = false;
+  Timer? _timer1;
 
   String formatCoins(int coins) {
     if (coins >= 1000000000) {
@@ -35,20 +30,19 @@ class CoinController extends GetxController {
     }
   }
 
-
   increaseCoins({required String userId, required BuildContext context}) async {
-   try{
-     var data = fireStore.collection(user).doc(userId);
-     await data.update({
-       'coins':FieldValue.increment(earnPerTap.value),
-     });
-   }catch(e){
-     ScaffoldMessenger.of(context).showSnackBar(
-       const SnackBar(
-         content: Text('Something went wrong'),
-       ),
-     );
-   }
+    try{
+      var data = fireStore.collection(user).doc(userId);
+      await data.update({
+        'coins':FieldValue.increment(earnPerTap.value),
+      });
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong'),
+        ),
+      );
+    }
   }
 
   increaseCoinsInGame({required String userId, required BuildContext context}) async {
@@ -134,7 +128,7 @@ class CoinController extends GetxController {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-       const  SnackBar(
+        const  SnackBar(
           content: Text('Something went wrong while starting the timer'),
         ),
       );
@@ -144,10 +138,10 @@ class CoinController extends GetxController {
 
   consumeHpInGame({required String userId, required BuildContext context}) async {
     try {
-        var data = fireStore.collection(user).doc(userId);
-        await data.update({
-          'hp.total_hp': FieldValue.increment(-1),
-        });
+      var data = fireStore.collection(user).doc(userId);
+      await data.update({
+        'hp.total_hp': FieldValue.increment(-1),
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -157,6 +151,48 @@ class CoinController extends GetxController {
     }
   }
 
+  void addEnergies({required String userId, required BuildContext context}) async {
+    // If the timer is already running, do nothing
+    if (_isTimerRunning1) return;
+    try {
+      _isTimerRunning1 = true; // Set the flag to true to prevent multiple timers
+      var data = FirebaseFirestore.instance.collection(user).doc(userId);
+      bool hasShownMaxEnergySnackbar = false; // Flag to track Snackbar status
+      // Start the timer
+      _timer1 = Timer.periodic(Duration(seconds: 6), (timer) async {
+        try {
+          var userSnapshot = await data.get();
+          var userData = userSnapshot.data() as Map<String, dynamic>;
+          // Check if current energy is less than maximum allowed energy
+          if (userData['energies']['value'] < userData['energies']['max_energies']) {
+            await data.update({
+              'energies.value': FieldValue.increment(1),
+            });
+            hasShownMaxEnergySnackbar = false; // Reset Snackbar flag if energy is added
+          } else {
+            // Stop the timer since max energies reached
+            timer.cancel();
+            _isTimerRunning1 = false; // Reset the flag
+          }
+        } catch (e) {
+          timer.cancel(); // Stop the timer in case of an error
+          _isTimerRunning1 = false; // Reset the flag if the timer stops
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Something went wrong while updating energies'),
+            ),
+          );
+        }
+      });
+    } catch (e) {
+      _isTimerRunning1 = false; // Reset the flag in case of an exception
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong while starting the timer'),
+        ),
+      );
+    }
+  }
 
 
 }

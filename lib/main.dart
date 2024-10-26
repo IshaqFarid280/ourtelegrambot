@@ -1,13 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/views/adventure_tab.dart';
+import 'package:ourtelegrambot/views/all_games/All_Games.dart';
 import 'package:ourtelegrambot/views/send_invite_screen.dart';
 import 'package:ourtelegrambot/views/earn_taks_screen.dart';
 import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/views/upgrades_tab.dart';
+import 'package:ourtelegrambot/widgets/CustomSized.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +59,7 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _widgetOptions = <Widget>[
       HomeTab(),
-      const AdventureTab(),
+      const AllGames(),
       UserAttributesScreen(),
       TaskListScreen(),
       EraserGameScreen()
@@ -77,34 +80,31 @@ class HomeScreenState extends State<HomeScreen> {
         toolbarHeight: 20,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.garage),
-            label: 'Garage',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flight_takeoff),
-            label: 'Adventure',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.self_improvement_outlined),
-            label: 'Improve',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on),
-            label: 'Earn',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Friends',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.only(left: 15,right: 15,bottom:5),
+        decoration: BoxDecoration(
+        ),
+        height: MediaQuery.sizeOf(context).height * 0.09,
+        width: MediaQuery.sizeOf(context).width * 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(fillIcons.length, (index){
+            return GestureDetector(
+              onTap: (){
+                _selectedIndex = index;
+                setState(() {});
+              },
+              child: Column(
+                children: [
+                  Image.asset(index == _selectedIndex ? fillIcons[index] : outlineIcons[index],color:  index == _selectedIndex ? Colors.amberAccent : Colors.white ,height: index == _selectedIndex  ? 25 : 22,width: index == _selectedIndex ? 25 : 22, ),
+                  CustomSized(height: 0.002,),
+                  Text(title[index],style: TextStyle(fontSize: index == _selectedIndex ? 12 : 10,color: index == _selectedIndex ? Colors.white : Colors.white38  ))
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

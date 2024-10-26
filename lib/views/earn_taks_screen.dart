@@ -25,19 +25,32 @@ class TaskListScreen extends StatelessWidget {
               itemCount: tasks.length,
               itemBuilder: (context, index) {
                 var task = tasks[index];
-                var taskName = task['task_name']; // Assuming 'task_name' field exists
-                var url = task['url']; // Assuming 'url' field exists
+                var taskName = task['task_name'];
+                var url = task['url'];
                 bool isCompleted = (task['completed'] as List<dynamic>).contains(userTelegramId.toString());
                 return ListTile(
                   title: Text(taskName,),
-                  trailing: isCompleted == true ? Icon(Icons.check) : IconButton(
+                  trailing: isCompleted == true
+                      ? Icon(Icons.check)
+                      : IconButton(
                     icon: Icon(Icons.open_in_browser),
                     onPressed: () async {
-                      if (await canLaunch(url)) {
-                        await launch(url).then((value){
-                          tasksController.markTasksCompleted(userId: userTelegramId.toString(), context: context,docId: task.id);
+                      final Uri taskUrl = Uri.parse(url);
+                      // Check if URL can be launched
+                      if (await canLaunchUrl(taskUrl)) {
+                        await launchUrl(
+                          taskUrl,
+                          mode: LaunchMode.externalApplication,
+                        ).then((value) {
+                          tasksController.markTasksCompleted(
+                              userId: userTelegramId.toString(),
+                              context: context,
+                              docId: task.id
+                          );
                         });
-
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('opned $url')),
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Could not open $url')),

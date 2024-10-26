@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
@@ -33,6 +34,7 @@ class HomeTab extends GetView<CoinController> {
               coinController.coinPerSecond.value = userData['coin_per_second']['value'];
               coinController.hpCurrentValue.value = userData['hp']['value'];
               coinController.totalHp.value = userData['hp']['total_hp'];
+              coinController.addEnergies(userId: userTelegramId.toString(), context: context,);
               coinController.makeCoinPerSecond(userId: userTelegramId.toString(), context: context);
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -155,8 +157,8 @@ class HomeTab extends GetView<CoinController> {
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                   Icon(Icons.battery_charging_full_outlined,color: Colors.amberAccent,size: 40,),
-                                    Text('Energies: ${userData['energies']['value']}',style: TextStyle(color: Colors.white),),
+                                    Image.network(energy,height: 40,width: 40,color: Colors.yellow,),
+                                    Text('${userData['energies']['value']}',style: TextStyle(color: Colors.white),),
                                 ],
                               ),
                               CustomSized(width: 0.3,height: 0,),

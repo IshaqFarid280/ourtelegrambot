@@ -40,6 +40,9 @@ dependencies:
   url_launcher:
   uni_links:
   clipboard:
+  url_launcher_web:
+  flutter_fortune_wheel:
+  flutter_slot_machine:
 
 
 
