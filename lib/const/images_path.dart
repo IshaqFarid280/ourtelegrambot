@@ -44,6 +44,9 @@ const String seventeenAvatar = 'assets/17.png';
 const String eighteenAvatar = 'assets/18.png';
 const String nineteenAvatar = 'assets/19.png';
 
+// coin
+const String coin = 'assets/coin.png';
+
 var fillIcons = [
   homeFill,
   gameControllerFill,

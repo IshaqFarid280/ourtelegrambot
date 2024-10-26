@@ -142,7 +142,7 @@ class HomeTab extends GetView<CoinController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.monetization_on, color: Colors.amber),
+                              Image.asset(coin,height: 40,width: 40,),
                               const SizedBox(width: 8),
                               Text(
                                 'Coins: ${coinController.formatCoins(coinController.coins.value)}',
