@@ -68,45 +68,6 @@ $inviteLink
     launch(uri); // Open the URL in Telegram
   }
 
-  Future<void> sendTelegramInvite(
-      String chatId, String inviteLink, String botToken) async {
-    final messageText = '''
-Check out our web app! 
-Title: InfoHawk 
-Description: A platform to explore exciting features and tools. 
-Join us and start your journey! 
-$inviteLink
-''';
-
-    try {
-      // Sending the invite message with an image and a button
-      var response = await http.post(
-        Uri.parse('https://api.telegram.org/bot$botToken/sendPhoto'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "chat_id": chatId,
-          "photo":
-              "assets/infohawks.png", // Replace with a valid URL for the photo
-          "caption": messageText,
-          "reply_markup": jsonEncode({
-            "inline_keyboard": [
-              [
-                {"text": "Launch Web App", "url": inviteLink}
-              ]
-            ]
-          })
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print('Invite sent successfully');
-      } else {
-        print('Failed to send invite: ${response.body}');
-      }
-    } catch (e) {
-      print('Error sending Telegram invite: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
