@@ -130,7 +130,7 @@ class HomeTab extends GetView<CoinController> {
                         height: 300.0,
                         curve: Curves.easeInOut,
                         child: Image.asset(
-                          'assets/spaceship.png',
+                          userData['avatar'],
                           fit: BoxFit.contain,
                         ),
                       ),
