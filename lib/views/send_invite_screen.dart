@@ -27,21 +27,17 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
     'assets/infohawks.png',
     'assets/infohawks.png',
   ];
-
   List<String> shuffledImages = [];
   List<bool> isVisible = [];
-
   @override
   void initState() {
     super.initState();
     _shuffleImages();
   }
-
   void _shuffleImages() {
     shuffledImages = List.from(images)..shuffle(Random());
     isVisible = List.generate(shuffledImages.length, (index) => true);
   }
-
   void _onTap(int index) {
     setState(() {
       isVisible[index] = false;
@@ -53,7 +49,6 @@ class _EraserGameScreenState extends State<EraserGameScreen> {
       });
     });
   }
-
   void shareInviteLink(String inviteLink) {
     final messageText = '''
 Check out our web app! 
@@ -67,7 +62,6 @@ $inviteLink
         'https://t.me/share/url?url=$inviteLink&text=$messageText');
     launch(uri); // Open the URL in Telegram
   }
-
 
   @override
   Widget build(BuildContext context) {
