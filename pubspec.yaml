@@ -43,6 +43,7 @@ dependencies:
   url_launcher_web:
   flutter_fortune_wheel:
   flutter_slot_machine:
+  animated_notch_bottom_bar: ^1.0.3
 
 
 

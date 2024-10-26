@@ -15,14 +15,13 @@ import 'package:ourtelegrambot/widgets/CustomSized.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: const  FirebaseOptions(
+    options: const FirebaseOptions(
         apiKey: "AIzaSyBU4j3TedSqjR2lIlRIIam-kx5PMERfiHg",
         authDomain: "telegrambot-dbb20.firebaseapp.com",
         projectId: "telegrambot-dbb20",
         storageBucket: "telegrambot-dbb20.appspot.com",
         messagingSenderId: "530545209911",
-        appId: "1:530545209911:web:226956ff9690294d4c45b2"
-    ),
+        appId: "1:530545209911:web:226956ff9690294d4c45b2"),
   );
   runApp(ExpeditionToTheMoonApp());
 }
@@ -37,7 +36,7 @@ class ExpeditionToTheMoonApp extends StatelessWidget {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
-      home:  HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
@@ -81,25 +80,45 @@ class HomeScreenState extends State<HomeScreen> {
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.only(left: 15,right: 15,bottom:5),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
         decoration: BoxDecoration(
-        ),
-        height: MediaQuery.sizeOf(context).height * 0.09,
-        width: MediaQuery.sizeOf(context).width * 1,
+            color: Colors.white.withOpacity(0.16),
+            borderRadius: BorderRadius.circular(18)),
+        height: MediaQuery.sizeOf(context).height * 0.07,
+        // width: MediaQuery.sizeOf(context).width * 0.95,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(fillIcons.length, (index){
+          children: List.generate(fillIcons.length, (index) {
             return GestureDetector(
-              onTap: (){
+              onTap: () {
                 _selectedIndex = index;
                 setState(() {});
               },
               child: Column(
                 children: [
-                  Image.asset(index == _selectedIndex ? fillIcons[index] : outlineIcons[index],color:  index == _selectedIndex ? Colors.amberAccent : Colors.white ,height: index == _selectedIndex  ? 25 : 22,width: index == _selectedIndex ? 25 : 22, ),
-                  CustomSized(height: 0.002,),
-                  Text(title[index],style: TextStyle(fontSize: index == _selectedIndex ? 12 : 10,color: index == _selectedIndex ? Colors.white : Colors.white38  ))
+                  CustomSized(
+                    height: 0.0102,
+                  ),
+                  Image.asset(
+                    index == _selectedIndex
+                        ? fillIcons[index]
+                        : outlineIcons[index],
+                    color: index == _selectedIndex
+                        ? Colors.amberAccent
+                        : Colors.white,
+                    height: index == _selectedIndex ? 22 : 18,
+                    width: index == _selectedIndex ? 22 : 22,
+                  ),
+                  CustomSized(
+                    height: 0.001,
+                  ),
+                  Text(title[index],
+                      style: TextStyle(
+                          fontSize: index == _selectedIndex ? 12 : 10,
+                          color: index == _selectedIndex
+                              ? Colors.white
+                              : Colors.white38))
                 ],
               ),
             );
