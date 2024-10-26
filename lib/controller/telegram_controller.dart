@@ -114,8 +114,10 @@ class TelegramController extends GetxController {
 
   // Method to save initial user data
   Future<void> saveUserData({required String userId, required String userName}) async {
-    var data = fireStore.collection('users').doc(userId);
+    var data = fireStore.collection(user).doc(userId);
     await data.set({
+      'avatar':'assets/10.png',
+      'my_avatars':FieldValue.arrayUnion(['assets/10.png']),
       'user_name': userName,
       'user_id': userId,
       'coins': 500,
