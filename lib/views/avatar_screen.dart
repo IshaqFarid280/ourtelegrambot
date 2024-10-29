@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import '../const/colors.dart';
 import '../const/firebase_const.dart';
 import '../controller/avatar_controller.dart';
@@ -24,6 +25,7 @@ class AvatarScreen extends StatelessWidget {
             var userData = snapshot.data!.data() as Map<String, dynamic>;
             var myAvatar = userData['my_avatars'] as List<dynamic>; // Access my_avatars as a list
             return SingleChildScrollView(
+              padding: EdgeInsets.all(10),
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: Column(
@@ -32,16 +34,17 @@ class AvatarScreen extends StatelessWidget {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.sizeOf(context).height * 0.4,
-                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        height: MediaQuery.sizeOf(context).height * 0.3,
+                        width: MediaQuery.sizeOf(context).width * 0.6,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: secondaryTextColor,
+                          color: primaryTextColor,
                           image: DecorationImage(image: AssetImage(userData['avatar'])),
                         ),
                       ),
+                      CustomSized(width: 0.02,),
                       Container(
-                        height: MediaQuery.sizeOf(context).height * 0.4,
+                        height: MediaQuery.sizeOf(context).height * 0.3,
                         child: SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
@@ -52,10 +55,11 @@ class AvatarScreen extends StatelessWidget {
                                   avatarController.changeAvatarToAlreadyAvaliable(userId: userTelegramId.toString(), avatar: myAvatar[index]);
                                 },
                                 child: Container(
-                                  height: MediaQuery.sizeOf(context).height * 0.1,
-                                  width: MediaQuery.sizeOf(context).width * 0.2,
+                                  height: MediaQuery.sizeOf(context).height * 0.15,
+                                  width: MediaQuery.sizeOf(context).width * 0.32,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    color: secondaryTextColor,
+                                    borderRadius: BorderRadius.circular(20),
                                     image: DecorationImage(image: AssetImage(myAvatar[index]), fit: BoxFit.cover),
                                   ),
                                 ),
@@ -66,52 +70,55 @@ class AvatarScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  CustomSized(),
                   GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: avatar.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 4 / 6,
                       crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 20,
                     ),
                     itemBuilder: (context, index) {
                       bool isPurchased = myAvatar.contains(avatar[index]); // Check if the avatar is purchased
                       return Container(
                         decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image(image: AssetImage(avatar[index])),
-                            CustomSized(),
+                            CustomSized(height: 0.03,),
                             isPurchased
                                 ? Text('Already Bought') // Show message if already purchased
                                 : avatarController.selectedIndex.value == index
                                 ? avatarController.isLoading.value == true
                                 ? CircularProgressIndicator()
-                                : TextButton(
-                              onPressed: () {
-                                avatarController.changeAvatar(
-                                  userId: userTelegramId.toString(),
-                                  avatar: avatar[index],
-                                  index: index,
-                                  price: avatarPrice[index],
-                                );
-                              },
-                              child: Text('Buy ${avatarPrice[index]}'),
-                            )
-                                : TextButton(
-                              onPressed: () {
-                                avatarController.changeAvatar(
-                                  userId: userTelegramId.toString(),
-                                  avatar: avatar[index],
-                                  index: index,
-                                  price: avatarPrice[index],
-                                );
-                              },
-                              child: Text('Buy ${avatarPrice[index]}'),
-                            ),
+                                : CustomButton(
+                              color: splashColor,
+                              imagePath: coin,
+                                title: 'Buy ${avatarPrice[index]}', onTap: (){
+                              avatarController.changeAvatar(
+                                userId: userTelegramId.toString(),
+                                avatar: avatar[index],
+                                index: index,
+                                price: avatarPrice[index],
+                              );
+                            })
+                                : CustomButton(
+                                imagePath: coin,
+                              color: splashColor,
+                                title: 'Buy ${avatarPrice[index]}', onTap: (){
+                              avatarController.changeAvatar(
+                                userId: userTelegramId.toString(),
+                                avatar: avatar[index],
+                                index: index,
+                                price: avatarPrice[index],
+                              );
+                            })
                           ],
                         ),
                       );

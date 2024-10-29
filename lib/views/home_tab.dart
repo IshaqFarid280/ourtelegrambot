@@ -4,6 +4,7 @@ import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/hud_view.dart';
 import 'package:get/get.dart';
 import 'package:shake_detector/shake_detector.dart';
@@ -111,13 +112,9 @@ class HomeTab extends GetView<CoinController> {
                                 ],
                               ),
                               CustomSized(width: 0.2,height: 0,),
-                              ElevatedButton(
-                                onPressed: () {
-                                  coinController.buyHp(userId: userTelegramId.toString(), context: context);
-                                },
-                                child: Text(
-                                    '${'Buy HP (-${coinController.upgradeCost}'} coins)'),
-                              ),
+                              CustomButton(title: '${'Buy HP (-${coinController.upgradeCost}'} coins)', onTap: (){
+                                coinController.buyHp(userId: userTelegramId.toString(), context: context);
+                              })
                             ],
                           ),
                         ],
