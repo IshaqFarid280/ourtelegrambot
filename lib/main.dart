@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
@@ -79,50 +80,55 @@ class HomeScreenState extends State<HomeScreen> {
         toolbarHeight: 20,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      bottomNavigationBar: Card(
+        elevation: 10,
+        color: primaryTextColor.withOpacity(0.5),
         margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
-        decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.16),
-            borderRadius: BorderRadius.circular(18)),
-        height: MediaQuery.sizeOf(context).height * 0.07,
-        // width: MediaQuery.sizeOf(context).width * 0.95,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(fillIcons.length, (index) {
-            return GestureDetector(
-              onTap: () {
-                _selectedIndex = index;
-                setState(() {});
-              },
-              child: Column(
-                children: [
-                  CustomSized(
-                    height: 0.0102,
-                  ),
-                  Image.asset(
-                    index == _selectedIndex
-                        ? fillIcons[index]
-                        : outlineIcons[index],
-                    color: index == _selectedIndex
-                        ? Colors.amberAccent
-                        : Colors.white,
-                    height: index == _selectedIndex ? 22 : 18,
-                    width: index == _selectedIndex ? 22 : 22,
-                  ),
-                  CustomSized(
-                    height: 0.001,
-                  ),
-                  Text(title[index],
-                      style: TextStyle(
-                          fontSize: index == _selectedIndex ? 12 : 10,
-                          color: index == _selectedIndex
-                              ? Colors.white
-                              : Colors.white38))
-                ],
-              ),
-            );
-          }),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+              color: primaryTextColor.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(18)),
+          height: MediaQuery.sizeOf(context).height * 0.07,
+          // width: MediaQuery.sizeOf(context).width * 0.95,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(fillIcons.length, (index) {
+              return GestureDetector(
+                onTap: () {
+                  _selectedIndex = index;
+                  setState(() {});
+                },
+                child: Column(
+                  children: [
+                    const CustomSized(
+                      height: 0.0102,
+                    ),
+                    Image.asset(
+                      fillIcons[index],
+                      color: index == _selectedIndex
+                          ? blueColor
+                          : greyColor,
+                      height: index == _selectedIndex ? 22 : 18,
+                      width: index == _selectedIndex ? 22 : 22,
+                    ),
+                   const  CustomSized(
+                      height: 0.001,
+                    ),
+                    Text(title[index],
+                        style: TextStyle(
+                            fontSize: index == _selectedIndex ? 11 : 10,
+                            color: index == _selectedIndex
+                                ? blueColor
+                                : greyColor,))
+                  ],
+                ),
+              );
+            }),
+          ),
         ),
       ),
     );

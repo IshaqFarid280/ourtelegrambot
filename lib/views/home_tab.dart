@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
@@ -43,7 +44,7 @@ class HomeTab extends GetView<CoinController> {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
                           Row(
@@ -67,7 +68,7 @@ class HomeTab extends GetView<CoinController> {
                         ],
                       ),
                     ),
-                    CustomSized(height: 0.1,),
+                    CustomSized(height: 0.05,),
                     GestureDetector(
                       onTap: () {
                         coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
@@ -83,7 +84,7 @@ class HomeTab extends GetView<CoinController> {
                         ),
                       ),
                     ),
-                    CustomSized(height: 0.05,),
+                    CustomSized(height: 0.03,),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -100,14 +101,16 @@ class HomeTab extends GetView<CoinController> {
                               ),
                             ],
                           ),
-                          CustomSized(height: 0.05,),
+                          CustomSized(height: 0.03,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                    Image.network(energy,height: 40,width: 40),
+                                    Image.network(energy,height: 40,width: 40,color: whiteColor,),
+                                    CustomSized(height: 0.01,),
                                     Text('${userData['energies']['value']}',style: TextStyle(color: Colors.white),),
                                 ],
                               ),
