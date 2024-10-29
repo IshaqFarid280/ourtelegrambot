@@ -4,7 +4,7 @@
 
 
 
-const String energy = 'assets/energy.png';
+const String energy = 'assets/energies.png';
 const String spinWheel = 'assets/spin_wheel.png';
 const String airPlane = 'assets/air_plane.png';
 const String slotMachine = 'assets/slot_machine.png';
@@ -43,6 +43,10 @@ const String sixteenAvatar = 'assets/16.png';
 const String seventeenAvatar = 'assets/17.png';
 const String eighteenAvatar = 'assets/18.png';
 const String nineteenAvatar = 'assets/19.png';
+
+// coin
+const String coin = 'assets/coin.png';
+const String health = 'assets/heart.png';
 
 var fillIcons = [
   homeFill,
