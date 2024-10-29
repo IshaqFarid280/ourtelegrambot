@@ -111,45 +111,100 @@ $inviteLink
                           var data = snapshot.data!.data() as Map<String, dynamic>;
                           controller.name.value = data['user_name'];
                           controller.userId.value = data['user_id'];
-                          return Column(
+                          return Stack(
+
                             children: [
-                              Text(
-                                'Welcome, ${controller.name.value}!',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
+                              Positioned(
+                                right: 0,
 
-                              InkWell(
-                                onTap: (){
-                                  print(controller.name.value);
-                                  print(controller.userId.value);
-                                  var encodedUsername =
-                                  Uri.encodeComponent(controller.name.value);
-                                  final inviteLink =
-                                      'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
-                                  controller.copyToClipboard(inviteLink, context);
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationY(pi),
 
-                                  // Option 1: Open Telegram share link
-                                  shareInviteLink(inviteLink);
-
-                                  // Option 2: Send the invite message to Telegram using the bot
-                                  // sendTelegramInvite(controller.userId.value, inviteLink, 'YOUR_BOT_TOKEN_HERE');
-                                },
-                                child: Container(
-
-                                  child: Row(
-                                    children: [
-                                      mediumText(title: 'Send Invite'),
-                                      Sized(width: 0.007,),
-                                      Icon(Icons.send)
-
-                                    ],
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: whiteColor.withOpacity(0.2)
+                                  child: Image.asset(
+                                    'assets/karatekid1.png',
+                                    fit: BoxFit.cover,
+                                    opacity:  const AlwaysStoppedAnimation(.4),
+                                    height: MediaQuery.of(context).size.height * 0.3,
+                                    width: MediaQuery.of(context).size.width * 0.5,
                                   ),
                                 ),
-                              )
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    'Welcome, ${controller.name.value}!',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  ),
+
+                                  Sized(height: 0.06,),
+
+                                  Row(
+                                                      mainAxisAlignment:  MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          print(controller.name.value);
+                                          print(controller.userId.value);
+                                          var encodedUsername =
+                                          Uri.encodeComponent(controller.name.value);
+                                          final inviteLink =
+                                              'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
+                                          controller.copyToClipboard(inviteLink, context);
+
+                                          // Option 1: Open Telegram share link
+                                          shareInviteLink(inviteLink);
+
+                                          // Option 2: Send the invite message to Telegram using the bot
+                                          // sendTelegramInvite(controller.userId.value, inviteLink, 'YOUR_BOT_TOKEN_HERE');
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width*0.7,
+                                          height: MediaQuery.of(context).size.height*0.05,
+
+                                          child: Row(
+                                            mainAxisAlignment:  MainAxisAlignment.center,
+                                            children: [
+                                              mediumText(title: 'Send Invite'.toUpperCase(), fontSize: 22.0),
+                                              Sized(width: 0.019,),
+                                              Icon(Icons.send)
+
+                                            ],
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            color: whiteColor.withOpacity(0.2)
+                                          ),
+                                        ),
+                                      ),
+                                      Sized(
+                                        width: 0.025,
+                                      ),
+                                      InkWell(
+                                        onTap: (){
+                                                      var encodedUsername =
+                                                      Uri.encodeComponent(controller.name.value);
+                                                      final inviteLink =
+                                                      'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
+                                                      controller.copyToClipboard(inviteLink, context);
+                                                      },
+                                        child: Container(
+                                        padding: EdgeInsets.all(8),
+                                            child: Icon(Icons.link_rounded, color: whiteColor , size: 36,),
+
+                                        decoration: BoxDecoration(
+                                            color: whiteColor.withOpacity(0.2),
+                                          shape: BoxShape.circle
+                                        ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+
+
+
                             ],
                           );
                         } else if (snapshot.hasError) {
