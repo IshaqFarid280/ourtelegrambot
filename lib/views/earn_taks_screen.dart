@@ -72,9 +72,6 @@ $inviteLink
     var controller = Get.put(TelegramController());
     var tasksController = Get.put(TasksController());
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Task List'),
-      ),
       body: Column(
         children: [
           Container(

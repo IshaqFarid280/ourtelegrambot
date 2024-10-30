@@ -14,6 +14,7 @@ const Color redColor = Color.fromRGBO(255, 0, 0, 1.0);
 const Color iconColor = Color(0xff616161);
 const Color greyColor = Color.fromRGBO(107, 115, 119, 1);
 const Color splashColor = Color(0xFF1D1D3F);
+const Color coinColors = Color(0xFFEADE9C);
 
 
 

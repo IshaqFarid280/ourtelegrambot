@@ -10,18 +10,11 @@ const String airPlane = 'assets/air_plane.png';
 const String slotMachine = 'assets/slot_machine.png';
 
 // fill icons
-const String homeFill = 'assets/home_fill.png';
-const String gameControllerFill = 'assets/game_controller_fill.png';
-const String upgradeFill = 'assets/buff_fill.png';
-const String earnFill = 'assets/money_bag_fill.png';
-const String friendsFill = 'assets/friends_fill.png';
-
-// outline
-const String home = 'assets/home.png';
-const String gameController = 'assets/game_controller.png';
-const String upgrade = 'assets/buff.png';
-const String earn = 'assets/money-bag.png';
-const String friends = 'assets/friends.png';
+const String ninjaHome = 'assets/ninja.png';
+const String ninjaAvatar = 'assets/judo.png';
+const String ninjaUpgrades = 'assets/blades.png';
+const String ninjaFiends = 'assets/katana.png';
+const String ninjaGames = 'assets/earn.png';
 
 // avatar
 const String oneAvatar = 'assets/1.png';
@@ -43,33 +36,46 @@ const String sixteenAvatar = 'assets/16.png';
 const String seventeenAvatar = 'assets/17.png';
 const String eighteenAvatar = 'assets/18.png';
 const String nineteenAvatar = 'assets/19.png';
+const String twenty = 'assets/tweenty.png';
+const String twentyOne = 'assets/tweentyOne.png';
+const String twentyTwo = 'assets/tweentyTwo.png';
+const String twentyThree = 'assets/tweentThree.png';
+const String twentyFour = 'assets/tweentFour.png';
+const String twentyFive = 'assets/tweentFive.png';
+const String twentySix = 'assets/tweentySix.png';
+const String twentySeven = 'assets/twentySeven.png';
 
 // coin
 const String coin = 'assets/coin.png';
 const String health = 'assets/heart.png';
 
+// upgrade screen
+const String coinPerTap = 'assets/tap_coins.png';
+const String coinPerSecond = 'assets/coins_second.png';
+const String hpNinja = 'assets/hp_ninja.png';
+const String ninjaEnergies = 'assets/ninja_energies.png';
+
+// how it works
+const String airDropInfo = 'assets/airDrop_info.png';
+const String friends = 'assets/friends.png';
+const String games = 'assets/games.png';
+const String comingSoon = 'assets/comingSoon.png';
+
 var fillIcons = [
-  homeFill,
-  gameControllerFill,
-  upgradeFill,
-  earnFill,
-  friendsFill,
+  ninjaHome,
+  ninjaGames,
+  ninjaUpgrades,
+  ninjaFiends,
+  ninjaAvatar,
 ];
 
-var outlineIcons = [
-  home,
-  gameController,
-  upgrade,
-  earn,
-  friends,
-];
 
 var title =[
   'Home',
-  'Games',
+  'Earn',
   'Upgrades',
   'Tasks',
-  'Friends',
+  'Avatar',
 ];
 
 var avatar = [
@@ -92,6 +98,14 @@ var avatar = [
   seventeenAvatar,
   eighteenAvatar,
   nineteenAvatar,
+  twenty,
+  twentyOne,
+  twentyTwo,
+  twentyThree,
+  twentyFour,
+  twentyFive,
+  twentySix,
+  twentySeven,
 ];
 
 var avatarPrice = [
@@ -114,4 +128,12 @@ var avatarPrice = [
   17000,
   18000,
   19000,
+  20000,
+  21000,
+  22000,
+  23000,
+  24000,
+  25000,
+  26000,
+  27000,
 ];
