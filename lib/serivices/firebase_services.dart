@@ -9,6 +9,9 @@ class FirebaseServices {
   static showDailyTasks(){
     return fireStore.collection(dailyTasks).snapshots();
   }
+  static showAllTasks(){
+    return fireStore.collection(allTasks).snapshots();
+  }
 
 
 //FirebaseFirestore.instance
