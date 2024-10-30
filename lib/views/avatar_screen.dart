@@ -110,8 +110,8 @@ class AvatarScreen extends StatelessWidget {
                             })
                                 : CustomButton(
                                 imagePath: coin,
-                              color: splashColor,
-                                title: 'Buy ${avatarPrice[index]}', onTap: (){
+                               color: splashColor,
+                                title: '${avatarPrice[index]}', onTap: (){
                               avatarController.changeAvatar(
                                 userId: userTelegramId.toString(),
                                 avatar: avatar[index],

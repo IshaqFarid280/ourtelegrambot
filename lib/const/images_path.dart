@@ -43,11 +43,23 @@ const String twentyThree = 'assets/tweentThree.png';
 const String twentyFour = 'assets/tweentFour.png';
 const String twentyFive = 'assets/tweentFive.png';
 const String twentySix = 'assets/tweentySix.png';
-const String twentySeven = 'assets/tweentySeven.png';
+const String twentySeven = 'assets/twentySeven.png';
 
 // coin
 const String coin = 'assets/coin.png';
 const String health = 'assets/heart.png';
+
+// upgrade screen
+const String coinPerTap = 'assets/tap_coins.png';
+const String coinPerSecond = 'assets/coins_second.png';
+const String hpNinja = 'assets/hp_ninja.png';
+const String ninjaEnergies = 'assets/ninja_energies.png';
+
+// how it works
+const String airDropInfo = 'assets/airDrop_info.png';
+const String friends = 'assets/friends.png';
+const String games = 'assets/games.png';
+const String comingSoon = 'assets/comingSoon.png';
 
 var fillIcons = [
   ninjaHome,

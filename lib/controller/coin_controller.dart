@@ -20,11 +20,11 @@ class CoinController extends GetxController {
 
   String formatCoins(int coins) {
     if (coins >= 1000000000) {
-      return '${(coins / 1000000000).toStringAsFixed(5)} B'; // Billions
+      return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
     } else if (coins >= 1000000) {
-      return '${(coins / 1000000).toStringAsFixed(5)} M'; // Millions
+      return '${(coins / 1000000).toStringAsFixed(1)} M'; // Millions
     } else if (coins >= 1000) {
-      return '${(coins / 1000).toStringAsFixed(5)} k'; // Thousands
+      return '${(coins / 1000).toStringAsFixed(1)} k'; // Thousands
     } else {
       return coins.toString(); // Less than a thousand
     }
