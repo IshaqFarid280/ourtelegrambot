@@ -58,15 +58,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   void shareInviteLink(String inviteLink) {
     final messageText = '''
-Check out our web app! 
-InfoHawk 
-A platform to explore exciting features and tools. 
-Join us and start your journey! 
+    Join us and start your journey 🐱‍👤!
 $inviteLink
 ''';
 
     final uri = Uri.encodeFull(
-        'https://t.me/share/url?url=$inviteLink&text=$messageText');
+        // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
+        'https://t.me/InfoHawkbot/BountyHunter?startapp=$messageText');
     launch(uri); // Open the URL in Telegram
   }
 
@@ -195,11 +193,13 @@ $inviteLink
                                           onTap: () {
                                             print(controller.name.value);
                                             print(controller.userId.value);
+
                                             var encodedUsername =
                                                 Uri.encodeComponent(
-                                                    controller.name.value);
+                                                    controller.userId.value);
+
                                             final inviteLink =
-                                                'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
+                                                'https://t.me/InfoHawkbot/BountyHunter?startapp=$encodedUsername';
                                             controller.copyToClipboard(
                                                 inviteLink, context);
 
@@ -248,7 +248,7 @@ $inviteLink
                                                 Uri.encodeComponent(
                                                     controller.name.value);
                                             final inviteLink =
-                                                'https://telegrambot-dbb20.web.app/?referrerId=${controller.userId.value}&username=$encodedUsername';
+                                                'https://t.me/InfoHawkbot/BountyHunter?startapp';
                                             controller.copyToClipboard(
                                                 inviteLink, context);
                                           },
