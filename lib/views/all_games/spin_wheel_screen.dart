@@ -1,19 +1,59 @@
+import 'package:audioplayers/audioplayers.dart'; // Import audioplayers package
+import 'package:confetti/confetti.dart'; // Import confetti package
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/firebase_const.dart';
+import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+import 'package:ourtelegrambot/widgets/Custom_button.dart';
+import 'package:ourtelegrambot/widgets/text_widgets.dart';
+import '../../const/colors.dart';
 import '../../controller/spin_wheel_controller.dart';
 
-class SpinWheelScreen extends StatelessWidget {
+class SpinWheelScreen extends StatefulWidget {
+  @override
+  _SpinWheelScreenState createState() => _SpinWheelScreenState();
+}
+
+class _SpinWheelScreenState extends State<SpinWheelScreen> {
   final SpinWheelController controller = Get.put(SpinWheelController());
+  late ConfettiController _confettiController;
+  final AudioPlayer _audioPlayer = AudioPlayer(); // Create an instance of AudioPlayer
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose(); // Dispose of the audio player
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _spinWheel() async {
+    // Trigger confetti when the spin starts
+    _confettiController.play();
+    await _audioPlayer.setSource(AssetSource(coinsMusic)); // Adjust the path to your sound file
+    _audioPlayer.resume(); // Play the sound
+
+    // Stop the sound after 2 seconds
+    await Future.delayed(Duration(seconds: 2));
+    _audioPlayer.stop(); // Stop the sound
+
+    controller.spinWheel(userTelegramId.toString(), context);
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Fortune Wheel'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: true,
       ),
       body: Center(
         child: Column(
@@ -21,46 +61,114 @@ class SpinWheelScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomSized(
-              height: 0.4,
-              width: 0.4,
-              child: FortuneWheel(
-                hapticImpact: HapticImpact.heavy,
-                rotationCount: 5,
-                curve: Curves.easeInCirc,
-                animateFirst: false,
-                selected: controller.selected.stream,
-                items: [
-                  FortuneItem(
-                    child: Text('100', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.blue),
+              height: 0.7,
+              width: 0.7,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  FortuneWheel(
+                    hapticImpact: HapticImpact.heavy,
+                    rotationCount: 5,
+                    curve: Curves.easeInCirc,
+                    animateFirst: false,
+                    selected: controller.selected.stream,
+                    items: [
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('100', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: secondaryTextColor),
+                      ),
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('200', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: splashColor),
+                      ),
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('400', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: secondaryTextColor),
+                      ),
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('600', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: splashColor),
+                      ),
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('800', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: secondaryTextColor),
+                      ),
+                      FortuneItem(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('5000', style: TextWidgets.customProfileTextStyle()),
+                            CustomSized(width: 0.03),
+                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                          ],
+                        ),
+                        style: const FortuneItemStyle(color: splashColor),
+                      ),
+                    ],
                   ),
-                  FortuneItem(
-                    child: Text('200', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.green),
-                  ),
-                  FortuneItem(
-                    child: Text('400', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.yellow),
-                  ),
-                  FortuneItem(
-                    child: Text('600', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.orange),
-                  ),
-                  FortuneItem(
-                    child: Text('800', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.red),
-                  ),
-                  FortuneItem(
-                    child: Text('5000', style: TextStyle(color: Colors.white)),
-                    style: FortuneItemStyle(color: Colors.purple),
+                  // Confetti widget positioned in the center
+                  ConfettiWidget(
+                    confettiController: _confettiController,
+                    blastDirectionality: BlastDirectionality.explosive, // Blast from center
+                    emissionFrequency: 0.02, // How often particles are emitted
+                    numberOfParticles: 30, // Number of particles to emit
+                    gravity: 0.2, // Particle gravity
+                    particleDrag: 0.03, // Apply drag to the particles
+                    colors: [
+                      coinColors
+                    ], // Set colors to null to use the original image colors
+                    createParticlePath: (_) {
+                      // You could use this to create a custom path if needed
+                      return Path()..addOval(Rect.fromCircle(center: Offset(0, 0), radius: 5));
+                    },
+                    child: Image.asset(
+                      coin,
+                      width: 30, // Adjust size as needed
+                      height: 30,
+                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => controller.spinWheel(userTelegramId.toString(), context),
-              child: Text('Spin the Wheel'),
+            CustomSized(),
+            CustomButton(
+              title: 'Spin',
+              onTap: _spinWheel, // Update to call the new function
             ),
           ],
         ),

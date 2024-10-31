@@ -123,9 +123,6 @@ class MySlotMachineController extends GetxController {
         prizeValue: prizeValue,
       );
     } else {
-      print('Prize Value: ${finalSlotValues[0]}');
-      print('Prize Value: ${finalSlotValues[1]}');
-      print('Prize Value: ${finalSlotValues[2]}');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('No matching slots!')),
       );
@@ -196,5 +193,19 @@ class MySlotMachineController extends GetxController {
         const SnackBar(content: Text('Not enough coins!')),
       );
     }
+  }
+
+  // Check if the resultIndexes represent a winning combination
+  bool isWinningCombination(List<int> resultIndexes) {
+    // Check if all elements in resultIndexes are the same
+    if (resultIndexes.isEmpty) return false;
+
+    int firstValue = resultIndexes[0];
+    for (int i = 1; i < resultIndexes.length; i++) {
+      if (resultIndexes[i] != firstValue) {
+        return false;
+      }
+    }
+    return true;
   }
 }

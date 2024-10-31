@@ -24,7 +24,7 @@ class AllGames extends StatelessWidget {
             GamesButton(title: 'Fortune Wheel',imagePath: spinWheel,onTap: (){
               Get.to(()=> SpinWheelScreen(),);
             },),
-            GamesButton(title: 'Sky Adventure',imagePath: airPlane,onTap: (){
+            GamesButton(title: 'Ninja Adventure',imagePath: airPlane,onTap: (){
               Get.to(()=> AdventureTab(),);
             },),
             GamesButton(title: 'Slot Machine',imagePath: slotMachine,onTap: (){
