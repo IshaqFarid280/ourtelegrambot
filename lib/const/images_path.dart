@@ -1,13 +1,15 @@
 
 
+// coins music
+const String  coinsMusic = 'assets/music/coins.mp3';
 
 
 
 
 const String energy = 'assets/energies.png';
-const String spinWheel = 'assets/spin_wheel.png';
-const String airPlane = 'assets/air_plane.png';
-const String slotMachine = 'assets/slot_machine.png';
+const String spinWheel = 'assets/spin_wheel.gif';
+const String airPlane = 'assets/air_plane.gif';
+const String slotMachine = 'assets/slot_machine.gif';
 
 // fill icons
 const String ninjaHome = 'assets/ninja.png';
@@ -60,6 +62,10 @@ const String airDropInfo = 'assets/airDrop_info.png';
 const String friends = 'assets/friends.png';
 const String games = 'assets/games.png';
 const String comingSoon = 'assets/comingSoon.png';
+
+// game screen
+const String ninjaGame = 'assets/ninja_running.png';
+const String ninjaHpNeed = 'assets/hp_need.png';
 
 var fillIcons = [
   ninjaHome,

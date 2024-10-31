@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/const/colors.dart';
@@ -107,14 +108,27 @@ class HomeScreenState extends State<HomeScreen> {
                     const CustomSized(
                       height: 0.0102,
                     ),
-                    Image.asset(
-                      fillIcons[index],
-                      color: index == _selectedIndex
-                          ? blueColor
-                          : greyColor,
-                      height: index == _selectedIndex ? 22 : 18,
-                      width: index == _selectedIndex ? 22 : 22,
-                    ),
+                      index == 2 ?   AvatarGlow(
+                      startDelay: const Duration(milliseconds: 1000),
+                      glowColor: whiteColor,
+                      glowShape: BoxShape.circle,
+                      curve: Curves.fastOutSlowIn,
+                      child: Image.asset(
+                        fillIcons[index],
+                        color: index == _selectedIndex
+                            ? coinColors
+                            : greyColor,
+                        height: index == _selectedIndex ? 22 : 18,
+                        width: index == _selectedIndex ? 22 : 22,
+                      ),
+                    ) : Image.asset(
+                        fillIcons[index],
+                        color: index == _selectedIndex
+                            ? coinColors
+                            : greyColor,
+                        height: index == _selectedIndex ? 22 : 18,
+                        width: index == _selectedIndex ? 22 : 22,
+                      ),
                    const  CustomSized(
                       height: 0.001,
                     ),
@@ -122,7 +136,7 @@ class HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                             fontSize: index == _selectedIndex ? 11 : 10,
                             color: index == _selectedIndex
-                                ? blueColor
+                                ? coinColors
                                 : greyColor,))
                   ],
                 ),

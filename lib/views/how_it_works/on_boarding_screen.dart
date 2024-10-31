@@ -57,6 +57,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     var theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: true,
+      ),
       body: Stack(
         children: [
           Positioned.fill(

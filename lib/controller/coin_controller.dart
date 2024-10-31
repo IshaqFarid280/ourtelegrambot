@@ -17,6 +17,12 @@ class CoinController extends GetxController {
   Timer? _timer;
   bool _isTimerRunning1 = false;
   Timer? _timer1;
+  var isTapped = false.obs;
+  var displayedCoins = 0.obs; // Used for counting-up animation
+  var showFlyingNumber = false.obs;
+  var lastAddedCoins = 0.obs;
+  Rx<Offset> startPosition = Offset.zero.obs; // Position for flying number
+
 
   String formatCoins(int coins) {
     if (coins >= 1000000000) {
@@ -36,6 +42,9 @@ class CoinController extends GetxController {
       await data.update({
         'coins':FieldValue.increment(earnPerTap.value),
       });
+      lastAddedCoins.value = earnPerTap.value; // Example number to display
+      triggerAnimation();
+      animateCoinCount();
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -193,6 +202,26 @@ class CoinController extends GetxController {
       );
     }
   }
+
+  // Method to trigger scaling and fading animation
+  void triggerAnimation() {
+    isTapped.value = true;
+    showFlyingNumber.value = true; // Trigger flying number animation
+    // Reset animation state after a short delay
+    Future.delayed(const Duration(milliseconds: 300), () {
+      isTapped.value = false;
+      showFlyingNumber.value = false; // Trigger flying number animation
+    });
+  }
+
+  // Method to animate the coin counting-up effect
+  void animateCoinCount() {
+    displayedCoins.value = coins.value - earnPerTap.value; // Start from previous value
+    Future.delayed(const Duration(milliseconds: 500), () {
+      displayedCoins.value = coins.value; // Count up to current value
+    });
+  }
+
 
 
 }

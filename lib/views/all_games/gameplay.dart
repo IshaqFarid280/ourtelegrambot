@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/const/firebase_const.dart';
+import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:get/get.dart';
 
@@ -76,13 +77,6 @@ class _GameScreenState extends State<GameScreen>
         return AlertDialog(
           title: const Text("Game Over"),
           actions: [
-            // FlatButton(
-            //   child: Text("Play Again"),
-            //   onPressed: () {
-            //     Navigator.of(context).pop();
-            //     resetGame();
-            //   },
-            // ),
             ElevatedButton(
                 onPressed: () {
                   resetGame();
@@ -243,7 +237,7 @@ class MyBird extends StatelessWidget {
         //   shape: BoxShape.circle,
         // ),
         child: Image.asset(
-          'assets/spaceship.png',
+          ninjaGame,
         ));
   }
 }
