@@ -12,6 +12,9 @@ class FirebaseServices {
   static showAllTasks(){
     return fireStore.collection(allTasks).snapshots();
   }
+static showSocialTasks(){
+    return fireStore.collection(socialTasks).snapshots();
+  }
 
 
 //FirebaseFirestore.instance

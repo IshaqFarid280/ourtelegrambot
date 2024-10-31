@@ -37,7 +37,7 @@ class CustomButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(title,style: TextWidgets.customSmallTextStyle(color: titleColor),),
-              CustomSized(width: 0.02,),
+              imagePath == null ? Container(height: 0,width: 0,):   CustomSized(width: 0.02,),
               imagePath == null ? Container(height: 0,width: 0,): Image.asset(imagePath.toString(),height: 20,width: 20,),
             ],
           ),
