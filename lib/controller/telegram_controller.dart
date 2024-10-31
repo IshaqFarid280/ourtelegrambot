@@ -28,14 +28,14 @@ class TelegramController extends GetxController {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Referral link copied to clipboard!'),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 1),
             ),
           );
         }).catchError((error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Failed to copy referral link on web'),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 1),
             ),
           );
         });
@@ -44,14 +44,14 @@ class TelegramController extends GetxController {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Referral link copied to clipboard!'),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 1),
             ),
           );
         }).catchError((error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Failed to copy referral link on mobile'),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 1),
             ),
           );
         });
@@ -60,7 +60,7 @@ class TelegramController extends GetxController {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Exception while copying referral link'),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 1),
         ),
       );
     }
@@ -120,7 +120,7 @@ class TelegramController extends GetxController {
       'my_avatars':FieldValue.arrayUnion(['assets/10.png']),
       'user_name': userName,
       'user_id': userId,
-      'coins': 500,
+      'coins': 5000,
       'lastSpinTime':FieldValue.serverTimestamp(),
       'tap_per_earn': {
         'level': 1,
