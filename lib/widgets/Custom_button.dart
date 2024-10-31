@@ -34,11 +34,11 @@ class CustomButton extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:  imagePath == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(title,style: TextWidgets.customSmallTextStyle(color: titleColor,fontSize: imagePath == null ? 12 : 16),),
-              const CustomSized(width: 0.02,),
-              imagePath == null ? Container(height: 0,width: 0,): Image.asset(imagePath.toString(),height: 30,width: 30,),
+              Text(title,style: TextWidgets.customSmallTextStyle(color: titleColor),),
+              imagePath == null ? Container(height: 0,width: 0,):   CustomSized(width: 0.02,),
+              imagePath == null ? Container(height: 0,width: 0,): Image.asset(imagePath.toString(),height: 20,width: 20,),
             ],
           ),
         ),

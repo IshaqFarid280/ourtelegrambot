@@ -8,6 +8,7 @@ import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/controller/tasks_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/serivices/firebase_services.dart';
+import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/Rounder_buttons.dart';
 import 'package:ourtelegrambot/widgets/custom_sizedBox.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
@@ -64,7 +65,7 @@ $inviteLink
 
     final uri = Uri.encodeFull(
         // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
-        'https://t.me/InfoHawkbot/BountyHunter?startapp=$messageText');
+        'https://t.me/share/url?url=$inviteLink&text=$messageText');
     launch(uri); // Open the URL in Telegram
   }
 
@@ -73,7 +74,7 @@ $inviteLink
     var controller = Get.put(TelegramController());
     var tasksController = Get.put(TasksController());
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Column(
           children: [
@@ -134,9 +135,7 @@ $inviteLink
                                     ),
                                   ),
                                 ),
-                                Sized(
-                                  height: 0.25,
-                                ),
+
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -180,7 +179,7 @@ $inviteLink
                                       ],
                                     ),
                                     Sized(
-                                      height: 0.1,
+                                      height: 0.07,
                                     ),
 
                                     Row(
@@ -225,7 +224,7 @@ $inviteLink
                                                 mediumText(
                                                     title: 'Send Invite'
                                                         .toUpperCase(),
-                                                    fontSize: 22.0),
+                                                    fontSize: 18.0),
                                                 Sized(
                                                   width: 0.019,
                                                 ),
@@ -257,7 +256,7 @@ $inviteLink
                                             child: Icon(
                                               Icons.link_rounded,
                                               color: whiteColor,
-                                              size: 36,
+                                              size: 28,
                                             ),
                                             decoration: BoxDecoration(
                                                 color:
@@ -293,8 +292,9 @@ $inviteLink
             ),
 
             TabBar(tabs: [
-              Tab(text: "Daily Task",),
-              Tab(text: "All Task",),
+              Tab(text: "Daily",),
+              Tab(text: "Basic",),
+              Tab(text: "Social",),
             ]),
             Expanded(
               child: TabBarView(
@@ -304,49 +304,149 @@ $inviteLink
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasData) {
+                      }
+                      else if (snapshot.hasData) {
                         final tasks = snapshot.data!.docs;
                         return ListView.builder(
                           itemCount: tasks.length,
                           itemBuilder: (context, index) {
                             var task = tasks[index];
                             var taskName = task['task_name'];
+                            var buttonTextName = task['button_text'];
+                            var price = task['price'].toString();
                             var url = task['url'];
+                            var imageurl = task['image_url'];
                             bool isCompleted = (task['completed'] as List<dynamic>)
                                 .contains(controller.userId.value);
 
                             return ListTile(
-                              title: Text(taskName),
-                              trailing: isCompleted
-                                  ? Icon(Icons.check)
-                                  : IconButton(
-                                icon: Icon(Icons.open_in_browser),
-                                onPressed: () async {
-                                  final Uri taskUrl = Uri.parse(url);
-                                  if (await canLaunchUrl(taskUrl)) {
-                                    await launchUrl(taskUrl,
-                                        mode: LaunchMode.externalApplication);
-                                    tasksController.markTasksCompleted(
-                                        userId: controller.userId.value,
-                                        context: context,
-                                        docId: task.id);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Could not open $url')),
-                                    );
-                                  }
-                                },
-                              ),
+                                leading: CircleAvatar(
+
+                                    child: Image.network(imageurl)),
+                                title: mediumText(title: taskName, fontSize: 16.0),
+                                subtitle: Row(
+                                  children: [
+                                    Container(
+
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage('assets/coin.png')
+                                          )
+                                      ),
+                                      width: MediaQuery.of(context).size.width*0.065,
+                                      height: MediaQuery.of(context).size.height*0.045,
+                                    ),
+                                    mediumText(title: price, fontSize: 12.0),
+                                  ],
+                                ),
+                                trailing: isCompleted
+                                    ? Icon(Icons.check)
+                                    : CustomButton(
+                                  width: 0.18,
+                                  height: 0.06,
+
+                                  title: buttonTextName,
+
+
+                                  onTap: () async {
+                                    final Uri taskUrl = Uri.parse(url);
+                                    if (await canLaunchUrl(taskUrl)) {
+                                      await launchUrl(taskUrl,
+                                          mode: LaunchMode.externalApplication);
+                                      tasksController.markTasksCompleted(
+                                          userId: controller.userId.value,
+                                          context: context,
+                                          docId: task.id);
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text('Could not open $url')),
+                                      );
+                                    }
+                                  },)
                             );
                           },
                         );
-                      } else {
+                      }
+                      else {
                         return Center(child: Text('No daily tasks found'));
                       }
                     },
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseServices.showAllTasks(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      else if (snapshot.hasData) {
+                        final tasks = snapshot.data!.docs;
+                        return ListView.builder(
+                          itemCount: tasks.length,
+                          itemBuilder: (context, index) {
+                            var task = tasks[index];
+                            var taskName = task['task_name'];
+                            var buttonTextName = task['button_text'];
+                            var price = task['price'].toString();
+                            var url = task['url'];
+                            var imageurl = task['image_url'];
+                            bool isCompleted = (task['completed'] as List<dynamic>)
+                                .contains(controller.userId.value);
+
+                            return ListTile(
+                                leading: CircleAvatar(
+
+                                    child: Image.network(imageurl)),
+                                title: mediumText(title: taskName, fontSize: 16.0),
+                                subtitle: Row(
+                                  children: [
+                                    Container(
+
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage('assets/coin.png')
+                                          )
+                                      ),
+                                      width: MediaQuery.of(context).size.width*0.065,
+                                      height: MediaQuery.of(context).size.height*0.045,
+                                    ),
+                                    mediumText(title: price, fontSize: 12.0),
+                                  ],
+                                ),
+                                trailing: isCompleted
+                                    ? Icon(Icons.check)
+                                    : CustomButton(
+                                  width: 0.18,
+                                  height: 0.06,
+
+                                  title: buttonTextName,
+
+
+                                  onTap: () async {
+                                    final Uri taskUrl = Uri.parse(url);
+                                    if (await canLaunchUrl(taskUrl)) {
+                                      await launchUrl(taskUrl,
+                                          mode: LaunchMode.externalApplication);
+                                      tasksController.markTasksCompleted(
+                                          userId: controller.userId.value,
+                                          context: context,
+                                          docId: task.id);
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text('Could not open $url')),
+                                      );
+                                    }
+                                  },)
+                            );
+                          },
+                        );
+                      }
+                      else {
+                        return Center(child: Text('No tasks found'));
+                      }
+                    },
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseServices.showSocialTasks(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
@@ -357,32 +457,57 @@ $inviteLink
                           itemBuilder: (context, index) {
                             var task = tasks[index];
                             var taskName = task['task_name'];
+                            var buttonTextName = task['button_text'];
+                            var price = task['price'].toString();
                             var url = task['url'];
+                            var imageurl = task['image_url'];
                             bool isCompleted = (task['completed'] as List<dynamic>)
                                 .contains(controller.userId.value);
 
                             return ListTile(
-                              title: Text(taskName),
+                              leading: CircleAvatar(
+
+                                  child: Image.network(imageurl)),
+                              title: mediumText(title: taskName, fontSize: 16.0),
+                              subtitle: Row(
+                                children: [
+                                  Container(
+
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage('assets/coin.png')
+                                      )
+                                    ),
+                                    width: MediaQuery.of(context).size.width*0.065,
+                                    height: MediaQuery.of(context).size.height*0.045,
+                                  ),
+                                  mediumText(title: price, fontSize: 12.0),
+                                ],
+                              ),
                               trailing: isCompleted
                                   ? Icon(Icons.check)
-                                  : IconButton(
-                                icon: Icon(Icons.open_in_browser),
-                                onPressed: () async {
-                                  final Uri taskUrl = Uri.parse(url);
-                                  if (await canLaunchUrl(taskUrl)) {
-                                    await launchUrl(taskUrl,
-                                        mode: LaunchMode.externalApplication);
-                                    tasksController.markTasksCompleted(
-                                        userId: controller.userId.value,
-                                        context: context,
-                                        docId: task.id);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Could not open $url')),
-                                    );
-                                  }
-                                },
-                              ),
+                                  : CustomButton(
+                                width: 0.18,
+                                height: 0.06,
+
+                                title: buttonTextName,
+
+
+                                onTap: () async {
+                                final Uri taskUrl = Uri.parse(url);
+                                if (await canLaunchUrl(taskUrl)) {
+                                  await launchUrl(taskUrl,
+                                      mode: LaunchMode.externalApplication);
+                                  tasksController.markTasksCompleted(
+                                      userId: controller.userId.value,
+                                      context: context,
+                                      docId: task.id);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Could not open $url')),
+                                  );
+                                }
+                              },)
                             );
                           },
                         );

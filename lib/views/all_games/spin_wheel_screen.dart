@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart'; // Import audioplayers package
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:confetti/confetti.dart'; // Import confetti package
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
@@ -10,6 +10,7 @@ import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import '../../const/colors.dart';
 import '../../controller/spin_wheel_controller.dart';
+import 'package:assets_audio_player_web/assets_audio_player_web.dart';
 
 class SpinWheelScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class SpinWheelScreen extends StatefulWidget {
 class _SpinWheelScreenState extends State<SpinWheelScreen> {
   final SpinWheelController controller = Get.put(SpinWheelController());
   late ConfettiController _confettiController;
-  final AudioPlayer _audioPlayer = AudioPlayer(); // Create an instance of AudioPlayer
+  final AssetsAudioPlayer _audioPlayer = AssetsAudioPlayer(); // Create an instance of AssetsAudioPlayer
 
   @override
   void initState() {
@@ -35,15 +36,16 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
   }
 
   void _spinWheel() async {
-    // Trigger confetti when the spin starts
     _confettiController.play();
-    await _audioPlayer.setSource(AssetSource(coinsMusic)); // Adjust the path to your sound file
-    _audioPlayer.resume(); // Play the sound
+    await _audioPlayer.open(
+      Audio('assets/music/coins.mp3'), // Adjust the path to your sound file
+      volume: 100,
+      forceOpen: true,
+    );
 
     // Stop the sound after 2 seconds
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 5));
     _audioPlayer.stop(); // Stop the sound
-
     controller.spinWheel(userTelegramId.toString(), context);
   }
 

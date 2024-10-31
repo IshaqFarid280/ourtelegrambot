@@ -69,7 +69,7 @@ class GamesButton extends StatelessWidget {
               CustomSized(height: 0.02,),
               Text(title),
               CustomSized(height: 0.02,),
-              Image.asset(imagePath,height: 80,width: 80,),
+              Image.asset(imagePath,width: 120,),
             ],
           ),
         ),

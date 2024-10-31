@@ -7,9 +7,9 @@ const String  coinsMusic = 'assets/music/coins.mp3';
 
 
 const String energy = 'assets/energies.png';
-const String spinWheel = 'assets/spin_wheel.png';
-const String airPlane = 'assets/air_plane.png';
-const String slotMachine = 'assets/slot_machine.png';
+const String spinWheel = 'assets/spin_wheel.gif';
+const String airPlane = 'assets/air_plane.gif';
+const String slotMachine = 'assets/slot_machine.gif';
 
 // fill icons
 const String ninjaHome = 'assets/ninja.png';

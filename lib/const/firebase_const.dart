@@ -17,3 +17,6 @@ String dailyTasks = 'dailyTasks';
 // all tasks
 String allTasks = 'allTasks';
 
+// all tasks
+String socialTasks = 'socialTasks';
+
