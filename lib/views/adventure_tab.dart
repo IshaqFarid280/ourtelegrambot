@@ -18,6 +18,11 @@ class _AdventureTabState extends State<AdventureTab> {
   Widget build(BuildContext context) {
     var coinController = Get.put(CoinController());
     return Scaffold(
+      appBar:AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: true,
+      ),
       body: Obx(
           ()=> coinController.totalHp.value < 5 ?
           Center(
