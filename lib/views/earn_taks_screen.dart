@@ -59,14 +59,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   void shareInviteLink(String inviteLink) {
     final messageText = '''
-    Join us and start your journey 🐱‍👤!
-$inviteLink
+    Join us and start your journey 🐱‍👤
 ''';
 
     final uri = Uri.encodeFull(
         // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
         'https://t.me/share/url?url=$inviteLink&text=$messageText');
-    launch(uri); // Open the URL in Telegram
+    launch(uri);
   }
 
   @override
@@ -198,7 +197,7 @@ $inviteLink
                                                     controller.userId.value);
 
                                             final inviteLink =
-                                                'https://t.me/InfoHawkbot/BountyHunter?startapp=$encodedUsername';
+                                                'https://t.me/InfoHawkbot/app?startapp=$encodedUsername';
                                             controller.copyToClipboard(
                                                 inviteLink, context);
 
@@ -322,7 +321,9 @@ $inviteLink
                             return ListTile(
                                 leading: CircleAvatar(
 
-                                    child: Image.network(imageurl)),
+                                    child: Image.network(imageurl, fit: BoxFit.cover, errorBuilder: (context, _, s){
+                                      return Icon(Icons.image);
+                                    }, ), ),
                                 title: mediumText(title: taskName, fontSize: 16.0),
                                 subtitle: Row(
                                   children: [
