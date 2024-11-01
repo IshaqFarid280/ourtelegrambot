@@ -154,7 +154,7 @@ class HomeTab extends GetView<CoinController> {
                                       child: AnimatedOpacity(
                                         duration: const Duration(milliseconds: 300),
                                         opacity: coinController.isTapped.value ? 0.8 : 1.0,
-                                        child: Text('${userData['energies']['value']}', style: TextStyle(color: Colors.white)),
+                                        child: Text('${userData['energies']['value']}', style: TextStyle(color: coinController.isTapped.value ?  coinColors : whiteColor)),
                                       ),
                                     ),
                                   ),

@@ -5,7 +5,6 @@ import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
-import 'package:ourtelegrambot/views/adventure_tab.dart';
 import 'package:ourtelegrambot/views/all_games/All_Games.dart';
 import 'package:ourtelegrambot/views/avatar_screen.dart';
 import 'package:ourtelegrambot/views/earn_taks_screen.dart';
@@ -34,6 +33,7 @@ class ExpeditionToTheMoonApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Expedition to the Moon',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),

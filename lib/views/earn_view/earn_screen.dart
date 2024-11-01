@@ -14,7 +14,6 @@ class EarnScreen extends StatelessWidget {
         children: [
 
           ListTile(
-
             leading: CircleAvatar(
               child: Icon(Icons.payment, color: Colors.black,),
             ),

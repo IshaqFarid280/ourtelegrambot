@@ -8,7 +8,6 @@ import 'package:ourtelegrambot/serivices/bottom_sheets_services.dart';
 import 'package:ourtelegrambot/serivices/firebase_services.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
-
 import '../const/colors.dart';
 import 'how_it_works/on_boarding_screen.dart';
 

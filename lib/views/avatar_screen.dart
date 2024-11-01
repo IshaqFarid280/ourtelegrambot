@@ -11,7 +11,6 @@ import '../serivices/firebase_services.dart';
 
 class AvatarScreen extends StatelessWidget {
   const AvatarScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     var avatarController = Get.put(AvatarController());
@@ -51,10 +50,12 @@ class AvatarScreen extends StatelessWidget {
                           child: Column(
                             children: List.generate(myAvatar.length, (index) {
                               return InkWell(
+                                borderRadius: BorderRadius.circular(25),
                                 onTap: (){
                                   avatarController.changeAvatarToAlreadyAvaliable(userId: userTelegramId.toString(), avatar: myAvatar[index]);
                                 },
                                 child: Container(
+                                  margin: EdgeInsets.only(top: 5),
                                   height: MediaQuery.sizeOf(context).height * 0.15,
                                   width: MediaQuery.sizeOf(context).width * 0.32,
                                   decoration: BoxDecoration(
