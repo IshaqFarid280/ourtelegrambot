@@ -57,15 +57,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
-  void shareInviteLink(String inviteLink, String appName, String appDescription, String appPhotoUrl) {
+  void shareInviteLink(String inviteLink  , String appName,) {
     // Create a message including the app name, description, and a link
-    final messageText = '''$appName ! 
-    $appDescription 
-👉 $inviteLink
-📷 $appPhotoUrl''';
+//     final messageText = '''$appName !
+// 👉 ''';
     final uri = Uri.encodeFull(
         // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
-        'https://t.me/share/url?url=$inviteLink&text=$messageText');
+        'https://t.me/share/url?url=$inviteLink=$appName');
   launch(uri);
   }
 
@@ -193,21 +191,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                             print(controller.name.value);
                                             print(controller.userId.value);
 
-                                            var encodedUsername =
-                                                Uri.encodeComponent(
-                                                    controller.userId.value);
-
-                                            final inviteLink =
-                                                'https://t.me/InfoHawkbot/app?startapp=$encodedUsername';
-                                            controller.copyToClipboard(
-                                                inviteLink, context);
-
-                                            // Option 1: Open Telegram share link
-                                            shareInviteLink(inviteLink, 'Ninja', 'Buckle up for big Adventure', 'https://firebasestorage.googleapis.com/v0/b/telegrambot-dbb20.appspot.com/o/twitter.png?alt=media&token=6256a87f-2e99-43ce-9bad-4c3cef0145a2');
-
-                                            // Option 2: Send the invite message to Telegram using the bot
-                                            // sendTelegramInvite(controller.userId.value, inviteLink, 'YOUR_BOT_TOKEN_HERE');
-                                          },
+             var encodedUsername =
+               Uri.encodeComponent(controller.userId.value);
+                final inviteLink =
+                 'https://t.me/InfoHawkbot/start?startapp=$encodedUsername';
+                    controller.copyToClipboard(
+                        inviteLink, context);
+                        shareInviteLink(inviteLink, 'Buckle up for big Adventure');
+                             },
                                           child: Container(
                                             width: MediaQuery.of(context)
                                                     .size
