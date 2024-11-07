@@ -19,4 +19,6 @@ String allTasks = 'allTasks';
 
 // all tasks
 String socialTasks = 'socialTasks';
+// all tasks
+String academyTasks = 'academyTasks';
 

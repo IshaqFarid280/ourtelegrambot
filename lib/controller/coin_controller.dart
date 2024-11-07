@@ -24,23 +24,23 @@ class CoinController extends GetxController {
   Rx<Offset> startPosition = Offset.zero.obs; // Position for flying number
 
 
-  String formatCoins(int coins) {
-    if (coins >= 1000000000) {
-      return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
-    } else if (coins >= 1000000) {
-      return '${(coins / 1000000).toStringAsFixed(1)} M'; // Millions
-    } else if (coins >= 1000) {
-      return '${(coins / 1000).toStringAsFixed(1)} k'; // Thousands
-    } else {
-      return coins.toString(); // Less than a thousand
-    }
-  }
+  // String formatCoins(int coins) {
+  //   if (coins >= 1000000000) {
+  //     return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
+  //   } else if (coins >= 1000000) {
+  //     return '${(coins / 1000000).toStringAsFixed(1)} M'; // Millions
+  //   } else if (coins >= 1000) {
+  //     return '${(coins / 1000).toStringAsFixed(1)} k'; // Thousands
+  //   } else {
+  //     return coins.toString(); // Less than a thousand
+  //   }
+  // }
 
-  increaseCoins({required String userId, required BuildContext context}) async {
+  increaseCoins({required String userId, required BuildContext context, required int values}) async {
     try{
       var data = fireStore.collection(user).doc(userId);
       await data.update({
-        'coins':FieldValue.increment(earnPerTap.value),
+        'coins':FieldValue.increment(earnPerTap.value*values),
       });
       lastAddedCoins.value = earnPerTap.value; // Example number to display
       triggerAnimation();
@@ -69,12 +69,12 @@ class CoinController extends GetxController {
     }
   }
 
-  consumeEnergies({required String userId, required BuildContext context}) async {
+  consumeEnergies({required String userId, required BuildContext context, required int inrementvalue}) async {
     try {
       if (coins.value >= 0) { // Ensure user has at least 5 coins
         var data = fireStore.collection(user).doc(userId);
         await data.update({
-          'energies.value': FieldValue.increment(-1),
+          'energies.value': FieldValue.increment(inrementvalue),
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

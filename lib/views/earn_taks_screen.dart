@@ -8,6 +8,7 @@ import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/controller/tasks_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/serivices/firebase_services.dart';
+import 'package:ourtelegrambot/views/code_verification_view/code_verification_screen.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/Rounder_buttons.dart';
 import 'package:ourtelegrambot/widgets/custom_sizedBox.dart';
@@ -59,11 +60,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   void shareInviteLink(String inviteLink  , String appName,) {
     // Create a message including the app name, description, and a link
-//     final messageText = '''$appName !
-// 👉 ''';
+    final messageText = '''$appName''';
     final uri = Uri.encodeFull(
         // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
-        'https://t.me/share/url?url=$inviteLink=$appName');
+        'https://t.me/share/url?url=https://t.me/InfoHawkbot/Info_Hawk?startapp=&text=$messageText');
   launch(uri);
   }
 
@@ -72,7 +72,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     var controller = Get.put(TelegramController());
     var tasksController = Get.put(TasksController());
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         body: Column(
           children: [
@@ -193,11 +193,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
              var encodedUsername =
                Uri.encodeComponent(controller.userId.value);
+             //https://t.me/InfoHawkbot/BountyHunter?startapp
+                                            //http://t.me/InfoHawkbot/BountyHunter?startapp  Info_Hawk
                 final inviteLink =
-                 'https://t.me/InfoHawkbot/start?startapp=$encodedUsername';
+                 'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
                     controller.copyToClipboard(
                         inviteLink, context);
-                        shareInviteLink(inviteLink, 'Buckle up for big Adventure');
+                        shareInviteLink(inviteLink+encodedUsername, 'Buckle up for big Adventure');
                              },
                                           child: Container(
                                             width: MediaQuery.of(context)
@@ -286,6 +288,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
               Tab(text: "Daily",),
               Tab(text: "Basic",),
               Tab(text: "Social",),
+              Tab(text: "Academy",),
             ]),
             Expanded(
               child: TabBarView(
@@ -347,8 +350,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                       await launchUrl(taskUrl,
                                           mode: LaunchMode.externalApplication);
                                       tasksController.markTasksCompleted(
+                                          collection: dailyTasks,
                                           userId: controller.userId.value,
                                           context: context,
+                                          coinprice:task['price'],
                                           docId: task.id);
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
@@ -420,8 +425,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                       await launchUrl(taskUrl,
                                           mode: LaunchMode.externalApplication);
                                       tasksController.markTasksCompleted(
+                                        collection: allTasks,
                                           userId: controller.userId.value,
                                           context: context,
+                                          coinprice:task['price'],
                                           docId: task.id);
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
@@ -492,8 +499,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                   await launchUrl(taskUrl,
                                       mode: LaunchMode.externalApplication);
                                   tasksController.markTasksCompleted(
+                                      collection: socialTasks,
                                       userId: controller.userId.value,
                                       context: context,
+                                      coinprice:task['price'],
                                       docId: task.id);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -509,7 +518,102 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       }
                     },
                   ),
-                ],
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.getAcademydetails(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                var task = tasks[index];
+                var taskName = task['task_name'];
+                var buttonTextName = task['button_text'];
+                var price = task['price'].toString();
+                var url = task['url'];
+                var code = task['code'];
+                var urllauncherNavigator = task['button_navigator'];
+                var imageurl = task['image_url'];
+
+                bool isCompleted = (task['completed'] as List<dynamic>)
+                    .contains(controller.userId.value);
+
+                // Check if the current user has already navigated (status is 'navigated')
+                bool hasNavigated = urllauncherNavigator.any((entry) =>
+                entry['user_id'] == controller.userId.value && entry['status'] == 'true');
+
+                return ListTile(
+                  leading: CircleAvatar(
+                      child: Image.network(imageurl)),
+                  title: mediumText(title: taskName, fontSize: 16.0),
+                  subtitle: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/coin.png')
+                            )
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.065,
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      mediumText(title: price, fontSize: 12.0),
+                    ],
+                  ),
+                  trailing: isCompleted
+                      ? Icon(Icons.check)
+                      : (hasNavigated)
+                      ? CustomButton(
+                      title: 'Verify',
+                      width: 0.18,
+                      height: 0.06,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VerificationScreen(
+                                        coinprice: task['price'],
+                                        title: taskName,
+                                        code: code,
+                                        docid: task.id,
+                                        url: url)));
+                      })
+                      : CustomButton(
+                    width: 0.18,
+                    height: 0.06,
+                    title: buttonTextName,
+                    onTap: () async {
+                      final Uri taskUrl = Uri.parse(url);
+                      if (await canLaunchUrl(taskUrl)) {
+                        await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
+                        tasksController.buttonverification(
+                            userId: controller.userId.value,
+                            collection: academyTasks,
+                            context: context,
+                            docId: task.id
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Could not open $url')),
+                        );
+                      }
+                    },
+                  ),
+                );
+              },
+            );
+          }
+          else {
+            return Center(child: Text('No tasks found'));
+          }
+        },
+      )
+
+      ],
               ),
             ),
 

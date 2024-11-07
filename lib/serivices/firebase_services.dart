@@ -12,8 +12,15 @@ class FirebaseServices {
   static showAllTasks(){
     return fireStore.collection(allTasks).snapshots();
   }
-static showSocialTasks(){
+  static showSocialTasks(){
     return fireStore.collection(socialTasks).snapshots();
+  }
+  static getAcademydetails(){
+    return fireStore.collection(academyTasks).snapshots();
+  }
+
+  static getleaderboarddetails({required String userId}){
+    return fireStore.collection(user).get();
   }
 
 

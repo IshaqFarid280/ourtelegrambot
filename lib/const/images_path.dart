@@ -50,6 +50,7 @@ const String twentySeven = 'assets/twentySeven.png';
 // coin
 const String coin = 'assets/coin.png';
 const String health = 'assets/heart.png';
+const String leaderboard = 'assets/leaderboard.png';
 
 // upgrade screen
 const String coinPerTap = 'assets/tap_coins.png';
