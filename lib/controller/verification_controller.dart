@@ -1,17 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class VerificationController extends GetxController {
-  // Observable for tracking whether the code is correct or not
-  var isCodeCorrect = true.obs;
-  var isCodeEntered = false.obs; // Track if the code was entered (button tap)
+  final TextEditingController verificationInputController = TextEditingController();
+  final RxBool isCodeCorrect = false.obs;
+  final String correctCode;
 
-  // Function to check if the code is correct
-  void verifyCode(String enteredCode, String correctCode) {
-    isCodeEntered.value = true; // Set to true when button is tapped
-    if (enteredCode == correctCode) {
-      isCodeCorrect.value = true;
-    } else {
-      isCodeCorrect.value = false;
-    }
+  VerificationController(this.correctCode) {
+    // Add listener to the text controller to validate the code
+    verificationInputController.addListener(() {
+      // Update `isCodeCorrect` based on whether the entered code matches the correct code
+      isCodeCorrect.value = verificationInputController.text == correctCode;
+    });
+  }
+
+  @override
+  void onClose() {
+    verificationInputController.dispose(); // Dispose controller when no longer needed
+    super.onClose();
   }
 }

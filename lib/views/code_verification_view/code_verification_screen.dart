@@ -6,7 +6,6 @@ import 'package:ourtelegrambot/controller/tasks_controller.dart';
 import 'package:ourtelegrambot/controller/telegram_controller.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
-import 'package:ourtelegrambot/controller/verification_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VerificationScreen extends StatelessWidget {
@@ -29,8 +28,8 @@ class VerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var tasksController = Get.put(TasksController());
     var controller = Get.put(TelegramController());
-    var verificationController = Get.put(VerificationController());
-    TextEditingController verificationInputController = TextEditingController();
+    final TextEditingController verificationInputController = TextEditingController();
+    ValueNotifier<bool> isCodeCorrect = ValueNotifier<bool>(true);
 
     return Scaffold(
       backgroundColor: primaryTextColor,
@@ -73,73 +72,63 @@ class VerificationScreen extends StatelessWidget {
               ),
             ),
             mediumText(title: 'Verification'),
-            Obx(() {
-              return TextFormField(
-                controller: verificationInputController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      width: 2.0,
-                      color: verificationController.isCodeEntered.value
-                          ? (verificationController.isCodeCorrect.value
-                          ? greenColor
-                          : redColor)
-                          : whiteColor.withOpacity(0.3),
+            ValueListenableBuilder(
+              valueListenable: isCodeCorrect,
+              builder: (context, value, child) {
+                return Column(
+                  children: [
+                    TextFormField(
+                      controller: verificationInputController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            width: 2.0,
+                            color: value
+                                ? whiteColor.withOpacity(0.3)
+                                : redColor, // Red if incorrect
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            width: 2.0,
+                            color: value
+                                ? whiteColor.withOpacity(0.3)
+                                : redColor, // Red if incorrect
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            width: 2.0,
+                            color: value
+                                ? whiteColor.withOpacity(0.3)
+                                : redColor, // Red if incorrect
+                          ),
+                        ),
+                        suffixIcon: value
+                            ? null
+                            : Icon(Icons.error, color: redColor), // Error icon if incorrect
+                      ),
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      width: 2.0,
-                      color: verificationController.isCodeEntered.value
-                          ? (verificationController.isCodeCorrect.value
-                          ? greenColor
-                          : redColor)
-                          : whiteColor.withOpacity(0.3),
+                    smallText(
+                      title: 'Verify to Claim Your Reward',
+                      color: value
+                          ? whiteColor.withOpacity(0.3)
+                          : redColor, // Change text color based on validation
                     ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      width: 2.0,
-                      color: verificationController.isCodeEntered.value
-                          ? (verificationController.isCodeCorrect.value
-                          ? greenColor
-                          : redColor)
-                          : whiteColor.withOpacity(0.3),
-                    ),
-                  ),
-                  suffixIcon: verificationController.isCodeEntered.value
-                      ? Icon(
-                    verificationController.isCodeCorrect.value
-                        ? Icons.check
-                        : Icons.error,
-                    color: verificationController.isCodeCorrect.value
-                        ? greenColor
-                        : redColor,
-                  )
-                      : null,
-                ),
-              );
-            }),
-            smallText(
-              title: 'Verify to Claim Your Reward',
-              color: verificationController.isCodeEntered.value
-                  ? (verificationController.isCodeCorrect.value
-                  ? greenColor
-                  : redColor)
-                  : whiteColor.withOpacity(0.3),
+                  ],
+                );
+              },
             ),
             Spacer(),
             CustomButton(
               titleColor: primaryTextColor,
               onTap: () {
-                verificationController.verifyCode(
-                  verificationInputController.text,
-                  code,
-                );
-                if (verificationController.isCodeCorrect.value) {
+                // Check if the entered code matches the correct code when the button is tapped
+                if (code == verificationInputController.text) {
+                  isCodeCorrect.value = true; // Correct code, validation passes
                   tasksController.markTasksCompletedwithpopNavigation(
                     collection: academyTasks,
                     userId: controller.userId.value,
@@ -147,6 +136,9 @@ class VerificationScreen extends StatelessWidget {
                     docId: docid,
                     coinprice: coinprice,
                   );
+                  verificationInputController.clear();
+                } else {
+                  isCodeCorrect.value = false; // Incorrect code, show error
                 }
               },
               title: 'Verify',
