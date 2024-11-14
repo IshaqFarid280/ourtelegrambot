@@ -12,19 +12,7 @@
   <meta property="og:url" content="https://t.me/InfoHawkbot/Info_Hawk?startapp">
 
 
-<!--<body>-->
-<!--<h1>Joins InfoHawk Adventure!</h1>-->
-<!--<p>Buckles up for big adventures with InfoHawk! Games, quests, tasks, and a referral program coming soon.</p>-->
-<!--<a href="https://t.me/InfoHawkbot/start?startapp" style="font-size:20px; color: blue;">-->
-<!--  Open in Telegram-->
-<!--</a>-->
-<!--</body>-->
-  <!-- Redirect Script to Open Telegram Bot Link -->
-<!--  <script>-->
-<!--    window.onload = function() {-->
-<!--      window.location.href = "https://t.me/InfoHawkbot/start?startapp";-->
-<!--    };-->
-<!--  </script>-->
+
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
@@ -53,19 +41,7 @@
       }
     }
   </script>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -84,14 +60,54 @@
   <title>foruai_mini_app</title>
   <link rel="manifest" href="manifest.json">
 
+
+  <!--  For Loading Indicator-->
+  <style>
+    .container{
+
+    width: 100vw;
+    height: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .indicator{
+    width: 13vw;
+    height: 10vw;
+    }
+  </style>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     const serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <script>
+    // Check if the Telegram Web App is available
+    function initTelegramReferral() {
+        if (window.Telegram) {
+            // Telegram WebApp API is available
+            const referralData = Telegram.WebApp.initDataUnsafe?.start_param || "";
+
+            // Send the referral data to the Flutter app
+            if (referralData) {
+                window.parent.postMessage({ referralCode: referralData }, "*");
+            }
+        }
+    }
+
+    // Call the function on load
+    window.onload = initTelegramReferral;
+  </script>
+
 </head>
 <body>
+<!--For Loading Indicator-->
+<div id="loading_indicator" class="container">
+  <img class="indicator" src="./assets/images/loading2.gif" />
+</div>
 <script>
   window.addEventListener('load', function(ev) {
     // Download main.dart.js

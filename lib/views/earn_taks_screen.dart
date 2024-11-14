@@ -58,12 +58,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
-  void shareInviteLink(String inviteLink  , String appName,) {
+  void shareInviteLink(String inviteLink , String userid , String appName,) {
     // Create a message including the app name, description, and a link
     final messageText = '''$appName''';
+
     final uri = Uri.encodeFull(
         // 'https://t.me/share/url?url=$inviteLink&text=$messageText');
-        'https://t.me/share/url?url=https://t.me/InfoHawkbot/Info_Hawk?startapp=&text=$messageText');
+        'https://t.me/share/url?url=$inviteLink&text=$messageText');
   launch(uri);
   }
 
@@ -72,7 +73,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     var controller = Get.put(TelegramController());
     var tasksController = Get.put(TasksController());
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         body: Column(
           children: [
@@ -198,7 +199,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                  'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
                     controller.copyToClipboard(
                         inviteLink, context);
-                        shareInviteLink(inviteLink+encodedUsername, 'Buckle up for big Adventure');
+                        shareInviteLink(inviteLink, controller.userId.value,  'Buckle up for big Adventure');
+                        print('the encoded user id: ${encodedUsername}');
                              },
                                           child: Container(
 
@@ -294,6 +296,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
               Tab(text: "Basic",),
               Tab(text: "Social",),
               Tab(text: "Academy",),
+              Tab(text: "Groups",),
             ]),
             Expanded(
               child: TabBarView(
@@ -523,6 +526,110 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       }
                     },
                   ),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.getAcademydetails(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                var task = tasks[index];
+                var taskName = task['task_name'];
+                var buttonTextName = task['button_text'];
+                var price = task['price'].toString();
+                var url = task['url'];
+                var code = task['code'];
+                var urllauncherNavigator = task['button_navigator'];
+                var imageurl = task['image_url'];
+
+                bool isCompleted = (task['completed'] as List<dynamic>)
+                    .contains(controller.userId.value);
+
+                // Check if the current user has already navigated (status is 'navigated')
+                bool hasNavigated = urllauncherNavigator.any((entry) =>
+                entry['user_id'] == controller.userId.value && entry['status'] == 'true');
+
+                return ListTile(
+                  leading: CircleAvatar(
+                      child: Image.network(imageurl)),
+                  title: mediumText(title: taskName, fontSize: 16.0),
+                  subtitle: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/coin.png')
+                            )
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.065,
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      mediumText(title: price, fontSize: 12.0),
+                    ],
+                  ),
+                  trailing: isCompleted
+                      ? Icon(Icons.check)
+                      : (hasNavigated)
+                      ? CustomButton(
+                      title: 'Verify',
+                      width: 0.18,
+                      height: 0.06,
+                      onTap: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>
+                        //             VerificationScreen(
+                        //                 coinprice: task['price'],
+                        //                 title: taskName,
+                        //                 code: code,
+                        //                 docid: task.id,
+                        //                 url: url)));
+
+                        tasksController.verifyUserMembership(
+                            botToken: '7397643566:AAHJ52kYZTgM3BWUzHNKRp7V0c_O51XZd58',
+                            channelId: '@ishaqhehe',
+                            userId: controller.userId.value,
+                            coin: task['price'],
+                            collection: academyTasks,
+                            docId: task.id,
+                            context: context
+                        );
+                      })
+                      : CustomButton(
+                    width: 0.18,
+                    height: 0.06,
+                    title: buttonTextName,
+                    onTap: () async {
+                      final Uri taskUrl = Uri.parse(url);
+                      if (await canLaunchUrl(taskUrl)) {
+                        await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
+                        tasksController.buttonverification(
+                            userId: controller.userId.value,
+                            collection: academyTasks,
+                            context: context,
+                            docId: task.id
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Could not open $url')),
+                        );
+                      }
+                    },
+                  ),
+                );
+              },
+            );
+          }
+          else {
+            return Center(child: Text('No tasks found'));
+          }
+        },
+      ),
       StreamBuilder<QuerySnapshot>(
         stream: FirebaseServices.getAcademydetails(),
         builder: (context, snapshot) {

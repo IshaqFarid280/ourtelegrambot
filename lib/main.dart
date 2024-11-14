@@ -12,6 +12,7 @@ import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/views/upgrades_tab.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+import 'dart:html' as html;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,6 @@ class ExpeditionToTheMoonApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Expedition to the Moon',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
@@ -54,6 +54,7 @@ class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
   TelegramController telegramController = Get.put(TelegramController());
+  String? referralCode;
 
   @override
   void initState() {
@@ -65,6 +66,8 @@ class HomeScreenState extends State<HomeScreen> {
       TaskListScreen(),
       AvatarScreen()
     ];
+    // Listen for messages from the HTML
+
   }
 
   void _onItemTapped(int index) {

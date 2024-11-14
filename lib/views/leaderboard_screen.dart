@@ -48,8 +48,6 @@ class LeaderboardScreen extends StatelessWidget {
 
                     title: Row(
                       children: [
-                        // Display the leaderboard rank (index + 1)
-
                         smallText(title: '${index + 1}. '),
                         Sized(width: 0.01),
                         ClipRRect(
