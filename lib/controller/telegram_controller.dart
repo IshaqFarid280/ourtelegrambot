@@ -122,6 +122,7 @@ class TelegramController extends GetxController {
       'user_id': userId,
       'coins': 5000,
       'lastSpinTime':FieldValue.serverTimestamp(),
+      'invited_users' : [],
       'tap_per_earn': {
         'level': 1,
         'value': 1,

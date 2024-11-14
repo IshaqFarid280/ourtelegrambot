@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../const/firebase_const.dart';
+import 'dart:html' as html;
 
 class CoinController extends GetxController {
   var coins = 0.obs;
@@ -22,8 +23,45 @@ class CoinController extends GetxController {
   var showFlyingNumber = false.obs;
   var lastAddedCoins = 0.obs;
   Rx<Offset> startPosition = Offset.zero.obs; // Position for flying number
+  var referralCode = '';
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    listenForReferralCode();
+  }
 
+  void listenForReferralCode() {
+    html.window.onMessage.listen((event) {
+      if (event.data != null && event.data['referralCode'] != null) {
+        print('the referral code of other user: $referralCode');
+        referralCode = event.data['referralCode'];
+        processReferral(referralCode);
+      }
+    });
+  }
+  // Function to process referral code
+  Future<void> processReferral(String referralCode) async {
+    try {
+      final refUserDoc = fireStore.collection(user).doc(referralCode);
+      final refUserSnapshot = await refUserDoc.get();
+
+      if (refUserSnapshot.exists) {
+        // If referral ID exists, add current user ID to `invited_users` array
+        await refUserDoc.update({
+          'invited_users': FieldValue.arrayUnion([userTelegramId]),
+          'coins': FieldValue.increment(500), // Deduct 5 coins
+
+        });
+        print("User $userTelegramId added to invited_users of referral ID $referralCode");
+      } else {
+        print("Referral code $referralCode does not match any user ID in the database.");
+      }
+    } catch (e) {
+      print("Error processing referral: $e");
+    }
+  }
   // String formatCoins(int coins) {
   //   if (coins >= 1000000000) {
   //     return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
