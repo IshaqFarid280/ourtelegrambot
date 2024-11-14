@@ -114,14 +114,18 @@ class TelegramController extends GetxController {
 
   // Method to save initial user data
   Future<void> saveUserData({required String userId, required String userName}) async {
+    DateTime now = DateTime.now();
+    DateTime yesterday = now.subtract(Duration(days: 1));
+    Timestamp customTimestamp = Timestamp.fromDate(yesterday);
     var data = fireStore.collection(user).doc(userId);
     await data.set({
+      'invited_users':[],
       'avatar':'assets/10.png',
       'my_avatars':FieldValue.arrayUnion(['assets/10.png']),
       'user_name': userName,
       'user_id': userId,
       'coins': 5000,
-      'lastSpinTime':FieldValue.serverTimestamp(),
+      'lastSpinTime':customTimestamp,
       'tap_per_earn': {
         'level': 1,
         'value': 1,

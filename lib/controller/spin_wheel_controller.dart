@@ -56,12 +56,13 @@ class SpinWheelController extends GetxController {
       selectedItem.value = items[randomIndex];
       // Call the function to increment coins
       await increaseCoinsInGame(userId: userId, context: context);
-      // Show a message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('You earned ${selectedItem.value} coins!'),
-        ),
-      );
+      Future.delayed(const Duration(seconds: 3),(){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('You earned ${selectedItem.value} coins!'),
+          ),
+        );
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

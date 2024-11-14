@@ -168,7 +168,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                                 title: '${controller.name.value}',
                                                 fontSize: 20.0),
                                             smallText(
-                                                title: 'the id',
+                                                title: 'id',
                                                 fontSize: 14.0,
                                                 color:
                                                     whiteColor.withOpacity(0.7)),
@@ -188,8 +188,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                         ),
                                         InkWell(
                                           onTap: () {
-                                            print(controller.name.value);
-                                            print(controller.userId.value);
+
 
              var encodedUsername =
                Uri.encodeComponent(controller.userId.value);
@@ -202,6 +201,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         shareInviteLink(inviteLink+encodedUsername, 'Buckle up for big Adventure');
                              },
                                           child: Container(
+
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
@@ -228,7 +228,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 color:
-                                                    whiteColor.withOpacity(0.2)),
+                                                    primaryTextColor),
                                           ),
                                         ),
                                         Sized(
@@ -284,7 +284,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
               ),
             ),
 
-            TabBar(tabs: [
+           const TabBar(
+              labelColor:coinColors,
+              dividerColor: primaryTextColor,
+                indicatorColor: coinColors,
+
+                tabs: [
               Tab(text: "Daily",),
               Tab(text: "Basic",),
               Tab(text: "Social",),

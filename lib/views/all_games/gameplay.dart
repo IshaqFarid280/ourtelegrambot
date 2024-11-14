@@ -37,37 +37,44 @@ class _GameScreenState extends State<GameScreen>
     gameStarted = true;
     time = 0;
     initialPosition = birdY;
+
+    // Collision threshold to define proximity needed for a collision
+    const double collisionThresholdY = 0.1; // Adjust for vertical proximity
+    const double collisionThresholdX = 0.15; // Adjust for horizontal proximity
+
     timer = Timer.periodic(const Duration(milliseconds: 60), (timer) {
       time += 0.04;
       height = gravity * time * time + velocity * time;
       setState(() {
         birdY = initialPosition - height;
 
+        // Move obstacle back to the right if it passes the left edge
         if (obstacleX < -1.5) {
           obstacleX += 3;
           obstacleSize = Random().nextDouble() * 100 + 20;
-          // score++;
           coinController.coins.value += 100;
           coinController.increaseCoinsInGame(userId: userTelegramId.toString(), context: context);
         } else {
           obstacleX -= 0.05;
         }
 
-        if (birdY > 1 || birdY < -1) {
-          timer.cancel();
-          showGameOverDialog();
-        }
+        // Calculate distances between bird and obstacle
+        double horizontalDistance = (0 - obstacleX).abs(); // X-axis distance
+        double verticalDistance = (birdY - (-0.4)).abs();  // Y-axis distance
 
-        if (birdY < -0.4 + obstacleSize / 100 &&
-            birdY > -0.4 - obstacleSize / 100 &&
-            obstacleX < 0.1 &&
-            obstacleX > -0.1) {
+        // Detect collision based on proximity in both axes
+        bool hasCollidedWithObstacle = horizontalDistance < collisionThresholdX &&
+            verticalDistance < (obstacleSize / 200) + collisionThresholdY;
+
+        // Check for game boundaries or collision
+        if (birdY > 1 || birdY < -1 || hasCollidedWithObstacle) {
           timer.cancel();
           showGameOverDialog();
         }
       });
     });
   }
+
 
   void showGameOverDialog() {
     showDialog(
@@ -253,7 +260,7 @@ class MyObstacle extends StatelessWidget {
       width: size,
       height: size,
       decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 74, 74, 74),
+        image: DecorationImage(image: AssetImage(obstacle),fit: BoxFit.cover,),
         shape: BoxShape.circle,
       ),
     );

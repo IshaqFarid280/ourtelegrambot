@@ -5,6 +5,7 @@ import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import 'package:confetti/confetti.dart';
 import '../../const/colors.dart';
+import '../../const/images_path.dart';
 import '../../controller/slot_machine.dart';
 import '../../const/firebase_const.dart';
 
@@ -15,19 +16,19 @@ class SlotMachineScreen extends StatefulWidget {
 
 class _SlotMachineScreenState extends State<SlotMachineScreen> {
   final MySlotMachineController _controller = Get.put(MySlotMachineController());
-  late ConfettiController _confettiController;
+
 
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _controller.confettiController = ConfettiController(duration: const Duration(seconds: 2));
     final userId = userTelegramId.toString();
     _controller.fetchUserData(userId);
   }
 
   @override
   void dispose() {
-    _confettiController.dispose();
+    _controller.confettiController.dispose();
     super.dispose();
   }
 
@@ -52,21 +53,21 @@ class _SlotMachineScreenState extends State<SlotMachineScreen> {
                 const CustomSized(),
                 Obx(() => smallText(title: 'Free Plays: ${_controller.remainingPlays}')),
                 const CustomSized(),
+                // SlotMachine with dynamic values based on finalSlotValues
                 SlotMachine(
-                  rollItems: [
-                    RollItem(index: 0, child: buildCoinSymbol(1000)),
-                    RollItem(index: 1, child: buildCoinSymbol(2000)),
-                    RollItem(index: 2, child: buildCoinSymbol(4000)),
-                    RollItem(index: 3, child: buildCoinSymbol(6000)),
-                    RollItem(index: 4, child: buildCoinSymbol(8000)),
-                    RollItem(index: 5, child: buildCoinSymbol(10000)),
-                  ],
+                  shuffle: true,
+                  multiplyNumberOfSlotItems: 1,
+                  rollItems: List.generate(3, (index) {
+                    return RollItem(
+                      index: index,
+                      child: Obx(()=> buildCoinSymbol(_controller.finalSlotValues[index])), // Use the observable value here
+                    );
+                  }),
                   onCreated: (controller) {
                     _controller.init(controller);
                   },
                   onFinished: (resultIndexes) {
                     if (_controller.isWinningCombination(resultIndexes)) {
-                      _confettiController.play(); // Play confetti if winning combination
                     }
                   },
                 ),
@@ -97,12 +98,24 @@ class _SlotMachineScreenState extends State<SlotMachineScreen> {
           ),
           // Confetti widget at the center of the screen
           ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirectionality: BlastDirectionality.explosive,
-            shouldLoop: false,
-            colors: [Colors.green, Colors.blue, Colors.pink, Colors.orange, Colors.purple],
-            numberOfParticles: 20,
-            gravity: 0.2,
+            confettiController: _controller.confettiController,
+            blastDirectionality: BlastDirectionality.explosive, // Blast from center
+            emissionFrequency: 0.02, // How often particles are emitted
+            numberOfParticles: 30, // Number of particles to emit
+            gravity: 0.2, // Particle gravity
+            particleDrag: 0.03, // Apply drag to the particles
+            colors: [
+              coinColors
+            ], // Set colors to null to use the original image colors
+            createParticlePath: (_) {
+              // You could use this to create a custom path if needed
+              return Path()..addOval(Rect.fromCircle(center: Offset(0, 0), radius: 5));
+            },
+            child: Image.asset(
+              coin,
+              width: 0, // Adjust size as needed
+              height: 0,
+            ),
           ),
         ],
       ),
@@ -136,3 +149,4 @@ class _SlotMachineScreenState extends State<SlotMachineScreen> {
     );
   }
 }
+

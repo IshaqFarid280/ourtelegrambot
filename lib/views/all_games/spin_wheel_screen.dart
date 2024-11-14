@@ -25,7 +25,7 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 10));
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
   }
 
   @override
@@ -36,17 +36,17 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
   }
 
   void _spinWheel() async {
-    _confettiController.play();
-    await _audioPlayer.open(
-      Audio('assets/music/coins.mp3'), // Adjust the path to your sound file
-      volume: 100,
-      forceOpen: true,
-    );
-
-    // Stop the sound after 2 seconds
-    await Future.delayed(Duration(seconds: 5));
-    _audioPlayer.stop(); // Stop the sound
     controller.spinWheel(userTelegramId.toString(), context);
+    await Future.delayed(Duration(seconds: 3),(){
+      _confettiController.play();
+      AssetsAudioPlayer.newPlayer().open(
+        Audio.network("assets/music/coins.mp3"),
+        autoStart: true,
+        playSpeed: 20,
+        audioFocusStrategy:AudioFocusStrategy.request(),
+        showNotification: true,
+      );
+    });
   }
 
   @override
@@ -71,7 +71,6 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
                   FortuneWheel(
                     hapticImpact: HapticImpact.heavy,
                     rotationCount: 5,
-                    curve: Curves.easeInCirc,
                     animateFirst: false,
                     selected: controller.selected.stream,
                     items: [
@@ -147,10 +146,10 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
                   ConfettiWidget(
                     confettiController: _confettiController,
                     blastDirectionality: BlastDirectionality.explosive, // Blast from center
-                    emissionFrequency: 0.02, // How often particles are emitted
+                    emissionFrequency: 0.03, // How often particles are emitted
                     numberOfParticles: 30, // Number of particles to emit
                     gravity: 0.2, // Particle gravity
-                    particleDrag: 0.03, // Apply drag to the particles
+                    particleDrag: 0.05, // Apply drag to the particles
                     colors: [
                       coinColors
                     ], // Set colors to null to use the original image colors
