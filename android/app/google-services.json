@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "530545209911",
-    "project_id": "telegrambot-dbb20",
-    "storage_bucket": "telegrambot-dbb20.appspot.com"
+    "project_number": "363816400266",
+    "project_id": "newtelegrambot-6b0e4",
+    "storage_bucket": "newtelegrambot-6b0e4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:530545209911:android:48dd138f6ea793d54c45b2",
+        "mobilesdk_app_id": "1:363816400266:android:22d2c0444f4b08a5a28473",
         "android_client_info": {
           "package_name": "com.ourteelgrambotapi.ourtelegrambot"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDA_t8wD5PlutXhnMLEzFFXIYZtqFYHBgo"
+          "current_key": "AIzaSyDG6t9w5wPY2qx1t-WyHMLYY6OKZ3L80RQ"
         }
       ],
       "services": {
