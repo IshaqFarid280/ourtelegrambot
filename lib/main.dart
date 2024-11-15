@@ -12,7 +12,7 @@ import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/views/upgrades_tab.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
-import 'dart:html' as html;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

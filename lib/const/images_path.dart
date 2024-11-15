@@ -11,6 +11,7 @@ const String spinWheel = 'assets/spin_wheel.gif';
 const String airPlane = 'assets/air_plane.gif';
 const String slotMachine = 'assets/slot_machine.gif';
 const String obstacle = 'assets/obstacle.gif';
+const String loading = 'assets/loading.gif';
 
 // fill icons
 const String ninjaHome = 'assets/ninja.png';
