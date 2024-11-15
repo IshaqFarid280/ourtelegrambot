@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/controller/coin_controller.dart';
+import 'package:ourtelegrambot/views/all_games/slot_machine_screen.dart';
 import 'package:ourtelegrambot/views/leaderboard_screen.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
@@ -12,6 +13,7 @@ import 'package:ourtelegrambot/widgets/tripletap_gesture.dart';
 import 'package:shake_detector/shake_detector.dart';
 import '../const/firebase_const.dart';
 import '../serivices/firebase_services.dart';
+import 'all_games/spin_wheel_screen.dart';
 
 class HomeTab extends GetView<CoinController> {
   const HomeTab({super.key});
@@ -130,7 +132,6 @@ class HomeTab extends GetView<CoinController> {
                               ),
                             ),
                             // Flying Number
-
                             Positioned(
                                 left: 16,
                                 top: 16,
@@ -146,6 +147,32 @@ class HomeTab extends GetView<CoinController> {
                                   height: 0.06,
                                   label: 'Leaderboard',
                                   icon: Image.asset(leaderboard, width: 20, height: 20),)),
+                            Positioned(
+                                right: MediaQuery.sizeOf(context).width * 0.005,
+                                top: MediaQuery.sizeOf(context).height * 0.016,
+                                child: HudViewSmall(
+                                  onTap: (){
+                                    Get.to(()=> SpinWheelScreen());
+                                  },
+                                  width: 0.2,
+                                  fontsize: 8.0,
+                                  height: 0.08,
+                                  issizedbox: true,
+                                  label: null,
+                                  icon: Image.asset(spinWheel, width: 50,),)),
+                            Positioned(
+                                right: MediaQuery.sizeOf(context).width * 0.005,
+                                top: MediaQuery.sizeOf(context).height * 0.12,
+                                child: HudViewSmall(
+                                  onTap: (){
+                                    Get.to(()=> SlotMachineScreen());
+                                  },
+                                  width: 0.2,
+                                  fontsize: 8.0,
+                                  height: 0.08,
+                                  issizedbox: true,
+                                  label: null,
+                                  icon: Image.asset(slotMachine, width: 50,),)),
                             if (coinController.showFlyingNumber.value)
                               FlyingNumber(
                                 number: coinController.lastAddedCoins.value, // Number to display

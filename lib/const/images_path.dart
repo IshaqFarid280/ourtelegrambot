@@ -10,6 +10,7 @@ const String energy = 'assets/energies.png';
 const String spinWheel = 'assets/spin_wheel.gif';
 const String airPlane = 'assets/air_plane.gif';
 const String slotMachine = 'assets/slot_machine.gif';
+const String obstacle = 'assets/obstacle.gif';
 
 // fill icons
 const String ninjaHome = 'assets/ninja.png';

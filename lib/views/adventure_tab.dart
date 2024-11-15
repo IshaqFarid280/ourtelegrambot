@@ -24,7 +24,7 @@ class _AdventureTabState extends State<AdventureTab> {
         automaticallyImplyLeading: true,
       ),
       body: Obx(
-          ()=> coinController.totalHp.value < 5 ?
+          ()=> coinController.totalHp.value < 1 ?
           Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
