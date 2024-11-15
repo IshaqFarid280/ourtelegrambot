@@ -11,6 +11,7 @@ import 'package:ourtelegrambot/serivices/firebase_services.dart';
 import 'package:ourtelegrambot/views/code_verification_view/code_verification_screen.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/Rounder_buttons.dart';
+import 'package:ourtelegrambot/widgets/custom_indicator.dart';
 import 'package:ourtelegrambot/widgets/custom_sizedBox.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -101,15 +102,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(
-                              child: SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.06,
-                                width: MediaQuery.of(context).size.width * 0.06,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.0,
-                                  value: 10.0,
-                                ),
-                              ),
+                            return const Center(
+                              child: CustomIndicator()
                             );
                           } else if (snapshot.hasData) {
                             var data =
@@ -149,10 +143,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                         Container(
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/ninja.png')),
+                                                  image: AssetImage('assets/ninja.png'),),
                                               shape: BoxShape.circle,
-                                              color: whiteColor.withOpacity(0.8)),
+                                              color: coinColors),
                                           width:
                                               MediaQuery.of(context).size.width *
                                                   0.1,
@@ -254,8 +247,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                               size: 28,
                                             ),
                                             decoration: BoxDecoration(
-                                                color:
-                                                    whiteColor.withOpacity(0.2),
+                                                color: primaryTextColor,
                                                 shape: BoxShape.circle),
                                           ),
                                         ),
@@ -305,7 +297,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     stream: FirebaseServices.showDailyTasks(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CustomIndicator());
                       }
                       else if (snapshot.hasData) {
                         final tasks = snapshot.data!.docs;
@@ -382,7 +374,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     stream: FirebaseServices.showAllTasks(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CustomIndicator());
                       }
                       else if (snapshot.hasData) {
                         final tasks = snapshot.data!.docs;
@@ -457,7 +449,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     stream: FirebaseServices.showSocialTasks(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CustomIndicator());
                       } else if (snapshot.hasData) {
                         final tasks = snapshot.data!.docs;
                         return ListView.builder(
@@ -530,7 +522,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         stream: FirebaseServices.getAcademydetails(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CustomIndicator());
           }
           else if (snapshot.hasData) {
             final tasks = snapshot.data!.docs;
@@ -634,7 +626,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         stream: FirebaseServices.getAcademydetails(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CustomIndicator());
           }
           else if (snapshot.hasData) {
             final tasks = snapshot.data!.docs;

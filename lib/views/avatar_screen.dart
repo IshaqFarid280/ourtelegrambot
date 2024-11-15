@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
+import 'package:ourtelegrambot/widgets/custom_indicator.dart';
 import '../const/colors.dart';
 import '../const/firebase_const.dart';
 import '../controller/avatar_controller.dart';
@@ -19,7 +20,7 @@ class AvatarScreen extends StatelessWidget {
         stream: FirebaseServices.getUserData(userId: userTelegramId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CustomIndicator());
           } else {
             var userData = snapshot.data!.data() as Map<String, dynamic>;
             var myAvatar = userData['my_avatars'] as List<dynamic>; // Access my_avatars as a list

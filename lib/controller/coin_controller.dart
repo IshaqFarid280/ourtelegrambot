@@ -24,6 +24,7 @@ class CoinController extends GetxController {
   var lastAddedCoins = 0.obs;
   Rx<Offset> startPosition = Offset.zero.obs; // Position for flying number
   var referralCode = '';
+  var totalEnergies = 0.obs;
 
   @override
   void onInit() {

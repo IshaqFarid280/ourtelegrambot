@@ -7,6 +7,7 @@ import 'package:ourtelegrambot/controller/upgradesCotroller.dart';
 import 'package:ourtelegrambot/serivices/bottom_sheets_services.dart';
 import 'package:ourtelegrambot/serivices/firebase_services.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+import 'package:ourtelegrambot/widgets/custom_indicator.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import '../const/colors.dart';
 import 'how_it_works/on_boarding_screen.dart';
@@ -20,7 +21,7 @@ class UserAttributesScreen extends StatelessWidget {
         stream: FirebaseServices.getUserData(userId: userTelegramId.toString()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CustomIndicator());
           }else if(snapshot.hasData){
             var userData = snapshot.data!.data() as Map<String, dynamic>;
             return  Padding(

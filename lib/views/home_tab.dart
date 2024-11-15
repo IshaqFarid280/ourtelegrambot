@@ -13,6 +13,8 @@ import 'package:ourtelegrambot/widgets/tripletap_gesture.dart';
 import 'package:shake_detector/shake_detector.dart';
 import '../const/firebase_const.dart';
 import '../serivices/firebase_services.dart';
+import '../widgets/custom_indicator.dart';
+import '../widgets/fling_number.dart';
 import 'all_games/spin_wheel_screen.dart';
 
 class HomeTab extends GetView<CoinController> {
@@ -29,7 +31,7 @@ class HomeTab extends GetView<CoinController> {
           stream: FirebaseServices.getUserData(userId: userTelegramId.toString()),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CustomIndicator());
             } else if (snapshot.hasData) {
               var userData = snapshot.data!.data() as Map<String, dynamic>;
               coinController.coins.value = userData['coins'];
@@ -37,9 +39,26 @@ class HomeTab extends GetView<CoinController> {
               coinController.coinPerSecond.value = userData['coin_per_second']['value'];
               coinController.hpCurrentValue.value = userData['hp']['value'];
               coinController.totalHp.value = userData['hp']['total_hp'];
+              coinController.totalEnergies.value =  userData['energies']['max_energies'];
               coinController.addEnergies(userId: userTelegramId.toString(), context: context);
               coinController.makeCoinPerSecond(userId: userTelegramId.toString(), context: context);
-
+              double energyPercentage = (userData['energies']['value'] / controller.totalEnergies.value) * 100;
+              // Determine the color based on the energy percentage
+              Color iconColor;
+              IconData iconData;
+              if (energyPercentage > 80) {
+                iconColor = Colors.green;
+                iconData = Icons.battery_full_outlined;
+              } else if (energyPercentage > 50) {
+                iconColor = Colors.yellow;
+                iconData = Icons.battery_6_bar_outlined;
+              } else if (energyPercentage > 30) {
+                iconColor = Colors.orange;
+                iconData = Icons.battery_4_bar_outlined;
+              } else {
+                iconColor = Colors.red;
+                iconData = Icons.battery_charging_full_outlined;
+              }
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 physics: BouncingScrollPhysics(),
@@ -116,14 +135,15 @@ class HomeTab extends GetView<CoinController> {
                             // Background Image
                             AnimatedScale(
                               duration: const Duration(milliseconds: 300),
-                              scale: coinController.isTapped.value ? 1.2 : 1.0,
+                              scale: coinController.isTapped.value ? 1.0 : 0.8,
                               child: AnimatedOpacity(
                                 duration: const Duration(milliseconds: 300),
                                 opacity: coinController.isTapped.value ? 0.8 : 1.0,
                                 child: Image.asset(
                                   userData['avatar'],
-                                  height: 300.0,
-                                  fit: BoxFit.contain,
+                                  height: 270.0,
+                                  width: 270.0, // Match width and height for a consistent size
+                                  fit: BoxFit.cover, // Use BoxFit.cover to keep the image within bounds when scaling
                                 ),
                               ),
                             ),
@@ -184,9 +204,6 @@ class HomeTab extends GetView<CoinController> {
                               ),
                           ],
                         )),),
-
-
-
                       ),
                     ),
                     CustomSized(height: 0.03),
@@ -221,7 +238,7 @@ class HomeTab extends GetView<CoinController> {
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Image.network(energy, height: 40, width: 40, color: whiteColor),
+                                  Icon(iconData,color: iconColor,size: 50,),
                                   CustomSized(height: 0.01),
                                   Obx(
                                       ()=> AnimatedScale(
@@ -262,69 +279,5 @@ class HomeTab extends GetView<CoinController> {
 }
 
 
-class FlyingNumber extends StatefulWidget {
-  final int number;
-  final Offset startPosition; // New parameter
-  final VoidCallback onAnimationComplete;
 
-  const FlyingNumber({
-    Key? key,
-    required this.number,
-    required this.startPosition,
-    required this.onAnimationComplete,
-  }) : super(key: key);
-
-  @override
-  _FlyingNumberState createState() => _FlyingNumberState();
-}
-
-class _FlyingNumberState extends State<FlyingNumber> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
-
-    // Adjust the end value here for higher flight
-    _animation = Tween<double>(begin: 0, end: -200).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
-
-    _controller.forward().whenComplete(() {
-      widget.onAnimationComplete();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Positioned(
-          left: widget.startPosition.dx - 20, // Center the number horizontally
-          top: widget.startPosition.dy + _animation.value, // Move upwards
-          child: Opacity(
-            opacity: 1 - (_controller.value), // Fade out
-            child: Text(
-              '+${widget.number}', // Display the number
-              style: const TextStyle(fontSize: 30, color: Colors.green, fontWeight: FontWeight.bold),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
 
