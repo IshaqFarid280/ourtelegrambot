@@ -25,24 +25,30 @@ class CoinController extends GetxController {
   Rx<Offset> startPosition = Offset.zero.obs; // Position for flying number
   var referralCode = '';
 
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    print('the init functino o coin controller');
+
     listenForReferralCode();
+
   }
 
-  void listenForReferralCode() {
+  void listenForReferralCode()  {
     html.window.onMessage.listen((event) {
       if (event.data != null && event.data['referralCode'] != null) {
         print('the referral code of other user: $referralCode');
-        referralCode = event.data['referralCode'];
-        processReferral(referralCode);
+         referralCode = event.data['referralCode'];
+        // referralCode =  '1431684555';
+        processReferral(  referralCode);
       }
     });
   }
   // Function to process referral code
   Future<void> processReferral(String referralCode) async {
+    print('process refferak ');
     try {
       final refUserDoc = fireStore.collection(user).doc(referralCode);
       final refUserSnapshot = await refUserDoc.get();
@@ -55,11 +61,18 @@ class CoinController extends GetxController {
 
         });
         print("User $userTelegramId added to invited_users of referral ID $referralCode");
+
+        Get.snackbar('Done', "User $userTelegramId added to invited_users of referral ID $referralCode");
+
       } else {
-        print("Referral code $referralCode does not match any user ID in the database.");
+        print("Referral code $referralCode does not match any user ID. the current user id: $userTelegramId");
+        Get.snackbar('Error', "Referral code $referralCode does not match any user ID. the current user id: $userTelegramId");
+
+
       }
     } catch (e) {
-      print("Error processing referral: $e");
+      print('Error processing referral: $e');
+      Get.snackbar('Error', "Error processing referral: $e");
     }
   }
   // String formatCoins(int coins) {

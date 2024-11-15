@@ -18,12 +18,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-        apiKey: "AIzaSyBU4j3TedSqjR2lIlRIIam-kx5PMERfiHg",
-        authDomain: "telegrambot-dbb20.firebaseapp.com",
-        projectId: "telegrambot-dbb20",
-        storageBucket: "telegrambot-dbb20.appspot.com",
-        messagingSenderId: "530545209911",
-        appId: "1:530545209911:web:226956ff9690294d4c45b2"),
+        apiKey: "AIzaSyCCf9VLLqdKOiv_clqw2WHpCvTwCs8ALts",
+        authDomain: "newtelegrambot-6b0e4.firebaseapp.com",
+        projectId: "newtelegrambot-6b0e4",
+        storageBucket: "newtelegrambot-6b0e4.firebasestorage.app",
+        messagingSenderId: "363816400266",
+        appId: "1:363816400266:web:a3538a4851dc7c54a28473"
+    ),
   );
   runApp(ExpeditionToTheMoonApp());
 }

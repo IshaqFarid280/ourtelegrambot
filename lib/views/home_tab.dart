@@ -18,8 +18,12 @@ class HomeTab extends GetView<CoinController> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return GetBuilder<CoinController>(
+
       builder: (coinController) => ShakeDetectWrap(
+
         onShake: () {
           coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 1);
         },

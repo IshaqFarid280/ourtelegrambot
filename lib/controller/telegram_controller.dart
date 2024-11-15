@@ -17,8 +17,6 @@ class TelegramController extends GetxController {
     super.onInit();
     getTelegramData();
   }
-
-
   var name = ''.obs;
   var userId = ''.obs;
   void copyToClipboard(String link, BuildContext context) {
@@ -65,9 +63,6 @@ class TelegramController extends GetxController {
       );
     }
   }
-
-
-
   void getTelegramData() {
     telegramData = initTelegramWebApp();
     if (telegramData != null) {
@@ -86,9 +81,6 @@ class TelegramController extends GetxController {
     }
     update();
   }
-
-
-
   // Function to initialize the Telegram WebApp
   static Map<String, dynamic>? initTelegramWebApp() {
     final result = js.context.callMethod('initTelegramWebApp');
@@ -122,7 +114,7 @@ class TelegramController extends GetxController {
       'user_id': userId,
       'coins': 5000,
       'lastSpinTime':FieldValue.serverTimestamp(),
-      'invited_users' : [],
+      'invited_users' : FieldValue.arrayUnion([]),
       'tap_per_earn': {
         'level': 1,
         'value': 1,
