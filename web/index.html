@@ -85,22 +85,31 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
   <script>
-    // Check if the Telegram Web App is available
+    // Function to initialize Telegram Web App and handle referral data
     function initTelegramReferral() {
+        // Check if the Telegram Web App is available
         if (window.Telegram) {
-            // Telegram WebApp API is available
+            // Extract referral code from start_param
             const referralData = Telegram.WebApp.initDataUnsafe?.start_param || "";
 
-            // Send the referral data to the Flutter app
             if (referralData) {
+                // Log the referral code
+                console.log("Referral code received:", referralData);
+
+                // Do something with the referral code (e.g., send it to your backend or parent page)
                 window.parent.postMessage({ referralCode: referralData }, "*");
+            } else {
+                console.log("No referral data available.");
             }
+        } else {
+            console.error("Telegram Web App is not available.");
         }
     }
 
-    // Call the function on load
+    // Initialize when the page loads
     window.onload = initTelegramReferral;
   </script>
+
 
 </head>
 <body>

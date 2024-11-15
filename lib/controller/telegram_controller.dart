@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'dart:js' as js;
 import 'package:ourtelegrambot/const/firebase_const.dart';
+import 'dart:html' as html;
 
 class TelegramController extends GetxController {
   Map<String, dynamic>? telegramData;
@@ -19,6 +20,40 @@ class TelegramController extends GetxController {
   }
   var name = ''.obs;
   var userId = ''.obs;
+
+  var referralCode = '';
+
+  void listenForReferralCode() {
+    html.window.onMessage.listen((event) {
+      if (event.data != null && event.data['referralCode'] != null) {
+        // referralCode = event.data['referralCode'];
+        referralCode = '1431684555';
+        print('Received referral code: $referralCode');
+
+        // Show toast notification for debugging
+        Get.snackbar(
+          'Referral Code',
+          'Received: $referralCode',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        print('No referral code received');
+        Get.snackbar(
+          'Referral Code',
+          'No referral code received',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    });
+  }
+
+
   void copyToClipboard(String link, BuildContext context) {
     try {
       if (kIsWeb) {
@@ -66,6 +101,7 @@ class TelegramController extends GetxController {
   void getTelegramData() {
     telegramData = initTelegramWebApp();
     if (telegramData != null) {
+      listenForReferralCode();
       debugPrint('Telegram Data: $telegramData');
       var userId = telegramData?['user']?['id'].toString();
       var username = telegramData?['user']?['username'] ?? 'Unknown';
@@ -114,7 +150,7 @@ class TelegramController extends GetxController {
       'user_id': userId,
       'coins': 5000,
       'lastSpinTime':FieldValue.serverTimestamp(),
-      'invited_users' : FieldValue.arrayUnion([]),
+      'invited_users' : [],
       'tap_per_earn': {
         'level': 1,
         'value': 1,
@@ -172,5 +208,45 @@ class TelegramController extends GetxController {
         ],
       },
     });
+
+    // If referrer exists, add 20 bonus to their account
+    print('the referal code is: ${referralCode}');
+    if (referralCode != null && referralCode.isNotEmpty) {
+      DocumentReference referrerDocRef = fireStore.collection(user).doc(referralCode);
+      await fireStore.runTransaction((transaction) async {
+        DocumentSnapshot referrerDoc = await transaction.get(referrerDocRef);
+        if (referrerDoc.exists) {
+          List<dynamic> referrals = referrerDoc.get('invited_users') ?? [];
+          if (!referrals.contains(userId)) {
+            referrals.add(userId);
+            transaction.update(referrerDocRef, {
+              'invited_users': referrals,
+              'coins': FieldValue.increment(500),
+            });
+
+            // Toast for successful referral
+            Get.snackbar(
+              'Referral Bonus',
+              '500 coins added for referral!',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+            );
+          }
+        }
+      });
+    } else {
+      // Toast for empty referral code
+      Get.snackbar(
+        'Referral Bonus',
+        'No referral code available.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+
   }
 }
+//   'invited_users': FieldValue.arrayUnion([userTelegramId]),
+//           'coins': FieldValue.increment(500), // Deduct 5 coins
