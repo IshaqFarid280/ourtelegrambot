@@ -10,8 +10,11 @@ import 'package:ourtelegrambot/views/avatar_screen.dart';
 import 'package:ourtelegrambot/views/earn_taks_screen.dart';
 import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
+import 'package:ourtelegrambot/views/leaderboard_screen.dart';
 import 'package:ourtelegrambot/views/upgrades_tab.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
+
+import 'const/firebase_const.dart';
 
 
 void main() async {
@@ -62,7 +65,7 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _widgetOptions = <Widget>[
       HomeTab(),
-      AdventureTab(),
+      LeaderboardScreen(userid: userTelegramId.toString(),),
       UserAttributesScreen(),
       TaskListScreen(),
       AvatarScreen()

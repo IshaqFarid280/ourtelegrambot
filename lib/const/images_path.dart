@@ -70,6 +70,11 @@ const String comingSoon = 'assets/comingSoon.png';
 const String ninjaGame = 'assets/ninja_running.png';
 const String ninjaHpNeed = 'assets/hp_need.png';
 
+// leader board
+const String first = 'assets/first.png';
+const String second = 'assets/second.png';
+const String third = 'assets/third.png';
+
 var fillIcons = [
   ninjaHome,
   ninjaGames,
@@ -81,7 +86,7 @@ var fillIcons = [
 
 var title =[
   'Home',
-  'Earn',
+  'Ranking',
   'Upgrades',
   'Tasks',
   'Avatar',
