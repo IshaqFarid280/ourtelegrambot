@@ -76,27 +76,27 @@ class CoinController extends GetxController {
       Get.snackbar('Error', "Error processing referral: $e");
     }
   }
-  // String formatCoins(int coins) {
-  //   if (coins >= 1000000000) {
-  //     return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
-  //   } else if (coins >= 1000000) {
-  //     return '${(coins / 1000000).toStringAsFixed(1)} M'; // Millions
-  //   } else if (coins >= 1000) {
-  //     return '${(coins / 1000).toStringAsFixed(1)} k'; // Thousands
-  //   } else {
-  //     return coins.toString(); // Less than a thousand
-  //   }
-  // }
 
-  increaseCoins({required String userId, required BuildContext context, required int values}) async {
+
+  increaseCoins({required String userId, required BuildContext context, required int values,required int energies}) async {
     try{
-      var data = fireStore.collection(user).doc(userId);
-      await data.update({
-        'coins':FieldValue.increment(earnPerTap.value*values),
-      });
-      lastAddedCoins.value = earnPerTap.value; // Example number to display
-      triggerAnimation();
-      animateCoinCount();
+      if(energies > 0){
+        var data = fireStore.collection(user).doc(userId);
+        await data.update({
+          'coins':FieldValue.increment(earnPerTap.value*values),
+        });
+        lastAddedCoins.value = earnPerTap.value; // Example number to display
+        triggerAnimation();
+        animateCoinCount();
+      }else{
+        Get.snackbar(
+            'Energies',
+            'Please wait until the ninja is fully prepared.',
+            snackPosition: SnackPosition.BOTTOM,
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.red,
+            colorText: Colors.white,);
+      }
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -121,9 +121,9 @@ class CoinController extends GetxController {
     }
   }
 
-  consumeEnergies({required String userId, required BuildContext context, required int inrementvalue}) async {
+  consumeEnergies({required String userId, required BuildContext context, required int inrementvalue,required int energies }) async {
     try {
-      if (coins.value >= 0) { // Ensure user has at least 5 coins
+      if (energies >= 0) { // Ensure user has at least 5 coins
         var data = fireStore.collection(user).doc(userId);
         await data.update({
           'energies.value': FieldValue.increment(inrementvalue),

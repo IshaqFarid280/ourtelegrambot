@@ -19,8 +19,8 @@ class FirebaseServices {
     return fireStore.collection(academyTasks).snapshots();
   }
 
-  static getleaderboarddetails({required String userId}){
-    return fireStore.collection(user).get();
+  static getleaderboarddetails(){
+    return fireStore.collection(user).orderBy('coins',descending: true).get();
   }
 
 

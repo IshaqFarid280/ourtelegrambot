@@ -113,7 +113,7 @@ class TelegramController extends GetxController {
       // userId = userId ;
     } else {
       userTelegramId = '6080705595';
-      saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1');
+      saveUserData(userId: userTelegramId.toString(), userName: 'moizKhan');
     }
     update();
   }
@@ -142,14 +142,18 @@ class TelegramController extends GetxController {
 
   // Method to save initial user data
   Future<void> saveUserData({required String userId, required String userName}) async {
+    DateTime now = DateTime.now();
+    DateTime yesterday = now.subtract(Duration(days: 1));
+    Timestamp customTimestamp = Timestamp.fromDate(yesterday);
     var data = fireStore.collection(user).doc(userId);
     await data.set({
+      'lastPlayed':customTimestamp,
       'avatar':'assets/10.png',
       'my_avatars':FieldValue.arrayUnion(['assets/10.png']),
       'user_name': userName,
       'user_id': userId,
       'coins': 5000,
-      'lastSpinTime':FieldValue.serverTimestamp(),
+      'lastSpinTime':customTimestamp,
       'invited_users' : [],
       'tap_per_earn': {
         'level': 1,
