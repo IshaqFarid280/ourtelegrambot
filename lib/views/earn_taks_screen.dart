@@ -73,6 +73,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     var controller = Get.put(TelegramController());
     var tasksController = Get.put(TasksController());
+    debugPrint('the iamge in earn task screen : $userprofileiamge');
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -110,6 +111,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 snapshot.data!.data() as Map<String, dynamic>;
                             controller.name.value = data['user_name'];
                             controller.userId.value = data['user_id'];
+                           List<dynamic> arrayfield = data['invited_users'];
+                            controller.inviteduserCount.value = arrayfield.length;
                             return Stack(
                               children: [
                                 Positioned(
@@ -141,9 +144,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                           width: 0.04,
                                         ),
                                         Container(
+                                          child: Image.network(userprofileiamge.toString(),
+                                            
+                                            loadingBuilder: (context, child, _ ){
+                                            return CustomIndicator();
+                                            
+                                          },
+                                          errorBuilder: (context, child, s){
+                                            return Icon(Icons.image_outlined);
+                                          },
+                                          
+                                          ),
                                           decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: AssetImage('assets/ninja.png'),),
+
+
                                               shape: BoxShape.circle,
                                               color: coinColors),
                                           width:
@@ -162,7 +176,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                                 title: '${controller.name.value}',
                                                 fontSize: 20.0),
                                             smallText(
-                                                title: 'id',
+                                                title: '${controller.userId.value.substring(0, 6)}${'*' * (controller.userId.value.length - 6)}',
                                                 fontSize: 14.0,
                                                 color:
                                                     whiteColor.withOpacity(0.7)),
@@ -287,237 +301,419 @@ class _TaskListScreenState extends State<TaskListScreen> {
               Tab(text: "Daily",),
               Tab(text: "Basic",),
               Tab(text: "Social",),
+              Tab(text: "Frens",),
               Tab(text: "Academy",),
               Tab(text: "Groups",),
             ]),
             Expanded(
               child: TabBarView(
                 children: [
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseServices.showDailyTasks(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CustomIndicator());
-                      }
-                      else if (snapshot.hasData) {
-                        final tasks = snapshot.data!.docs;
-                        return ListView.builder(
-                          itemCount: tasks.length,
-                          itemBuilder: (context, index) {
-                            var task = tasks[index];
-                            var taskName = task['task_name'];
-                            var buttonTextName = task['button_text'];
-                            var price = task['price'].toString();
-                            var url = task['url'];
-                            var imageurl = task['image_url'];
-                            bool isCompleted = (task['completed'] as List<dynamic>)
-                                .contains(controller.userId.value);
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.showDailyTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CustomIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                var task = tasks[index];
+                var taskName = task['task_name'];
+                var buttonTextName = task['button_text'];
+                var price = task['price'].toString();
+                var url = task['url'];
+                var urllauncherNavigator = task['button_navigator'];
+                var imageurl = task['image_url'];
 
-                            return ListTile(
-                                leading: CircleAvatar(
+                bool isCompleted = (task['completed'] as List<dynamic>)
+                    .contains(controller.userId.value);
 
-                                    child: Image.network(imageurl, fit: BoxFit.cover, errorBuilder: (context, _, s){
-                                      return Icon(Icons.image);
-                                    }, ), ),
-                                title: mediumText(title: taskName, fontSize: 16.0),
-                                subtitle: Row(
-                                  children: [
-                                    Container(
+                // Check if the current user has already navigated (status is 'navigated')
+                bool hasNavigated = urllauncherNavigator.any((entry) =>
+                entry['user_id'] == controller.userId.value && entry['status'] == 'true');
 
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: AssetImage('assets/coin.png')
-                                          )
-                                      ),
-                                      width: MediaQuery.of(context).size.width*0.065,
-                                      height: MediaQuery.of(context).size.height*0.045,
-                                    ),
-                                    mediumText(title: price, fontSize: 12.0),
-                                  ],
-                                ),
-                                trailing: isCompleted
-                                    ? Icon(Icons.check)
-                                    : CustomButton(
-                                  width: 0.18,
-                                  height: 0.06,
-
-                                  title: buttonTextName,
-
-
-                                  onTap: () async {
-                                    final Uri taskUrl = Uri.parse(url);
-                                    if (await canLaunchUrl(taskUrl)) {
-                                      await launchUrl(taskUrl,
-                                          mode: LaunchMode.externalApplication);
-                                      tasksController.markTasksCompleted(
-                                          collection: dailyTasks,
-                                          userId: controller.userId.value,
-                                          context: context,
-                                          coinprice:task['price'],
-                                          docId: task.id);
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Could not open $url')),
-                                      );
-                                    }
-                                  },)
-                            );
-                          },
-                        );
-                      }
-                      else {
-                        return Center(child: Text('No daily tasks found'));
-                      }
-                    },
+                return ListTile(
+                  leading: CircleAvatar(
+                      child: Image.network(imageurl)),
+                  title: mediumText(title: taskName, fontSize: 16.0),
+                  subtitle: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/coin.png')
+                            )
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.065,
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      mediumText(title: price, fontSize: 12.0),
+                    ],
                   ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseServices.showAllTasks(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CustomIndicator());
-                      }
-                      else if (snapshot.hasData) {
-                        final tasks = snapshot.data!.docs;
-                        return ListView.builder(
-                          itemCount: tasks.length,
-                          itemBuilder: (context, index) {
-                            var task = tasks[index];
-                            var taskName = task['task_name'];
-                            var buttonTextName = task['button_text'];
-                            var price = task['price'].toString();
-                            var url = task['url'];
-                            var imageurl = task['image_url'];
-                            bool isCompleted = (task['completed'] as List<dynamic>)
-                                .contains(controller.userId.value);
-
-                            return ListTile(
-                                leading: CircleAvatar(
-
-                                    child: Image.network(imageurl)),
-                                title: mediumText(title: taskName, fontSize: 16.0),
-                                subtitle: Row(
-                                  children: [
-                                    Container(
-
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: AssetImage('assets/coin.png')
-                                          )
-                                      ),
-                                      width: MediaQuery.of(context).size.width*0.065,
-                                      height: MediaQuery.of(context).size.height*0.045,
-                                    ),
-                                    mediumText(title: price, fontSize: 12.0),
-                                  ],
-                                ),
-                                trailing: isCompleted
-                                    ? Icon(Icons.check)
-                                    : CustomButton(
-                                  width: 0.18,
-                                  height: 0.06,
-
-                                  title: buttonTextName,
-
-
-                                  onTap: () async {
-                                    final Uri taskUrl = Uri.parse(url);
-                                    if (await canLaunchUrl(taskUrl)) {
-                                      await launchUrl(taskUrl,
-                                          mode: LaunchMode.externalApplication);
-                                      tasksController.markTasksCompleted(
-                                        collection: allTasks,
-                                          userId: controller.userId.value,
-                                          context: context,
-                                          coinprice:task['price'],
-                                          docId: task.id);
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Could not open $url')),
-                                      );
-                                    }
-                                  },)
-                            );
-                          },
-                        );
-                      }
-                      else {
-                        return Center(child: Text('No tasks found'));
-                      }
+                  trailing: isCompleted
+                      ? Icon(Icons.check)
+                      : (hasNavigated)
+                      ?  CustomButton(
+                    title: 'Verify',
+                    width: 0.18,
+                    height: 0.06,
+                    onTap: () {
+                      tasksController.markTasksCompleted(
+                          collection: dailyTasks,
+                          userId: controller.userId.value,
+                          context: context,
+                          coinprice:task['price'],
+                          docId: task.id);
                     },
+                  )
+
+                    : Obx(
+                       () {
+    if (tasksController.isloadingIndicator.value) {
+    return CustomIndicator();
+    } else {
+      return CustomButton(
+        width: 0.18,
+        height: 0.06,
+        title: buttonTextName,
+        onTap: () async {
+          final Uri taskUrl = Uri.parse(url);
+          if (await canLaunchUrl(taskUrl)) {
+            await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
+            tasksController.buttonverification(
+                userId: controller.userId.value,
+                collection: dailyTasks,
+                context: context,
+                docId: task.id
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not open $url')),
+            );
+          }
+        },
+      );
+    }
+                      }
+                    ),
+                );
+              },
+            );
+          }
+          else {
+            return Center(child: Text('No All tasks found'));
+          }
+        },
+      ),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.showAllTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CustomIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                var task = tasks[index];
+                var taskName = task['task_name'];
+                var buttonTextName = task['button_text'];
+                var price = task['price'].toString();
+                var url = task['url'];
+                var urllauncherNavigator = task['button_navigator'];
+                var imageurl = task['image_url'];
+
+                bool isCompleted = (task['completed'] as List<dynamic>)
+                    .contains(controller.userId.value);
+
+                // Check if the current user has already navigated (status is 'navigated')
+                bool hasNavigated = urllauncherNavigator.any((entry) =>
+                entry['user_id'] == controller.userId.value && entry['status'] == 'true');
+
+                return ListTile(
+                  leading: CircleAvatar(
+                      child: Image.network(imageurl)),
+                  title: mediumText(title: taskName, fontSize: 16.0),
+                  subtitle: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/coin.png')
+                            )
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.065,
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      mediumText(title: price, fontSize: 12.0),
+                    ],
                   ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseServices.showSocialTasks(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CustomIndicator());
-                      } else if (snapshot.hasData) {
-                        final tasks = snapshot.data!.docs;
-                        return ListView.builder(
-                          itemCount: tasks.length,
-                          itemBuilder: (context, index) {
-                            var task = tasks[index];
-                            var taskName = task['task_name'];
-                            var buttonTextName = task['button_text'];
-                            var price = task['price'].toString();
-                            var url = task['url'];
-                            var imageurl = task['image_url'];
-                            bool isCompleted = (task['completed'] as List<dynamic>)
-                                .contains(controller.userId.value);
+                  trailing: isCompleted
+                      ? Icon(Icons.check)
+                      : (hasNavigated)
 
-                            return ListTile(
-                              leading: CircleAvatar(
+                      ?  CustomButton(
+                    title: 'Verify',
+                    width: 0.18,
+                    height: 0.06,
+                    onTap: () {
+                      tasksController.markTasksCompleted(
+                          collection: allTasks,
+                          userId: controller.userId.value,
+                          context: context,
+                          coinprice:task['price'],
+                          docId: task.id);
+                    },
+                  )
 
-                                  child: Image.network(imageurl)),
-                              title: mediumText(title: taskName, fontSize: 16.0),
-                              subtitle: Row(
-                                children: [
-                                  Container(
+                    : Obx(() {
+    if (tasksController.isloadingIndicator.value) {
+    return CustomIndicator();
+    } else {
+     return CustomButton(
+        width: 0.18,
+        height: 0.06,
+        title: buttonTextName,
+        onTap: () async {
+          final Uri taskUrl = Uri.parse(url);
+          if (await canLaunchUrl(taskUrl)) {
+            await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
+            tasksController.buttonverification(
+                userId: controller.userId.value,
+                collection: allTasks,
+                context: context,
+                docId: task.id
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not open $url')),
+            );
+          }
+        },
+      );
 
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage('assets/coin.png')
-                                      )
-                                    ),
-                                    width: MediaQuery.of(context).size.width*0.065,
-                                    height: MediaQuery.of(context).size.height*0.045,
-                                  ),
-                                  mediumText(title: price, fontSize: 12.0),
-                                ],
+    }
+
+                  }
+
+                    ),
+                );
+              },
+            );
+          }
+          else {
+            return Center(child: Text('No All tasks found'));
+          }
+        },
+      ),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.showSocialTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CustomIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                var task = tasks[index];
+                var taskName = task['task_name'];
+                var buttonTextName = task['button_text'];
+                var price = task['price'].toString();
+                var url = task['url'];
+                var urllauncherNavigator = task['button_navigator'];
+                var imageurl = task['image_url'];
+
+                bool isCompleted = (task['completed'] as List<dynamic>)
+                    .contains(controller.userId.value);
+
+                // Check if the current user has already navigated (status is 'navigated')
+                bool hasNavigated = urllauncherNavigator.any((entry) =>
+                entry['user_id'] == controller.userId.value && entry['status'] == 'true');
+
+                return ListTile(
+                  leading: CircleAvatar(
+                      child: Image.network(imageurl)),
+                  title: mediumText(title: taskName, fontSize: 16.0),
+                  subtitle: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/coin.png')
+                            )
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.065,
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      mediumText(title: price, fontSize: 12.0),
+                    ],
+                  ),
+                  trailing: isCompleted
+                      ? Icon(Icons.check)
+                      : (hasNavigated)
+
+                      ?  CustomButton(
+                    title: 'Verify',
+                    width: 0.18,
+                    height: 0.06,
+                    onTap: () {
+                      tasksController.markTasksCompleted(
+                          collection: socialTasks,
+                          userId: controller.userId.value,
+                          context: context,
+                          coinprice:task['price'],
+                          docId: task.id);
+                    },
+                  )
+                    : Obx(() {
+                    if (tasksController.isloadingIndicator.value) {
+                      return CustomIndicator();
+                    } else {
+                      return   CustomButton(
+                        width: 0.18,
+                        height: 0.06,
+                        title: buttonTextName,
+                        onTap: () async {
+                          final Uri taskUrl = Uri.parse(url);
+                          if (await canLaunchUrl(taskUrl)) {
+                            await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
+                            tasksController.buttonverification(
+                                userId: controller.userId.value,
+                                collection: socialTasks,
+                                context: context,
+                                docId: task.id
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Could not open $url')),
+                            );
+                          }
+                        },
+                      );
+                    }
+                  })
+
+
+                );
+              },
+            );
+          }
+          else {
+            return Center(child: Text('No Social tasks found'));
+          }
+        },
+      ),
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseServices.showFrensTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CustomIndicator());
+          }
+          else if (snapshot.hasData) {
+            final tasks = snapshot.data!.docs;
+            return Column(
+              children: [
+
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      var task = tasks[index];
+                      var taskName = task['task_name'];
+                      var buttonTextName = task['button_text'];
+                      var price = task['price'].toString();
+                      var code = task['code'];
+                      var urllauncherNavigator = task['button_navigator'];
+                      var imageurl = task['image_url'];
+
+                      bool isCompleted = (task['completed'] as List<dynamic>)
+                          .contains(controller.userId.value);
+
+                      int invitedusercount = controller.inviteduserCount.value;
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                            child: Image.network(imageurl)),
+                        title: mediumText(title: taskName, fontSize: 16.0),
+                        subtitle: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/coin.png')
+                                  )
                               ),
-                              trailing: isCompleted
-                                  ? Icon(Icons.check)
-                                  : CustomButton(
-                                width: 0.18,
-                                height: 0.06,
-
-                                title: buttonTextName,
-
-
-                                onTap: () async {
-                                final Uri taskUrl = Uri.parse(url);
-                                if (await canLaunchUrl(taskUrl)) {
-                                  await launchUrl(taskUrl,
-                                      mode: LaunchMode.externalApplication);
-                                  tasksController.markTasksCompleted(
-                                      collection: socialTasks,
-                                      userId: controller.userId.value,
-                                      context: context,
-                                      coinprice:task['price'],
-                                      docId: task.id);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('Could not open $url')),
-                                  );
-                                }
-                              },)
+                              width: MediaQuery.of(context).size.width * 0.065,
+                              height: MediaQuery.of(context).size.height * 0.045,
+                            ),
+                            mediumText(title: price, fontSize: 12.0),
+                          ],
+                        ),
+                        trailing: isCompleted
+                            ? Icon(Icons.check)
+                            : Obx(() {
+                          if (invitedusercount >= code) {
+                            return CustomButton(
+                              title: 'Verify',
+                              width: 0.18,
+                              height: 0.06,
+                              onTap: () {
+                                tasksController.markTasksCompleted(
+                                  collection: frensTasks,
+                                  userId: controller.userId.value,
+                                  context: context,
+                                  coinprice: task['price'],
+                                  docId: task.id,
+                                );
+                              },
                             );
-                          },
-                        );
-                      } else {
-                        return Center(child: Text('No tasks found'));
-                      }
+                          } else if (tasksController.isloadingIndicator.value) {
+                            return CustomIndicator();
+                          } else {
+                            return CustomButton(
+                              width: 0.18,
+                              height: 0.06,
+                              title: buttonTextName,
+                              onTap: () async {
+                                var encodedUsername = Uri.encodeComponent(controller.userId.value);
+                                final inviteLink =
+                                    'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
+                                shareInviteLink(inviteLink, controller.userId.value, 'Buckle up for big Adventure');
+                              },
+                            );
+                          }
+                        }),
+
+
+
+                      );
                     },
                   ),
+                ),
+                ListTile(
+
+                  leading: CircleAvatar(
+                    child: Icon(Icons.person),
+                  ),
+                  title: mediumText(title: 'People Joined through your Invite:'),
+                  tileColor: primaryTextColor.withOpacity(0.5),
+                  trailing: mediumText(title:  '${controller.inviteduserCount.value}'),
+                )
+
+
+              ],
+            );
+          }
+          else {
+            return Center(child: Text('No Social tasks found'));
+          }
+        },
+      ),
       StreamBuilder<QuerySnapshot>(
         stream: FirebaseServices.getAcademydetails(),
         builder: (context, snapshot) {
@@ -566,33 +762,32 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   trailing: isCompleted
                       ? Icon(Icons.check)
                       : (hasNavigated)
-                      ? CustomButton(
-                      title: 'Verify',
-                      width: 0.18,
-                      height: 0.06,
-                      onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             VerificationScreen(
-                        //                 coinprice: task['price'],
-                        //                 title: taskName,
-                        //                 code: code,
-                        //                 docid: task.id,
-                        //                 url: url)));
+                      ?  Obx(
+                         () {
+                           if (tasksController.isloadingIndicator.value) {
+                             return CustomIndicator();
+                           } else {
 
-                        tasksController.verifyUserMembership(
+                          return CustomButton(
+                                              title: 'Verify',
+                                              width: 0.18,
+                                              height: 0.06,
+                                              onTap: () {
+                          tasksController.verifyUserMembership(
                             botToken: '7397643566:AAHJ52kYZTgM3BWUzHNKRp7V0c_O51XZd58',
                             channelId: '@ishaqhehe',
                             userId: controller.userId.value,
                             coin: task['price'],
                             collection: academyTasks,
                             docId: task.id,
-                            context: context
-                        );
-                      })
-                      : CustomButton(
+                            context: context,
+                          );
+                                              },
+                                            );}
+                        }
+                      )
+
+                    : CustomButton(
                     width: 0.18,
                     height: 0.06,
                     title: buttonTextName,

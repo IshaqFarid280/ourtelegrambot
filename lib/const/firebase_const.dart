@@ -7,6 +7,8 @@ FirebaseFirestore fireStore = FirebaseFirestore.instance;
 // user const
 
 String ?  userTelegramId ;
+String ?  referid ;
+String ?  userprofileiamge ;
 
 // user collection
 String user = 'users';
@@ -19,6 +21,8 @@ String allTasks = 'allTasks';
 
 // all tasks
 String socialTasks = 'socialTasks';
+// invite frens tasks
+String frensTasks = 'frensTasks';
 // all tasks
 String academyTasks = 'academyTasks';
 
