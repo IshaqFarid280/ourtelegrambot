@@ -15,6 +15,7 @@ import 'package:ourtelegrambot/views/upgrades_tab.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
 
 import 'const/firebase_const.dart';
+import 'controller/set_status_controller.dart';
 
 
 void main() async {
@@ -54,15 +55,21 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
   TelegramController telegramController = Get.put(TelegramController());
   String? referralCode;
 
+  var statusController = Get.put(SetStatusController());
+
+
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _widgetOptions = <Widget>[
       HomeTab(),
       LeaderboardScreen(userid: userTelegramId.toString(),),
@@ -70,15 +77,37 @@ class HomeScreenState extends State<HomeScreen> {
       TaskListScreen(),
       AvatarScreen()
     ];
-    // Listen for messages from the HTML
-
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed ) {
+      statusController.setStatus(isOnline: true);
+      statusController.isOnline.value = true;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('is Online  ${statusController.isOnline.value}'),
+        ),
+      );
+    } else {
+      statusController.setStatus(isOnline: false);
+      statusController.isOnline.value = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('is Online  ${statusController.isOnline.value}'),
+        ),
+      );
+    }
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    print("Observer removed");
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

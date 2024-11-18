@@ -156,6 +156,8 @@ class TelegramController extends GetxController {
     var data = fireStore.collection(user).doc(userId);
     try {
       await data.set({
+        'lastPlayed':customTimestamp,
+        'is_online':false,
         'avatar': 'assets/10.png',
         'my_avatars': FieldValue.arrayUnion(['assets/10.png']),
         'user_name': userName,
