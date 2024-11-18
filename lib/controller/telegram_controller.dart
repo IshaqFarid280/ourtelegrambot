@@ -105,7 +105,7 @@ class TelegramController extends GetxController {
     if (telegramData != null) {
       debugPrint('Telegram Data: $telegramData');
       var userId = telegramData?['user']?['id'].toString();
-      var refferid = telegramData?['start_param'].toString();
+      var refferid = telegramData?['start_param']?.toString();
       var username = telegramData?['user']?['username'] ?? 'Unknown';
       var userprofileimagen = telegramData?['user']?['photo_url'];
       if (userId != null ) {
@@ -113,19 +113,19 @@ class TelegramController extends GetxController {
         referid = refferid;
         userprofileiamge = userprofileimagen ;
         update();
-        print(userTelegramId);
-        print(referid);
-        print(userprofileiamge);
-        print('Before hiting : ${referid.toString}');
-        saveUserData(userId: userId, userName: username, referralCodes: referid.toString());
+        print('the user telegram id: ${userTelegramId}');
+        print('the user referid before string: ${referid}');
+        print('the user profile image id: ${userprofileiamge}');
+        print('user referid after hiting string : ${referid?.toString}');
+        saveUserData(userId: userId, userName: username, referralCodes: referid!);
       }
       // userId = userId ;
     } else {
-      print('Before else hiting: ${referid.toString}');
+      print('Before else hiting: ${referid?.toString}');
       userTelegramId = '6080705595';
       saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
     }
-    update();
+
   }
   // Function to initialize the Telegram WebApp
   static Map<String, dynamic>? initTelegramWebApp() {
@@ -154,7 +154,6 @@ class TelegramController extends GetxController {
     DateTime yesterday = now.subtract(Duration(days: 1));
     Timestamp customTimestamp = Timestamp.fromDate(yesterday);
     var data = fireStore.collection(user).doc(userId);
-
     try {
       await data.set({
         'avatar': 'assets/10.png',
@@ -203,36 +202,34 @@ class TelegramController extends GetxController {
           ],
         },
       });
-      try {
-        DocumentReference referrerDocRef = fireStore.collection(user).doc(referralCodes);
-        await fireStore.runTransaction((transaction) async {
-          DocumentSnapshot referrerDoc = await transaction.get(referrerDocRef);
-          if (referrerDoc.exists) {
-            List<dynamic> referrals = referrerDoc.get('invited_users') ?? [];
-            if (!referrals.contains(userId)) {
-              referrals.add(userId);
-              transaction.update(referrerDocRef, {
-                'invited_users': referrals,
-                'coins': FieldValue.increment(500),
-              });
-              print('500 coins added for referral!');
+      if (referralCodes != userId) {
+        try {
+          DocumentReference referrerDocRef = fireStore.collection(user).doc(referralCodes);
+          await fireStore.runTransaction((transaction) async {
+            DocumentSnapshot referrerDoc = await transaction.get(referrerDocRef);
+            if (referrerDoc.exists) {
+              List<dynamic> referrals = referrerDoc.get('invited_users') ?? [];
+              if (!referrals.contains(userId)) {
+                referrals.add(userId);
+                transaction.update(referrerDocRef, {
+                  'invited_users': referrals,
+                  'coins': FieldValue.increment(500),
+                });
+                print('500 coins added for referral!');
 
+              }
             }
-          }
-        });
-            } catch (e) {
-        // Catch any errors and show them in a Snackbar
-        print('Error during referral process: $e');
-
+          });
+              } catch (e) {
+          // Catch any errors and show them in a Snackbar
+          print('Error during referral process: $e');
+        }
       }
-
     } catch (e) {
       // Log or handle the error if there's a failure in the transaction or data saving process
       print('Failed to save user data: $e');
-
     }
   }
-
 }
 //   'invited_users': FieldValue.arrayUnion([userTelegramId]),
 //           'coins': FieldValue.increment(500), // Deduct 5 coins

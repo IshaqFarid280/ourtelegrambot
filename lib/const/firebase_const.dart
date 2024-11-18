@@ -24,5 +24,7 @@ String socialTasks = 'socialTasks';
 // invite frens tasks
 String frensTasks = 'frensTasks';
 // all tasks
-String academyTasks = 'academyTasks';
+String channeltasks = 'channeltasks';
+// channel  tasks
+String academicTasks = 'academyTasks';
 

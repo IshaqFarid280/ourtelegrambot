@@ -29,6 +29,7 @@ class TasksController extends GetxController {
           userId
         ]),
       }).then((value){
+        isloadingIndicator.value = false;
         var data = fireStore.collection(user).doc(userId);
         data.update({
           'coins':FieldValue.increment(coinprice),
@@ -91,19 +92,33 @@ class TasksController extends GetxController {
      on SocketException catch(_){
       isloadingIndicator.value = false;
       Get.snackbar('Error', 'Network Connectivity Lost. Try Again', backgroundColor: Colors.red.withOpacity(0.8), colorText: whiteColor);
-
-
-
      }
-
     catch (e) {
       debugPrint(e.toString());
       isloadingIndicator.value = false;
       Get.snackbar('Error', 'Something went wrong', backgroundColor: Colors.red.withOpacity(0.8), colorText: whiteColor);
-
     }
+  }
+
+  Future<void> removeuserfromnavigator(
+      String collection,
+      String docId,
+      String userId,
+
+      )async{
+    var data  = fireStore.collection(collection).doc(docId);
+    await data.update({
+      'button_navigator': FieldValue.arrayRemove([
+  {
+    'user_id' : userId,
+    'status': 'true'
+  }
+      ])
+    });
 
   }
+
+
   // New method to verify user membership in the Telegram channel
   Future<void> verifyUserMembership({
     required String botToken,
@@ -148,6 +163,7 @@ class TasksController extends GetxController {
 
           } else {
             isloadingIndicator.value = false;
+            removeuserfromnavigator(collection, docId, userId);
             Get.snackbar(
               'Failed',
               'User is not a member of the channel. Join again',

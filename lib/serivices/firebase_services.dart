@@ -18,8 +18,11 @@ class FirebaseServices {
   static showFrensTasks(){
     return fireStore.collection(frensTasks).snapshots();
   }
-  static getAcademydetails(){
-    return fireStore.collection(academyTasks).snapshots();
+  static showAcademyTasks(){
+    return fireStore.collection(academicTasks).snapshots();
+  }
+  static showChannelTasks(){
+    return fireStore.collection(channeltasks).snapshots();
   }
 
   static getleaderboarddetails(){

@@ -75,7 +75,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     var tasksController = Get.put(TasksController());
     debugPrint('the iamge in earn task screen : $userprofileiamge');
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         body: Column(
           children: [
@@ -302,8 +302,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
               Tab(text: "Basic",),
               Tab(text: "Social",),
               Tab(text: "Frens",),
-              Tab(text: "Academy",),
               Tab(text: "Groups",),
+              Tab(text: "Academy",),
             ]),
             Expanded(
               child: TabBarView(
@@ -695,10 +695,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     },
                   ),
                 ),
+                Divider(
+                  thickness: 1.5,
+
+                  color: whiteColor.withOpacity(0.4),
+                ),
                 ListTile(
 
                   leading: CircleAvatar(
-                    child: Icon(Icons.person),
+                    child: Icon(Icons.person_add_alt_sharp),
                   ),
                   title: mediumText(title: 'People Joined through your Invite:'),
                   tileColor: primaryTextColor.withOpacity(0.5),
@@ -715,7 +720,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         },
       ),
       StreamBuilder<QuerySnapshot>(
-        stream: FirebaseServices.getAcademydetails(),
+        stream: FirebaseServices.showChannelTasks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CustomIndicator());
@@ -729,7 +734,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 var taskName = task['task_name'];
                 var buttonTextName = task['button_text'];
                 var price = task['price'].toString();
-                var url = task['url'];
+                // var url = task['url'];
+                var channelname = task['channelname'];
                 var code = task['code'];
                 var urllauncherNavigator = task['button_navigator'];
                 var imageurl = task['image_url'];
@@ -769,16 +775,16 @@ class _TaskListScreenState extends State<TaskListScreen> {
                            } else {
 
                           return CustomButton(
-                                              title: 'Verify',
+                                              title: 'Claim',
                                               width: 0.18,
                                               height: 0.06,
                                               onTap: () {
                           tasksController.verifyUserMembership(
                             botToken: '7397643566:AAHJ52kYZTgM3BWUzHNKRp7V0c_O51XZd58',
-                            channelId: '@ishaqhehe',
+                            channelId: '@${channelname}', //@ishaqhehe
                             userId: controller.userId.value,
                             coin: task['price'],
-                            collection: academyTasks,
+                            collection: channeltasks,
                             docId: task.id,
                             context: context,
                           );
@@ -792,18 +798,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     height: 0.06,
                     title: buttonTextName,
                     onTap: () async {
-                      final Uri taskUrl = Uri.parse(url);
+                      final Uri taskUrl = Uri.parse('https://t.me/${channelname}');
+                      print('before task url: ${taskUrl}');
                       if (await canLaunchUrl(taskUrl)) {
                         await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
                         tasksController.buttonverification(
                             userId: controller.userId.value,
-                            collection: academyTasks,
+                            collection: channeltasks,
                             context: context,
                             docId: task.id
                         );
                       } else {
+                        print('after task url: ${taskUrl}');
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Could not open $url')),
+                          SnackBar(content: Text('Could not open. Try again')),
                         );
                       }
                     },
@@ -818,7 +826,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         },
       ),
       StreamBuilder<QuerySnapshot>(
-        stream: FirebaseServices.getAcademydetails(),
+        stream: FirebaseServices.showAcademyTasks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CustomIndicator());
@@ -891,7 +899,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
                         tasksController.buttonverification(
                             userId: controller.userId.value,
-                            collection: academyTasks,
+                            collection: academicTasks,
                             context: context,
                             docId: task.id
                         );
