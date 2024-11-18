@@ -130,7 +130,7 @@ class VerificationScreen extends StatelessWidget {
                 if (code == verificationInputController.text) {
                   isCodeCorrect.value = true; // Correct code, validation passes
                   tasksController.markTasksCompletedwithpopNavigation(
-                    collection: academyTasks,
+                    collection: academicTasks,
                     userId: controller.userId.value,
                     context: context,
                     docId: docid,

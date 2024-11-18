@@ -22,6 +22,7 @@ class HomeTab extends GetView<CoinController> {
 
   @override
   Widget build(BuildContext context) {
+    print('the user telegram id in home tab: ${ userTelegramId.toString()}');
 
 
     return GetBuilder<CoinController>(
