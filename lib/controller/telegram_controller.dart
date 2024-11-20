@@ -8,7 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'dart:js' as js;
 import 'package:ourtelegrambot/const/firebase_const.dart';
-import 'dart:html' as html;
 
 class TelegramController extends GetxController {
   Map<String, dynamic>? telegramData;
@@ -122,7 +121,7 @@ class TelegramController extends GetxController {
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
-      userTelegramId = '6080705595';
+      userTelegramId = '1111111111111';
       saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
     }
 
