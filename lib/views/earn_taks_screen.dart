@@ -639,7 +639,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
                         return ListTile(
                           leading: CircleAvatar(
-                              child: Image.network(imageurl)),
+                              backgroundImage: NetworkImage(imageurl ?? '')),
                           title: mediumText(title: taskName, fontSize: 14.0),
                           subtitle: Row(
                             children: [

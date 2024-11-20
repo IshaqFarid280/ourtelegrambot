@@ -85,7 +85,8 @@ class CoinController extends GetxController {
     }
   }
 
-  consumeEnergies({required String userId, required BuildContext context, required int inrementvalue,required int energies }) async {
+  consumeEnergies({required String userId, required BuildContext context,
+    required int inrementvalue,required int energies }) async {
     try {
       if (energies >= 0) { // Ensure user has at least 5 coins
         var data = fireStore.collection(user).doc(userId);

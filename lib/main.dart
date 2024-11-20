@@ -85,19 +85,19 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed ) {
       statusController.setStatus(isOnline: true);
       statusController.isOnline.value = true;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('is Online  ${statusController.isOnline.value}'),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('is Online  ${statusController.isOnline.value}'),
+      //   ),
+      // );
     } else {
       statusController.setStatus(isOnline: false);
       statusController.isOnline.value = false;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('is Online  ${statusController.isOnline.value}'),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('is Online  ${statusController.isOnline.value}'),
+      //   ),
+      // );
     }
   }
 

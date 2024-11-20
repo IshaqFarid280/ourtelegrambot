@@ -49,13 +49,16 @@ class HomeTab extends GetView<CoinController> {
             if (energyPercentage > 80) {
               iconColor = Colors.green;
               iconData = Icons.battery_full_outlined;
-            } else if (energyPercentage > 50) {
+            }
+            else if (energyPercentage > 50) {
               iconColor = Colors.yellow;
               iconData = Icons.battery_6_bar_outlined;
-            } else if (energyPercentage > 30) {
+            }
+            else if (energyPercentage > 30) {
               iconColor = Colors.orange;
               iconData = Icons.battery_4_bar_outlined;
-            } else {
+            }
+            else {
               iconColor = Colors.red;
               iconData = Icons.battery_charging_full_outlined;
             }
@@ -91,121 +94,127 @@ class HomeTab extends GetView<CoinController> {
                     ),
                   ),
                   CustomSized(height: 0.05),
-                  TwoFingerTapDetector(
-                    onTwoFingerTap: () {
-                      if(userData['energies']['value'] > 0){
-                        // Handle double tap (earn double coins)
-                        coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 2,energies: userData['energies']['value']);
-                        coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -2,energies: userData['energies']['value']);
-                        coinController.triggerAnimation();
-                        coinController.lastAddedCoins.value = coinController.earnPerTap.value + 2; // Set the value to display for double tap
-                        coinController.showFlyingNumber.value = true;
-                        coinController.startPosition.value = Offset(
-                          MediaQuery.of(context).size.width / 2,
-                          280.0,
-                        ); // This is where the number will start
-                      }
-          },
-                    child: GestureDetector(
-                      onTap: () {
-                        if(userData['energies']['value'] > 0){
-                          coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 1,energies: userData['energies']['value'] );
-                          coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -1,energies: userData['energies']['value']);
-                          coinController.triggerAnimation();
-                          coinController.lastAddedCoins.value = coinController.earnPerTap.value; // Set the value to display
-                          coinController.showFlyingNumber.value = true;
-                          coinController.startPosition.value = Offset(
-                            MediaQuery.of(context).size.width / 2,
-                            280.0,
-                          ); // This is where the number will start
-                        }
-                      },
-                      child: ThreeFingerTapDetector(
-                        onThreeFingerTap: () {
-                         if(userData['energies']['value'] > 0){
-                           // Handle double tap (earn double coins)
-                           coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 3,energies: userData['energies']['value']);
-                           coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -3,energies: userData['energies']['value']);
-                           coinController.triggerAnimation();
-                           coinController.lastAddedCoins.value = coinController.earnPerTap.value + 3; // Set the value to display for double tap
-                           coinController.showFlyingNumber.value = true;
-                           coinController.startPosition.value = Offset(MediaQuery.of(context).size.width / 2, 280.0,); // This is where the number will start
-                         }
-                        },
-                     child:  Obx(() => Stack(
-                        alignment: Alignment.center, // Center align the children
-                        children: [
-                          // Background Image
-                          AnimatedScale(
-                            duration: const Duration(milliseconds: 300),
-                            scale: coinController.isTapped.value ? 1.0 : 0.8,
-                            child: AnimatedOpacity(
-                              duration: const Duration(milliseconds: 300),
-                              opacity: coinController.isTapped.value ? 0.8 : 1.0,
-                              child: Image.asset(
-                                userData['avatar'],
-                                height: 270.0,
-                                width: 270.0, // Match width and height for a consistent size
-                                fit: BoxFit.cover, // Use BoxFit.cover to keep the image within bounds when scaling
-                              ),
-                            ),
-                          ),
-                          // Flying Number
-                          Positioned(
-                              left: MediaQuery.sizeOf(context).width * 0.00,
-                              top: MediaQuery.sizeOf(context).height * 0.016,
-                              child: HudViewSmall(
-                                onTap: (){
+                  Stack(
+                    children: [
 
-                                  Get.to(()=> AdventureTab());
+                      TwoFingerTapDetector(
+                        onTwoFingerTap: () {
+                          if(userData['energies']['value'] > 0){
+                            // Handle double tap (earn double coins)
+                            coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 2,energies: userData['energies']['value']);
+                            coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -2,energies: userData['energies']['value']);
+                            coinController.triggerAnimation();
+                            coinController.lastAddedCoins.value = coinController.earnPerTap.value + 2; // Set the value to display for double tap
+                            coinController.showFlyingNumber.value = true;
+                            coinController.startPosition.value = Offset(
+                              MediaQuery.of(context).size.width / 2,
+                              280.0,
+                            ); // This is where the number will start
+                          }
                                 },
-                                width: 0.2,
-                                fontsize: 8.0,
-                                height: 0.1,
-                                label: 'Ninja',
-                                icon: Image.asset(airPlane, width: 100,),)),
-                          Positioned(
-                              right: MediaQuery.sizeOf(context).width * 0.005,
-                              top: MediaQuery.sizeOf(context).height * 0.016,
-                              child: HudViewSmall(
-                                onTap: (){
-                                  Get.to(()=> SpinWheelScreen());
-                                },
-                                width: 0.2,
-                                fontsize: 8.0,
-                                height: 0.08,
-                                issizedbox: true,
-                                label: null,
-                                icon: Image.asset(spinWheel, width: 50,),)),
-                          Positioned(
-                              right: MediaQuery.sizeOf(context).width * 0.005,
-                              top: MediaQuery.sizeOf(context).height * 0.12,
-                              child: HudViewSmall(
-                                onTap: (){
-                                  Get.to(()=> GameScreen());
-                                },
-                                width: 0.2,
-                                fontsize: 8.0,
-                                height: 0.08,
-                                issizedbox: true,
-                                label: null,
-                                icon: Image.asset(slotMachine, width: 50,),)),
-                          if (coinController.showFlyingNumber.value)
-                            FlyingNumber(
-                              number: coinController.lastAddedCoins.value, // Number to display
-                              startPosition: coinController.startPosition.value, // Pass the starting position
-                              onAnimationComplete: () {
-                                // After animation completes, we can reset the flag
-                                coinController.showFlyingNumber.value = false;
-                                // Trigger an additional build to allow for new flying number on next tap
-                                Future.delayed(const Duration(milliseconds: 100), () {
-                                  coinController.showFlyingNumber.value = true; // Allow the next flying number
-                                });
-                              },
-                            ),
-                        ],
-                      )),),
-                    ),
+                        child: GestureDetector(
+                          onTap: () {
+                            if(userData['energies']['value'] > 0){
+                              coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 1,energies: userData['energies']['value'] );
+                              coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -1,energies: userData['energies']['value']);
+                              coinController.triggerAnimation();
+                              coinController.lastAddedCoins.value = coinController.earnPerTap.value; // Set the value to display
+                              coinController.showFlyingNumber.value = true;
+                              coinController.startPosition.value = Offset(
+                                MediaQuery.of(context).size.width / 2,
+                                280.0,
+                              ); // This is where the number will start
+                            }
+                          },
+                          child: ThreeFingerTapDetector(
+                            onThreeFingerTap: () {
+                             if(userData['energies']['value'] > 0){
+                               // Handle double tap (earn double coins)
+                               coinController.increaseCoins(userId: userTelegramId.toString(), context: context,values: 3,energies: userData['energies']['value']);
+                               coinController.consumeEnergies(userId: userTelegramId.toString(), context: context, inrementvalue: -3,energies: userData['energies']['value']);
+                               coinController.triggerAnimation();
+                               coinController.lastAddedCoins.value = coinController.earnPerTap.value + 3; // Set the value to display for double tap
+                               coinController.showFlyingNumber.value = true;
+                               coinController.startPosition.value = Offset(MediaQuery.of(context).size.width / 2, 280.0,); // This is where the number will start
+                             }
+                            },
+                         child:  Obx(() => Stack(
+                            alignment: Alignment.center, // Center align the children
+                            children: [
+                              // Background Image
+                              Positioned(
+                                  left: MediaQuery.sizeOf(context).width * 0.000,
+                                  top: MediaQuery.sizeOf(context).height * 0.019,
+                                  child: HudViewSmall(
+                                    onTap: (){
+
+                                      Get.to(()=> AdventureTab());
+                                    },
+                                    width: 0.18,
+                                    fontsize: 8.0,
+                                    height: 0.1,
+                                    label: 'Ninja',
+                                    icon: Image.asset(airPlane, width: MediaQuery.sizeOf(context).width * 0.15,),)),
+                              Positioned(
+                                  right: MediaQuery.sizeOf(context).width * 0.018,
+                                  top: MediaQuery.sizeOf(context).height * 0.016,
+                                  child: HudViewSmall(
+                                    onTap: (){
+                                      Get.to(()=> SpinWheelScreen());
+                                    },
+                                    width: 0.18,
+                                    fontsize: 8.0,
+                                    height: 0.08,
+                                    issizedbox: true,
+                                    label: null,
+                                    icon: Image.asset(spinWheel,width: MediaQuery.sizeOf(context).width * 0.15,),)),
+                              Positioned(
+                                  right: MediaQuery.sizeOf(context).width * 0.018,
+                                  top: MediaQuery.sizeOf(context).height * 0.12,
+                                  child: HudViewSmall(
+                                    onTap: (){
+                                      Get.to(()=> GameScreen());
+                                    },
+                                    width: 0.18,
+                                    fontsize: 8.0,
+                                    height: 0.08,
+                                    issizedbox: true,
+                                    label: null,
+                                    icon: Image.asset(slotMachine, width: MediaQuery.sizeOf(context).width * 0.1,),)),
+                              AnimatedScale(
+                                duration: const Duration(milliseconds: 300),
+                                scale: coinController.isTapped.value ? 1.0 : 0.8,
+                                child: AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 300),
+                                  opacity: coinController.isTapped.value ? 0.8 : 1.0,
+                                  child: Image.asset(
+                                    userData['avatar'],
+                                    height: MediaQuery.of(context).size.height*0.48,
+                                    width: MediaQuery.of(context).size.width*0.92,
+                                    fit: BoxFit.cover, // Use BoxFit.cover to keep the image within bounds when scaling
+                                  ),
+                                ),
+                              ),
+                              // Flying Number
+
+                              if (coinController.showFlyingNumber.value)
+                                FlyingNumber(
+                                  number: coinController.lastAddedCoins.value, // Number to display
+                                  startPosition: coinController.startPosition.value, // Pass the starting position
+                                  onAnimationComplete: () {
+                                    // After animation completes, we can reset the flag
+                                    coinController.showFlyingNumber.value = false;
+                                    // Trigger an additional build to allow for new flying number on next tap
+                                    Future.delayed(const Duration(milliseconds: 100), () {
+                                      coinController.showFlyingNumber.value = true; // Allow the next flying number
+                                    });
+                                  },
+                                ),
+                            ],
+                          )),),
+                        ),
+                      ),
+                    ],
                   ),
                   CustomSized(height: 0.03),
                   Padding(

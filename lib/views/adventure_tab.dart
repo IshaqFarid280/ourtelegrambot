@@ -17,30 +17,39 @@ class _AdventureTabState extends State<AdventureTab> {
   @override
   Widget build(BuildContext context) {
     var coinController = Get.put(CoinController());
-    return Scaffold(
-      appBar:AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
-      ),
-      body: Obx(
-          ()=> coinController.totalHp.value < 1 ?
-          Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    ninjaHpNeed,
-                    width: 200,
-                    height: 200,
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                      "Your ninja is not ready to stealth!\nMinimum HP is 5 to play this game.")
-                ],
-              ),
-            ):
-           const GameScreen(),
+    return PopScope(
+      canPop: false, // Prevents automatic back navigation
+      onPopInvoked: (popped) {
+        if (!popped) {
+          // Custom back navigation behavior
+          Get.back(); // Navigate to the previous screen
+        }
+      },
+      child: Scaffold(
+        appBar:AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: true,
+        ),
+        body: Obx(
+            ()=> coinController.totalHp.value < 1 ?
+            Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      ninjaHpNeed,
+                      width: 200,
+                      height: 200,
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                        "Your ninja is not ready to stealth!\nMinimum HP is 5 to play this game.")
+                  ],
+                ),
+              ):
+             const GameScreen(),
+        ),
       ),
     );
   }

@@ -14,71 +14,80 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: FutureBuilder<bool>(
-        future: controller.canPlayGame(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasData && snapshot.data == false) {
-            return Center(child: Text("You can play again in 24 hours!"));
-          }
-          return Obx(() {
-            return Column(
-              children: [
-                Sized(height: 0.02),
-                Obx(()=> Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(coin,width: 50,),
-                    Sized(width: 0.05,),
-                    mediumText(title: "Coins: ${controller.coins.value}"),
-                  ],
-                )),
-                Sized(height: 0.02),
-                Obx(()=> smallText(title: "Attempts Left : ${controller.tapCount.value}")),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                    itemCount: controller.pictures.length,
-                    itemBuilder: (context, index) {
-                      return Obx(
-                          ()=> GestureDetector(
-                          onTap: () => controller.selectPicture(index),
-                          child: Container(
-                            margin: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: primaryTextColor,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: controller.isRevealed[index]
-                                  ? (controller.pictures[index] is String
-                                  ? Image.asset(
-                                controller.pictures[index], // Assuming it's an asset path
-                                fit: BoxFit.cover,
-                              )
-                                  : controller.pictures[index] as Icon)
-                                  : const Icon(Icons.question_mark, color: Colors.white), // Hidden state
+    return PopScope(
+      canPop: false, // Prevents automatic back navigation
+      onPopInvoked: (popped) {
+        if (!popped) {
+          // Custom back navigation behavior
+          Get.back(); // Navigate to the previous screen
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        body: FutureBuilder<bool>(
+          future: controller.canPlayGame(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasData && snapshot.data == false) {
+              return Center(child: Text("You can play again in 24 hours!"));
+            }
+            return Obx(() {
+              return Column(
+                children: [
+                  Sized(height: 0.02),
+                  Obx(()=> Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(coin,width: 50,),
+                      Sized(width: 0.05,),
+                      mediumText(title: "Coins: ${controller.coins.value}"),
+                    ],
+                  )),
+                  Sized(height: 0.02),
+                  Obx(()=> smallText(title: "Attempts Left : ${controller.tapCount.value}")),
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                      itemCount: controller.pictures.length,
+                      itemBuilder: (context, index) {
+                        return Obx(
+                            ()=> GestureDetector(
+                            onTap: () => controller.selectPicture(index),
+                            child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: primaryTextColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(
+                                child: controller.isRevealed[index]
+                                    ? (controller.pictures[index] is String
+                                    ? Image.asset(
+                                  controller.pictures[index], // Assuming it's an asset path
+                                  fit: BoxFit.cover,
+                                )
+                                    : controller.pictures[index] as Icon)
+                                    : const Icon(Icons.question_mark, color: Colors.white), // Hidden state
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                if (controller.gameOver.value)
-                  CustomButton(title: 'Play Again', onTap: controller.resetGame)
-              ],
-            );
-          });
-        },
+                  if (controller.gameOver.value)
+                    CustomButton(title: 'Play Again', onTap: controller.resetGame)
+                ],
+              );
+            });
+          },
+        ),
       ),
     );
   }

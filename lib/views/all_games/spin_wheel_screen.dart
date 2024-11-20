@@ -51,127 +51,136 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomSized(
-              height: 0.7,
-              width: 0.7,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  FortuneWheel(
-                    hapticImpact: HapticImpact.heavy,
-                    rotationCount: 5,
-                    animateFirst: false,
-                    selected: controller.selected.stream,
-                    items: [
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('100', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+    return PopScope(
+      canPop: false, // Prevents automatic back navigation
+      onPopInvoked: (popped) {
+        if (!popped) {
+          // Custom back navigation behavior
+          Get.back(); // Navigate to the previous screen
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: true,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomSized(
+                height: 0.7,
+                width: 0.7,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    FortuneWheel(
+                      hapticImpact: HapticImpact.heavy,
+                      rotationCount: 5,
+                      animateFirst: false,
+                      selected: controller.selected.stream,
+                      items: [
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('100', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: secondaryTextColor),
                         ),
-                        style: const FortuneItemStyle(color: secondaryTextColor),
-                      ),
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('200', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('200', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: splashColor),
                         ),
-                        style: const FortuneItemStyle(color: splashColor),
-                      ),
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('400', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('400', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: secondaryTextColor),
                         ),
-                        style: const FortuneItemStyle(color: secondaryTextColor),
-                      ),
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('600', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('600', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: splashColor),
                         ),
-                        style: const FortuneItemStyle(color: splashColor),
-                      ),
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('800', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('800', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: secondaryTextColor),
                         ),
-                        style: const FortuneItemStyle(color: secondaryTextColor),
-                      ),
-                      FortuneItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('5000', style: TextWidgets.customProfileTextStyle()),
-                            CustomSized(width: 0.03),
-                            const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
-                          ],
+                        FortuneItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('5000', style: TextWidgets.customProfileTextStyle()),
+                              CustomSized(width: 0.03),
+                              const CircleAvatar(backgroundImage: AssetImage(coin), radius: 20, backgroundColor: Colors.transparent),
+                            ],
+                          ),
+                          style: const FortuneItemStyle(color: splashColor),
                         ),
-                        style: const FortuneItemStyle(color: splashColor),
-                      ),
-                    ],
-                  ),
-                  // Confetti widget positioned in the center
-                  ConfettiWidget(
-                    confettiController: _confettiController,
-                    blastDirectionality: BlastDirectionality.explosive, // Blast from center
-                    emissionFrequency: 0.03, // How often particles are emitted
-                    numberOfParticles: 30, // Number of particles to emit
-                    gravity: 0.2, // Particle gravity
-                    particleDrag: 0.05, // Apply drag to the particles
-                    colors: [
-                      coinColors
-                    ], // Set colors to null to use the original image colors
-                    createParticlePath: (_) {
-                      // You could use this to create a custom path if needed
-                      return Path()..addOval(Rect.fromCircle(center: Offset(0, 0), radius: 5));
-                    },
-                    child: Image.asset(
-                      coin,
-                      width: 30, // Adjust size as needed
-                      height: 30,
+                      ],
                     ),
-                  ),
-                ],
+                    // Confetti widget positioned in the center
+                    ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirectionality: BlastDirectionality.explosive, // Blast from center
+                      emissionFrequency: 0.03, // How often particles are emitted
+                      numberOfParticles: 30, // Number of particles to emit
+                      gravity: 0.2, // Particle gravity
+                      particleDrag: 0.05, // Apply drag to the particles
+                      colors: [
+                        coinColors
+                      ], // Set colors to null to use the original image colors
+                      createParticlePath: (_) {
+                        // You could use this to create a custom path if needed
+                        return Path()..addOval(Rect.fromCircle(center: Offset(0, 0), radius: 5));
+                      },
+                      child: Image.asset(
+                        coin,
+                        width: 30, // Adjust size as needed
+                        height: 30,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            CustomSized(),
-            CustomButton(
-              title: 'Spin',
-              onTap: _spinWheel, // Update to call the new function
-            ),
-          ],
+              CustomSized(),
+              CustomButton(
+                title: 'Spin',
+                onTap: _spinWheel, // Update to call the new function
+              ),
+            ],
+          ),
         ),
       ),
     );
