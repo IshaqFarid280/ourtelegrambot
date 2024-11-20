@@ -62,6 +62,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String? referralCode;
 
   var statusController = Get.put(SetStatusController());
+  var coinController = Get.put(CoinController());
 
 
   @override
@@ -85,19 +86,16 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed ) {
       statusController.setStatus(isOnline: true);
       statusController.isOnline.value = true;
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('is Online  ${statusController.isOnline.value}'),
-      //   ),
-      // );
     } else {
-      statusController.setStatus(isOnline: false);
+      statusController.setStatus(isOnline: false).then((value){
+        coinController.makeCoinPerSecond(userId: userTelegramId.toString(), context: context);
+        coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
+        coinController.addEnergies(userId: userTelegramId.toString(), context: context);
+        coinController.consumeEnergies(userId: userTelegramId.toString(), context: context);
+        coinController.addedEnergies.value = 0 ;
+        coinController.consumedEnergies.value = 0;
+      });
       statusController.isOnline.value = false;
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('is Online  ${statusController.isOnline.value}'),
-      //   ),
-      // );
     }
   }
 
@@ -136,8 +134,24 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             children: List.generate(fillIcons.length, (index) {
               return GestureDetector(
                 onTap: () {
-                  _selectedIndex = index;
-                  setState(() {});
+                  if (_selectedIndex != index) { // Only trigger when changing tabs
+                    // Check if moving from index 0 to any other index
+                    statusController.setStatus(isOnline: false).then((value) {
+                      coinController.makeCoinPerSecond(userId: userTelegramId.toString(), context: context);
+                      coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
+                      coinController.consumeEnergies(userId: userTelegramId.toString(), context: context);
+                      coinController.addEnergies(userId: userTelegramId.toString(), context: context); // Only called when moving from index 0
+                      coinController.earnPerTap.value = 0;
+                      coinController.coinPerSecondCurrent.value = 0;
+                      coinController.coinPerSecond.value = 0;
+                      coinController.coins.value = 0;
+                      coinController.addedEnergies.value = 0 ;
+                      coinController.consumedEnergies.value = 0;
+                    });
+                    statusController.isOnline.value = false;
+                    _selectedIndex = index; // Update the selected index after logic
+                    setState(() {});
+                  }
                 },
                 child: Column(
                   children: [
