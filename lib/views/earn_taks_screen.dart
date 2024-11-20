@@ -302,7 +302,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
               Tab(text: "Basic",),
               Tab(text: "Social",),
               Tab(text: "Frens",),
-              Tab(text: "Groups",),
+              Tab(text: "Channel",),
               Tab(text: "Academy",),
             ]),
             Expanded(
@@ -618,83 +618,85 @@ class _TaskListScreenState extends State<TaskListScreen> {
             final tasks = snapshot.data!.docs;
             return Column(
               children: [
+ Container(
+   height: MediaQuery.of(context).size.height*0.44,
+   width: MediaQuery.of(context).size.width*0.95,
+   child: ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        var task = tasks[index];
+                        var taskName = task['task_name'];
+                        var buttonTextName = task['button_text'];
+                        var price = task['price'].toString();
+                        var code = task['code'];
+                        var urllauncherNavigator = task['button_navigator'];
+                        var imageurl = task['image_url'];
 
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) {
-                      var task = tasks[index];
-                      var taskName = task['task_name'];
-                      var buttonTextName = task['button_text'];
-                      var price = task['price'].toString();
-                      var code = task['code'];
-                      var urllauncherNavigator = task['button_navigator'];
-                      var imageurl = task['image_url'];
+                        bool isCompleted = (task['completed'] as List<dynamic>)
+                            .contains(controller.userId.value);
 
-                      bool isCompleted = (task['completed'] as List<dynamic>)
-                          .contains(controller.userId.value);
+                        int invitedusercount = controller.inviteduserCount.value;
 
-                      int invitedusercount = controller.inviteduserCount.value;
-
-                      return ListTile(
-                        leading: CircleAvatar(
-                            child: Image.network(imageurl)),
-                        title: mediumText(title: taskName, fontSize: 16.0),
-                        subtitle: Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage('assets/coin.png')
-                                  )
+                        return ListTile(
+                          leading: CircleAvatar(
+                              child: Image.network(imageurl)),
+                          title: mediumText(title: taskName, fontSize: 14.0),
+                          subtitle: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage('assets/coin.png')
+                                    )
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.065,
+                                height: MediaQuery.of(context).size.height * 0.045,
                               ),
-                              width: MediaQuery.of(context).size.width * 0.065,
-                              height: MediaQuery.of(context).size.height * 0.045,
-                            ),
-                            mediumText(title: price, fontSize: 12.0),
-                          ],
-                        ),
-                        trailing: isCompleted
-                            ? Icon(Icons.check)
-                            : Obx(() {
-                          if (invitedusercount >= code) {
-                            return CustomButton(
-                              title: 'Verify',
-                              width: 0.18,
-                              height: 0.06,
-                              onTap: () {
-                                tasksController.markTasksCompleted(
-                                  collection: frensTasks,
-                                  userId: controller.userId.value,
-                                  context: context,
-                                  coinprice: task['price'],
-                                  docId: task.id,
-                                );
-                              },
-                            );
-                          } else if (tasksController.isloadingIndicator.value) {
-                            return CustomIndicator();
-                          } else {
-                            return CustomButton(
-                              width: 0.18,
-                              height: 0.06,
-                              title: buttonTextName,
-                              onTap: () async {
-                                var encodedUsername = Uri.encodeComponent(controller.userId.value);
-                                final inviteLink =
-                                    'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
-                                shareInviteLink(inviteLink, controller.userId.value, 'Buckle up for big Adventure');
-                              },
-                            );
-                          }
-                        }),
+                              mediumText(title: price, fontSize: 12.0),
+                            ],
+                          ),
+                          trailing: isCompleted
+                              ? Icon(Icons.check)
+                              : Obx(() {
+                            if (invitedusercount >= code) {
+                              return CustomButton(
+                                title: 'Verify',
+                                width: 0.18,
+                                height: 0.06,
+                                onTap: () {
+                                  tasksController.markTasksCompleted(
+                                    collection: frensTasks,
+                                    userId: controller.userId.value,
+                                    context: context,
+                                    coinprice: task['price'],
+                                    docId: task.id,
+                                  );
+                                },
+                              );
+                            } else if (tasksController.isloadingIndicator.value) {
+                              return CustomIndicator();
+                            } else {
+                              return CustomButton(
+                                width: 0.18,
+                                height: 0.06,
+                                title: buttonTextName,
+                                onTap: () async {
+                                  var encodedUsername = Uri.encodeComponent(controller.userId.value);
+                                  final inviteLink =
+                                      'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
+                                  shareInviteLink(inviteLink, controller.userId.value, 'Buckle up for big Adventure');
+                                },
+                              );
+                            }
+                          }),
 
 
 
-                      );
-                    },
-                  ),
-                ),
+                        );
+                      },
+                    ),
+ ),
+
                 Divider(
                   thickness: 1.5,
 
@@ -705,9 +707,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   leading: CircleAvatar(
                     child: Icon(Icons.person_add_alt_sharp),
                   ),
-                  title: mediumText(title: 'People Joined through your Invite:'),
+                  title: mediumText(title: 'People Joined through your Invite:', fontSize: 14.0),
                   tileColor: primaryTextColor.withOpacity(0.5),
-                  trailing: mediumText(title:  '${controller.inviteduserCount.value}'),
+                  trailing: mediumText(title:  '${controller.inviteduserCount.value}', fontSize: 15.0),
                 )
 
 
