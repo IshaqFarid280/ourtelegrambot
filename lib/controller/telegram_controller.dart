@@ -147,13 +147,24 @@ class TelegramController extends GetxController {
     js.context.callMethod('setMainButton', [text, isVisible]);
   }
   // Method to save initial user data
-  Future<void> saveUserData({required String userId, required String userName, required  String  referralCodes}) async {
+  Future<void> saveUserData({required String userId, required String userName,
+    required  String  referralCodes}) async {
     print('print th in saveuserdata fucntion: ${referralCodes}');
     DateTime now = DateTime.now();
     DateTime yesterday = now.subtract(Duration(days: 1));
     Timestamp customTimestamp = Timestamp.fromDate(yesterday);
     var data = fireStore.collection(user).doc(userId);
     try {
+      // Reference to the user's document
+      DocumentReference userDocRef = fireStore.collection(user).doc(userId);
+
+      // Check if the user document exists
+      DocumentSnapshot userDoc = await userDocRef.get();
+      if (userDoc.exists) {
+        print('User already exists. Skipping saveUserData.');
+        return; // Exit the function if user already exists
+      }
+
       await data.set({
         'lastPlayed':customTimestamp,
         'is_online':false,
@@ -206,6 +217,7 @@ class TelegramController extends GetxController {
       if (referralCodes != userId) {
         try {
           DocumentReference referrerDocRef = fireStore.collection(user).doc(referralCodes);
+
           await fireStore.runTransaction((transaction) async {
             DocumentSnapshot referrerDoc = await transaction.get(referrerDocRef);
             if (referrerDoc.exists) {
@@ -231,6 +243,9 @@ class TelegramController extends GetxController {
       print('Failed to save user data: $e');
     }
   }
+
+
+
 }
 //   'invited_users': FieldValue.arrayUnion([userTelegramId]),
 //           'coins': FieldValue.increment(500), // Deduct 5 coins

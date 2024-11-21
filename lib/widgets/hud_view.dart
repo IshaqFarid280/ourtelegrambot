@@ -56,7 +56,7 @@ class HudViewSmall extends StatelessWidget {
           height: MediaQuery.of(context).size.height*height,
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
+            // color: Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(8)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
