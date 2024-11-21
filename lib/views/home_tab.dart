@@ -35,7 +35,6 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
   void initState() {
   super.initState();
   WidgetsFlutterBinding.ensureInitialized();
-  super.initState();
   WidgetsBinding.instance.addObserver(this);
   }
 
@@ -59,7 +58,6 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     print('the user telegram id in home tab: ${ userTelegramId.toString()}');
@@ -69,7 +67,8 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CustomIndicator());
-          } else if (snapshot.hasData) {
+          }
+          else if (snapshot.hasData) {
             var userData = snapshot.data!.data() as Map<String, dynamic>;
             coinController.coins.value = userData['coins'];
             coinController.earnPerTap.value = userData['tap_per_earn']['value'];
@@ -87,13 +86,16 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
             if (coinController.energyPercentage.value > 80) {
               iconColor = Colors.green;
               coinController.iconData.value = Icons.battery_full_outlined;
-            } else if (coinController.energyPercentage.value > 50) {
+            }
+            else if (coinController.energyPercentage.value > 50) {
               iconColor = Colors.yellow;
               coinController.iconData.value = Icons.battery_6_bar_outlined;
-            } else if (coinController.energyPercentage.value > 30) {
+            }
+            else if (coinController.energyPercentage.value > 30) {
               iconColor = Colors.orange;
               coinController.iconData.value = Icons.battery_4_bar_outlined;
-            } else {
+            }
+            else {
               iconColor = Colors.red;
               coinController.iconData.value = Icons.battery_charging_full_outlined;
             }
@@ -304,7 +306,8 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
                 ],
               ),
             );
-          } else {
+          }
+          else {
             return Text('Something went wrong');
           }
         },

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../const/firebase_const.dart';
+import 'dart:js' as js;
 
 
 class CoinController extends GetxController {
@@ -35,7 +36,15 @@ class CoinController extends GetxController {
 
 
 
+  void initializeTelegramBackButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('showBackButton', []);
+  }
 
+  void _showAlert(String message) {
+    // Calling the 'showAlert' function from JavaScript
+    js.context.callMethod('showAlert', [message]);
+  }
 
 
   consumeEnergies({required String userId, required BuildContext context}) async {
@@ -142,7 +151,6 @@ class CoinController extends GetxController {
       );
     }
   }
-
   addEnergiesOffline(){
     if (_isTimerRunning1) return;
     _timer1 = Timer.periodic(Duration(seconds: 7), (timer) async {

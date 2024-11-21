@@ -107,8 +107,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                               child: CustomIndicator()
                             );
                           } else if (snapshot.hasData) {
-                            var data =
-                                snapshot.data!.data() as Map<String, dynamic>;
+                            var data = snapshot.data!.data() as Map<String, dynamic>;
                             controller.name.value = data['user_name'];
                             controller.userId.value = data['user_id'];
                            List<dynamic> arrayfield = data['invited_users'];

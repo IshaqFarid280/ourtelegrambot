@@ -16,6 +16,21 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
+    window.onload = function() {
+      const tg = Telegram.WebApp;
+
+      // Enable closing confirmation when the page is loaded
+      tg.enableClosingConfirmation();
+
+      // Listen for the event where the user tries to close the app
+      window.onbeforeunload = function(event) {
+        // Show a confirmation prompt when the user tries to leave the page
+        event.returnValue = "Are you sure you want to exit?";
+      };
+    };
+  </script>
+
+  <script>
     function initTelegramWebApp() {
       if (window.Telegram) {
         Telegram.WebApp.ready();
@@ -39,6 +54,23 @@
           Telegram.WebApp.MainButton.hide();
         }
       }
+    }
+  </script>
+  <script>
+    // Define a JavaScript function
+    function showBackButton() {
+      console.log('Telegram Back Button shown');
+      if (typeof Telegram !== 'undefined') {
+        Telegram.WebApp.BackButton.show();
+        Telegram.WebApp.BackButton.onClick(() => {
+          window.history.back();
+        });
+      }
+    }
+
+    // You can define more JS functions here
+    function showAlert(message) {
+      alert(message);
     }
   </script>
 

@@ -9,19 +9,24 @@ import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import '../../controller/GameController.dart';
 
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
   final GameController controller = Get.put(GameController());
+
+  Future<bool> _handleBackNavigation() async {
+    Navigator.pop(context);
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, // Prevents automatic back navigation
-      onPopInvoked: (popped) {
-        if (!popped) {
-          // Custom back navigation behavior
-          Get.back(); // Navigate to the previous screen
-        }
-      },
+
+    return WillPopScope(
+      onWillPop: _handleBackNavigation,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,

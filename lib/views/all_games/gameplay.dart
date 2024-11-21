@@ -116,118 +116,126 @@ class _GameScreenState extends State<GameScreen>
     });
   }
 
+  Future<bool> _handleBackNavigation() async {
+    Navigator.pop(context);
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CoinController>(builder: (coinController) {
-      return GestureDetector(
-        onTap: () {
-          if (gameStarted) {
-            jump();
-          } else {
-            startGame();
-          }
-        },
-        child: Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Container(
-                  color: Colors.blue,
-                  child: Stack(
-                    children: [
-                      AnimatedContainer(
-                        alignment: Alignment(0, birdY),
-                        duration: const Duration(milliseconds: 0),
-                        color: Colors.black,
-                        child: const MyBird(),
-                      ),
-                      Container(
-                        alignment: const Alignment(0, -0.3),
-                        child: gameStarted
-                            ? const Text(
-                                "",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 24),
-                              )
-                            : const Text(
-                                "Tap To Play",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 24),
-                              ),
-                      ),
-                      AnimatedContainer(
-                        alignment: Alignment(obstacleX, -0.4),
-                        duration: const Duration(milliseconds: 0),
-                        child: MyObstacle(
-                          size: obstacleSize,
+
+    return WillPopScope(
+      onWillPop: _handleBackNavigation,
+      child: GetBuilder<CoinController>(builder: (coinController) {
+        return GestureDetector(
+          onTap: () {
+            if (gameStarted) {
+              jump();
+            } else {
+              startGame();
+            }
+          },
+          child: Scaffold(
+            body: Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    color: Colors.blue,
+                    child: Stack(
+                      children: [
+                        AnimatedContainer(
+                          alignment: Alignment(0, birdY),
+                          duration: const Duration(milliseconds: 0),
+                          color: Colors.black,
+                          child: const MyBird(),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.monetization_on,
-                                        color: Colors.amber),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      coinController.coins.value.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                  ],
+                        Container(
+                          alignment: const Alignment(0, -0.3),
+                          child: gameStarted
+                              ? const Text(
+                                  "",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 24),
+                                )
+                              : const Text(
+                                  "Tap To Play",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 24),
                                 ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.favorite,
-                                        color: Colors.red),
-                                    const SizedBox(width: 8),
-                                    const Text(
-                                      "HP ",
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      coinController.totalHp.value
-                                          .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        ),
+                        AnimatedContainer(
+                          alignment: Alignment(obstacleX, -0.4),
+                          duration: const Duration(milliseconds: 0),
+                          child: MyObstacle(
+                            size: obstacleSize,
                           ),
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.monetization_on,
+                                          color: Colors.amber),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        coinController.coins.value.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.favorite,
+                                          color: Colors.red),
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        "HP ",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        coinController.totalHp.value
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                height: 15,
-                color: Colors.green,
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.brown,
+                Container(
+                  height: 15,
+                  color: Colors.green,
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Container(
+                    color: Colors.brown,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 }
 

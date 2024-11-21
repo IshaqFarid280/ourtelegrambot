@@ -48,17 +48,16 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
       );
     });
   }
+  Future<bool> _handleBackNavigation() async {
+    Navigator.pop(context);
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, // Prevents automatic back navigation
-      onPopInvoked: (popped) {
-        if (!popped) {
-          // Custom back navigation behavior
-          Get.back(); // Navigate to the previous screen
-        }
-      },
+
+    return WillPopScope(
+      onWillPop: _handleBackNavigation,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
