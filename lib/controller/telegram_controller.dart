@@ -121,8 +121,8 @@ class TelegramController extends GetxController {
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
-      userTelegramId = '1111111111111';
-      saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
+      userTelegramId = '123';
+      saveUserData(userId: userTelegramId.toString(), userName: 'test1', referralCodes: referid.toString());
     }
 
   }
@@ -163,8 +163,6 @@ class TelegramController extends GetxController {
         'user_id': userId,
         'coins': 5000,
         'lastSpinTime': customTimestamp,
-        'lastPlayed':customTimestamp,
-
         'invited_users': [],
         'tap_per_earn': {
           'level': 1,

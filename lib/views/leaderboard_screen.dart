@@ -18,8 +18,8 @@ class LeaderboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Leaderboard'),
       ),
-      body: FutureBuilder(
-        future: FirebaseServices.getleaderboarddetails(),
+      body: StreamBuilder<QuerySnapshot>(
+       stream : FirebaseServices.getleaderboarddetails(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CustomIndicator());
@@ -33,6 +33,8 @@ class LeaderboardScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: userDocs.length,
               itemBuilder: (context, index) {
+               var data = userDocs[index];
+               print('Names : coins : ${data['coins']} ${data['user_name']}');
                 String formatCoins(int coins) {
                   if (coins >= 1000000000) {
                     return '${(coins / 1000000000).toStringAsFixed(1)} B'; // Billions
@@ -44,7 +46,6 @@ class LeaderboardScreen extends StatelessWidget {
                     return coins.toString(); // Less than a thousand
                   }
                 }
-                var userData = userDocs[index].data() as Map<String, dynamic>;
                 return index <= 2 ? Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                   child: ListTile(
@@ -66,7 +67,7 @@ class LeaderboardScreen extends StatelessWidget {
                                 color: secondaryTextColor,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                      userData['avatar'] ?? '',
+                                      data['avatar'] ?? '',
                                     )
                                 )
                             ),
@@ -74,7 +75,7 @@ class LeaderboardScreen extends StatelessWidget {
                           ),
                         ),
                         Sized(width: 0.05),
-                        mediumText(title: userData['user_name'] ?? 'User Name',fontSize: 15,fontWeight:FontWeight.w400 ),
+                        mediumText(title: data['user_name'] ?? 'User Name',fontSize: 15,fontWeight:FontWeight.w400 ),
                       ],
                     ),
 
@@ -82,7 +83,7 @@ class LeaderboardScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(coin, width: 30, height: 40,),
-                        mediumText(title: '${formatCoins(userData['coins'] ?? 0)}', color: yellowColor, fontSize: 12.0 ),
+                        mediumText(title: '${formatCoins(data['coins'] ?? data['coins'])}', color: yellowColor, fontSize: 12.0 ),
                       ],
                     ),
                   ),
@@ -106,7 +107,7 @@ class LeaderboardScreen extends StatelessWidget {
                               color: secondaryTextColor,
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  userData['avatar'] ?? '',
+                                  data['avatar'] ?? '',
                                 )
                               )
                             ),
@@ -114,7 +115,7 @@ class LeaderboardScreen extends StatelessWidget {
                           ),
                         ),
                         Sized(width: 0.05),
-                        mediumText(title: userData['user_name'] ?? 'User Name',fontSize: 15,fontWeight:FontWeight.w400 ),
+                        mediumText(title: data['user_name'] ?? 'User Name',fontSize: 15,fontWeight:FontWeight.w400 ),
                       ],
                     ),
 
@@ -122,7 +123,7 @@ class LeaderboardScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(coin, width: 30, height: 40,),
-                        mediumText(title: '${formatCoins(userData['coins'] ?? 0)}', color: yellowColor, fontSize: 12.0 ),
+                        mediumText(title: data['coins'].toString(), color: yellowColor, fontSize: 15.0 ),
                       ],
                     ),
                   ),

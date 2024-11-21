@@ -144,7 +144,6 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       coinController.earnPerTap.value = 0;
                       coinController.coinPerSecondCurrent.value = 0;
                       coinController.coinPerSecond.value = 0;
-                      coinController.coins.value = 0;
                       coinController.addedEnergies.value = 0 ;
                       coinController.consumedEnergies.value = 0;
                     });
