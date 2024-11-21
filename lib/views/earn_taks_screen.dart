@@ -91,6 +91,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   Row(
                     children: [
                       Container(
+                        height: 30,
+                        width: 30,
                         decoration: BoxDecoration(
                             color: whiteColor.withOpacity(0.1),
                             shape: BoxShape.circle,
@@ -107,12 +109,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
                               child: CustomIndicator()
                             );
                           } else if (snapshot.hasData) {
-                            var data =
-                                snapshot.data!.data() as Map<String, dynamic>;
+                            var data = snapshot.data!.data() as Map<String, dynamic>;
                             controller.name.value = data['user_name'];
                             controller.userId.value = data['user_id'];
-                           List<dynamic> arrayfield = data['invited_users'];
+                            List<dynamic> arrayfield = data['invited_users'] ?? [];
                             controller.inviteduserCount.value = arrayfield.length;
+                            print('ArrayField Length: ${arrayfield.length}');
+                            print('ArrayField Contents: $arrayfield');
                             return Stack(
                               children: [
                                 Positioned(

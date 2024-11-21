@@ -123,7 +123,7 @@ class LeaderboardScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(coin, width: 30, height: 40,),
-                        mediumText(title: data['coins'].toString(), color: yellowColor, fontSize: 15.0 ),
+                        mediumText(title: formatCoins(data['coins'] ?? data['coins']), color: yellowColor, fontSize: 12.0 ),
                       ],
                     ),
                   ),

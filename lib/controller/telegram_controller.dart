@@ -121,8 +121,8 @@ class TelegramController extends GetxController {
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
-      userTelegramId = '123';
-      saveUserData(userId: userTelegramId.toString(), userName: 'test1', referralCodes: referid.toString());
+      userTelegramId = '5702';
+      saveUserData(userId: userTelegramId.toString(), userName: 'Moiz', referralCodes: referid.toString());
     }
 
   }
