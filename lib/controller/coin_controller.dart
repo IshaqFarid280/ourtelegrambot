@@ -10,6 +10,7 @@ import 'dart:js' as js;
 class CoinController extends GetxController {
   var coins = 0.obs;
   var earnPerTap = 0.obs;
+  var earnPerTapCurrent = 0.obs;
   var hpCurrentValue = 0.obs;
   var coinPerSecond = 0.obs;
   var coinPerSecondCurrent = 0.obs;
@@ -73,8 +74,8 @@ class CoinController extends GetxController {
   }
 
   increaseCoinsOffline(int values){
-    earnPerTap.value += values;
-    coins.value += values;
+    earnPerTap.value += (earnPerTapCurrent.value * values);
+    coins.value += (earnPerTapCurrent.value * values);
     lastAddedCoins.value = values;
     triggerAnimation();
     animateCoinCount();

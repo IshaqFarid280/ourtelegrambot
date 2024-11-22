@@ -88,204 +88,195 @@ class _TaskListScreenState extends State<TaskListScreen> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: whiteColor.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: AssetImage('assets/ninja.png'))),
-                      ),
-                      StreamBuilder<DocumentSnapshot>(
-                        stream: FirebaseServices.getUserData(
-                            userId: userTelegramId.toString()),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CustomIndicator()
-                            );
-                          } else if (snapshot.hasData) {
-                            var data = snapshot.data!.data() as Map<String, dynamic>;
-                            controller.name.value = data['user_name'];
-                            controller.userId.value = data['user_id'];
-                           List<dynamic> arrayfield = data['invited_users'];
-                            controller.inviteduserCount.value = arrayfield.length;
-                            return Stack(
-                              children: [
-                                Positioned(
-                                  right: 0,
-                                  child: Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.rotationY(pi),
-                                    child: Image.asset(
-                                      'assets/karatekid1.png',
-                                      fit: BoxFit.cover,
-                                      opacity: const AlwaysStoppedAnimation(.4),
-                                      height: MediaQuery.of(context).size.height *
-                                          0.25,
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.6,
-                                    ),
-                                  ),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseServices.getUserData(
+                        userId: userTelegramId.toString()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                          child: CustomIndicator()
+                        );
+                      } else if (snapshot.hasData) {
+                        var data = snapshot.data!.data() as Map<String, dynamic>;
+                        controller.name.value = data['user_name'];
+                        controller.userId.value = data['user_id'];
+                        List<dynamic> arrayfield = data['invited_users'] ?? [];
+                        controller.inviteduserCount.value = arrayfield.length;
+                        print('ArrayField Length: ${arrayfield.length}');
+                        print('ArrayField Contents: $arrayfield');
+                        return Stack(
+                          children: [
+                            Positioned(
+                              right: 0,
+                              child: Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationY(pi),
+                                child: Image.asset(
+                                  'assets/karatekid1.png',
+                                  fit: BoxFit.cover,
+                                  opacity: const AlwaysStoppedAnimation(.4),
+                                  height: MediaQuery.of(context).size.height *
+                                      0.25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
                                 ),
+                              ),
+                            ),
 
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Sized(
+                                  height: 0.02,
+                                ),
+                                Row(
                                   children: [
                                     Sized(
-                                      height: 0.02,
+                                      width: 0.04,
                                     ),
-                                    Row(
-                                      children: [
-                                        Sized(
-                                          width: 0.04,
-                                        ),
-                                        Container(
-                                          child: Image.network(userprofileiamge.toString(),
-                                            
-                                            loadingBuilder: (context, child, _ ){
-                                            return CustomIndicator();
-                                            
-                                          },
-                                          errorBuilder: (context, child, s){
-                                            return Icon(Icons.image_outlined);
-                                          },
-                                          
-                                          ),
-                                          decoration: BoxDecoration(
+                                    Container(
+                                      child: Image.network(userprofileiamge.toString(),
+
+                                        loadingBuilder: (context, child, _ ){
+                                        return CustomIndicator();
+
+                                      },
+                                      errorBuilder: (context, child, s){
+                                        return Icon(Icons.image_outlined);
+                                      },
+
+                                      ),
+                                      decoration: BoxDecoration(
 
 
-                                              shape: BoxShape.circle,
-                                              color: coinColors),
-                                          width:
-                                              MediaQuery.of(context).size.width *
-                                                  0.1,
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.05,
-                                        ),
-                                        Sized(
-                                          width: 0.04,
-                                        ),
-                                        Column(
-                                          children: [
-                                            mediumText(
-                                                title: '${controller.name.value}',
-                                                fontSize: 20.0),
-                                            smallText(
-                                                title: '${controller.userId.value.substring(0, 6)}${'*' * (controller.userId.value.length - 6)}',
-                                                fontSize: 14.0,
-                                                color:
-                                                    whiteColor.withOpacity(0.7)),
-                                          ],
-                                        ),
-                                      ],
+                                          shape: BoxShape.circle,
+                                          color: coinColors),
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                              0.1,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.05,
                                     ),
                                     Sized(
-                                      height: 0.07,
+                                      width: 0.04,
                                     ),
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                    Column(
                                       children: [
-                                        Sized(
-                                          width: 0.025,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-
-
-             var encodedUsername =
-               Uri.encodeComponent(controller.userId.value);
-             //https://t.me/InfoHawkbot/BountyHunter?startapp
-                                            //http://t.me/InfoHawkbot/BountyHunter?startapp  Info_Hawk
-                final inviteLink =
-                 'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
-                    controller.copyToClipboard(
-                        inviteLink, context);
-                        shareInviteLink(inviteLink, controller.userId.value,  'Buckle up for big Adventure');
-                        print('the encoded user id: ${encodedUsername}');
-                             },
-                                          child: Container(
-
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.05,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                mediumText(
-                                                    title: 'Send Invite'
-                                                        .toUpperCase(),
-                                                    fontSize: 18.0),
-                                                Sized(
-                                                  width: 0.019,
-                                                ),
-                                                Icon(Icons.send)
-                                              ],
-                                            ),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color:
-                                                    primaryTextColor),
-                                          ),
-                                        ),
-                                        Sized(
-                                          width: 0.025,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            var encodedUsername =
-                                                Uri.encodeComponent(
-                                                    controller.name.value);
-                                            final inviteLink =
-                                                'https://t.me/InfoHawkbot/BountyHunter?startapp';
-                                            controller.copyToClipboard(
-                                                inviteLink, context);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(8),
-                                            child: Icon(
-                                              Icons.link_rounded,
-                                              color: whiteColor,
-                                              size: 28,
-                                            ),
-                                            decoration: BoxDecoration(
-                                                color: primaryTextColor,
-                                                shape: BoxShape.circle),
-                                          ),
-                                        ),
+                                        mediumText(
+                                            title: '${controller.name.value}',
+                                            fontSize: 20.0),
+                                        smallText(
+                                            title: '${controller.userId.value.substring(0, 6)}${'*' * (controller.userId.value.length - 6)}',
+                                            fontSize: 14.0,
+                                            color:
+                                                whiteColor.withOpacity(0.7)),
                                       ],
                                     ),
                                   ],
-                                )
+                                ),
+                                Sized(
+                                  height: 0.07,
+                                ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Sized(
+                                      width: 0.025,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+
+
+                               var encodedUsername =
+                                 Uri.encodeComponent(controller.userId.value);
+                               //https://t.me/InfoHawkbot/BountyHunter?startapp
+                                        //http://t.me/InfoHawkbot/BountyHunter?startapp  Info_Hawk
+                                  final inviteLink =
+                                   'http://t.me/InfoHawkbot/Info_Hawk?startapp=$encodedUsername';
+                                      controller.copyToClipboard(
+                    inviteLink, context);
+                    shareInviteLink(inviteLink, controller.userId.value,  'Buckle up for big Adventure');
+                    print('the encoded user id: ${encodedUsername}');
+                         },
+                                      child: Container(
+
+                                        width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                            0.7,
+                                        height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                            0.05,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            mediumText(
+                                                title: 'Send Invite'
+                                                    .toUpperCase(),
+                                                fontSize: 18.0),
+                                            Sized(
+                                              width: 0.019,
+                                            ),
+                                            Icon(Icons.send)
+                                          ],
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color:
+                                                primaryTextColor),
+                                      ),
+                                    ),
+                                    Sized(
+                                      width: 0.025,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        var encodedUsername =
+                                            Uri.encodeComponent(
+                                                controller.name.value);
+                                        final inviteLink =
+                                            'https://t.me/InfoHawkbot/BountyHunter?startapp';
+                                        controller.copyToClipboard(
+                                            inviteLink, context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        child: Icon(
+                                          Icons.link_rounded,
+                                          color: whiteColor,
+                                          size: 28,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: primaryTextColor,
+                                            shape: BoxShape.circle),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text(
-                                  'Error fetching user data. Please try again.'),
-                            );
-                          } else {
-                            return Center(
-                              child: Text(
-                                'Please visit admin to resolve the issue.',
-                                style: TextStyle(fontSize: 16, color: Colors.red),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
+                            )
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                              'Error fetching user data. Please try again.'),
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            'Please visit admin to resolve the issue.',
+                            style: TextStyle(fontSize: 16, color: Colors.red),
+                          ),
+                        );
+                      }
+                    },
                   )
                 ],
               ),

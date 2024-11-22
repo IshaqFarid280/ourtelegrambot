@@ -26,14 +26,8 @@ class FirebaseServices {
   }
 
   static getleaderboarddetails(){
-    return fireStore.collection(user).orderBy('coins',descending: true).get();
+    return fireStore.collection(user).orderBy('coins',descending: true).snapshots();
   }
-
-
-//FirebaseFirestore.instance
-//                           .collection('users')
-//                           .doc(userTelegramId.toString())
-//                           .snapshots(),
 
 
 }

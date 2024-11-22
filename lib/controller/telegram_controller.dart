@@ -117,14 +117,12 @@ class TelegramController extends GetxController {
         print('the user profile image id: ${userprofileiamge}');
         print('user referid after hiting string : ${referid?.toString}');
         saveUserData(userId: userId, userName: username, referralCodes: referid!);
-        initializeTelegramBackButton();
       }
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
       userTelegramId = '1111111111111';
       saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
-      initializeTelegramBackButton();
     }
 
   }
@@ -139,11 +137,6 @@ class TelegramController extends GetxController {
     }
 
     return null;
-  }
-
-  void initializeTelegramBackButton() {
-    // Calling the 'showBackButton' function from JavaScript in the index.html
-    js.context.callMethod('showBackButton', []);
   }
   // Function to send data back to Telegram
   static void sendTelegramData(String data) {
@@ -179,10 +172,8 @@ class TelegramController extends GetxController {
         'my_avatars': FieldValue.arrayUnion(['assets/10.png']),
         'user_name': userName,
         'user_id': userId,
-        'coins': 5000,
+        'coins': 5000000,
         'lastSpinTime': customTimestamp,
-        'lastPlayed':customTimestamp,
-
         'invited_users': [],
         'tap_per_earn': {
           'level': 1,

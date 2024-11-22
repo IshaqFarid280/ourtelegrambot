@@ -50,8 +50,12 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
         coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
         coinController.consumeEnergies(userId: userTelegramId.toString(), context: context);
         coinController.addEnergies(userId: userTelegramId.toString(), context: context);
+        coinController.earnPerTap.value = 0;
+        coinController.coinPerSecondCurrent.value = 0;
+        coinController.coinPerSecond.value = 0;
         coinController.addedEnergies.value = 0 ;
         coinController.consumedEnergies.value = 0;
+        coinController.earnPerTapCurrent.value = 0;
       });
       statusController.isOnline.value = false;
     }
@@ -72,6 +76,7 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
             var userData = snapshot.data!.data() as Map<String, dynamic>;
             coinController.coins.value = userData['coins'];
             coinController.earnPerTap.value = userData['tap_per_earn']['value'];
+            coinController.earnPerTapCurrent.value = userData['tap_per_earn']['value'];
             coinController.coinPerSecond.value = userData['coin_per_second']['value'];
             coinController.coinPerSecondCurrent.value = userData['coin_per_second']['value'];
             coinController.hpCurrentValue.value = userData['hp']['value'];

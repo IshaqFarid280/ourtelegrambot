@@ -92,8 +92,12 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         coinController.increaseCoins(userId: userTelegramId.toString(), context: context);
         coinController.addEnergies(userId: userTelegramId.toString(), context: context);
         coinController.consumeEnergies(userId: userTelegramId.toString(), context: context);
+        coinController.earnPerTap.value = 0;
+        coinController.coinPerSecondCurrent.value = 0;
+        coinController.coinPerSecond.value = 0;
         coinController.addedEnergies.value = 0 ;
         coinController.consumedEnergies.value = 0;
+        coinController.earnPerTapCurrent.value = 0;
       });
       statusController.isOnline.value = false;
     }
@@ -144,9 +148,9 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       coinController.earnPerTap.value = 0;
                       coinController.coinPerSecondCurrent.value = 0;
                       coinController.coinPerSecond.value = 0;
-                      coinController.coins.value = 0;
                       coinController.addedEnergies.value = 0 ;
                       coinController.consumedEnergies.value = 0;
+                      coinController.earnPerTapCurrent.value = 0;
                     });
                     statusController.isOnline.value = false;
                     _selectedIndex = index; // Update the selected index after logic

@@ -67,13 +67,13 @@ class UpgradesController extends GetxController {
     switch (attribute) {
       case 'tap_per_earn':
       // For 'tap_per_earn', the value doubles with each level
-        return (level == 1) ? 2 : (calculateNewValue(attribute, level - 1) * 2);
+        return (level == 1) ? 2 : (calculateNewValue(attribute, level - 1) + 2);
       case 'hp':
       // For 'hp', the value increases by 4 with each level
-        return (level == 1) ? 4 : (calculateNewValue(attribute, level - 1) + 4);
+        return (level == 1) ? 2 : (calculateNewValue(attribute, level - 1) + 2);
       case 'coin_per_second':
       // For 'coin_per_second', the value increases by 5 with each level
-        return (level == 1) ? 5 : (calculateNewValue(attribute, level - 1) + 5);
+        return (level == 1) ? 1 : (calculateNewValue(attribute, level - 1) + 2);
       case 'energies':
       // For 'energies', the value increases by 250 with each level
         return (level == 1) ? 250 : (calculateNewValue(attribute, level - 1) + 250);
