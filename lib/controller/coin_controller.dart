@@ -36,6 +36,67 @@ class CoinController extends GetxController {
 
 
 
+  Future<void> regenerateEnergy(String userId) async {
+    final userRef = FirebaseFirestore.instance.collection(user).doc(userId);
+
+    try {
+      // Fetch the user's document
+      final userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        throw Exception('User document does not exist.');
+      }
+
+      // Extract user data
+      final data = userDoc.data();
+      final int currentEnergy = data?['energies']['value'] ?? 0;
+      final int maxEnergies = data?['energies']['max_energies'] ?? 0;
+      Timestamp? lastOnlineTimestamp = data?['last_Online'];
+      print(data?['last_Online']);
+
+      // If last_Online is missing, set it to the current server timestamp
+      if (lastOnlineTimestamp == null) {
+        await userRef.update({
+          'last_Online': FieldValue.serverTimestamp(),
+        });
+        print('last_Online was missing. Initialized with current server timestamp.');
+        return;
+      }
+
+      // Calculate elapsed time since last online
+      final DateTime lastOnline = lastOnlineTimestamp.toDate();
+      final DateTime now = DateTime.now();
+      final int elapsedSeconds = now.difference(lastOnline).inSeconds;
+
+      // Calculate energy to add (+1 every 10 seconds)
+      final int energyToAdd = (elapsedSeconds ~/ 10);
+
+      // Update energy value (cap at maxEnergies)
+      int updatedEnergy = currentEnergy + energyToAdd;
+      if (updatedEnergy > maxEnergies) {
+        updatedEnergy = maxEnergies;
+      }
+
+      // If no energy needs to be added, return early
+      if (updatedEnergy == currentEnergy) {
+        print('Energy is already at max or no time has passed to regenerate.');
+        return;
+      }
+
+      // Update Firestore with the new energy value and current timestamp
+      await userRef.update({
+        'energies.value': updatedEnergy,
+        'last_Online': FieldValue.serverTimestamp(),
+      });
+
+      print('Energy updated successfully: $updatedEnergy');
+    } catch (e) {
+      print('Error updating energy: $e');
+    }
+  }
+
+
+
+
 
   void initializeTelegramBackButton() {
     // Calling the 'showBackButton' function from JavaScript in the index.html

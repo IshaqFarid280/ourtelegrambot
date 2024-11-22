@@ -8,7 +8,7 @@ class UpgradesController extends GetxController {
 
   var coins = Get.find<CoinController>().coins ;
 
-  Future<void> upgradeAttribute(String userId, String attribute, BuildContext context) async {
+  Future<void> upgradeAttribute(String userId, String attribute, BuildContext context,int price) async {
     try {
       var userDoc = fireStore.collection(user).doc(userId);
       var userSnapshot = await userDoc.get();
@@ -19,22 +19,21 @@ class UpgradesController extends GetxController {
         int nextLevel = currentLevel + 1;
         List<dynamic> costs = userData[attribute]['costs'];
         // Check if next level is valid and the user has enough coins
-        if (nextLevel <= 20 && nextLevel < costs.length && userData['coins'] >= costs[nextLevel]) {
+        if (nextLevel <= 20 && currentLevel < costs.length && userData['coins'] >= costs[currentLevel]) {
           // Calculate the new value for the attribute at the next level
           int newValue = calculateNewValue(attribute, nextLevel);
           // Data to be updated in Firestore
           Map<String, dynamic> updateData = {
             '$attribute.level': nextLevel,  // Update level
             '$attribute.value': newValue,  // Update value
-            'coins': FieldValue.increment(-costs[nextLevel]), // Deduct coins
+            'coins': FieldValue.increment(-costs[currentLevel]), // Deduct coins for current level
           };
           // Special case for 'energies': also update 'max_energies'
           if (attribute == 'energies') {
             updateData['$attribute.max_energies'] = newValue;  // Sync max_energies with value
           }
-          // Perform the update in Firestore
           await userDoc.update(updateData);
-          coins.value = userData['coins'];
+          Get.find<CoinController>().coins -= price;
           Navigator.pop(context);
         } else {
           // If next level is invalid or insufficient coins
@@ -61,6 +60,7 @@ class UpgradesController extends GetxController {
       );
     }
   }
+
 
   // Calculate new value based on the attribute and level
   int calculateNewValue(String attribute, int level) {

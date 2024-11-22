@@ -10,6 +10,7 @@ import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/custom_indicator.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import '../const/colors.dart';
+import '../controller/coin_controller.dart';
 import 'how_it_works/on_boarding_screen.dart';
 
 class UserAttributesScreen extends StatelessWidget {
@@ -37,7 +38,7 @@ class UserAttributesScreen extends StatelessWidget {
                       children: [
                         const  CircleAvatar(backgroundImage: AssetImage(coin),backgroundColor: Colors.transparent,radius: 30,),
                         CustomSized(width: 0.01),
-                        Obx(()=> largeText(title:upgradesController.coins.value.toString(),fontWeight: FontWeight.w400,color: coinColors,fontSize: 35)),
+                        Obx(()=> largeText(title:Get.find<CoinController>().coins.toString(),fontWeight: FontWeight.w400,color: coinColors,fontSize: 35)),
                       ],
                     ),
                     CustomSized(height: 0.02,),
@@ -90,7 +91,7 @@ class UserAttributesScreen extends StatelessWidget {
                             ),
                             onTap: () {
                               OpenBottomSheet.openBottomSheet(title: 'Silent Strike Coins', description: 'Earn coins instantly with each tap, using the stealth and precision of a ninja!', onTap: (){
-                                upgradesController.upgradeAttribute(userTelegramId.toString(), 'tap_per_earn',context);
+                                upgradesController.upgradeAttribute(userTelegramId.toString(), 'tap_per_earn',context,userData['tap_per_earn']['costs'][userData['tap_per_earn']['level']]);
                               }, imagePath: coinPerTap, context: context,price: userData['tap_per_earn']['costs'][userData['tap_per_earn']['level']].toString());
                             },
                           ),
@@ -118,7 +119,7 @@ class UserAttributesScreen extends StatelessWidget {
                               ),
                               onTap: () {
                                OpenBottomSheet.openBottomSheet(title: 'Hp', description: 'Your ninja\'s health power – keep it high to stay strong in every battle!', onTap: (){
-                                 upgradesController.upgradeAttribute(userTelegramId.toString(), 'hp',context);
+                                 upgradesController.upgradeAttribute(userTelegramId.toString(), 'hp',context,userData['hp']['costs'][userData['hp']['level']]);
                                }, imagePath: hpNinja, context: context,price: userData['hp']['costs'][userData['hp']['level']].toString());
                               }),
                           const Divider(),
@@ -145,8 +146,8 @@ class UserAttributesScreen extends StatelessWidget {
                               ),
                               onTap: () {
                                 OpenBottomSheet.openBottomSheet(title: 'Stealth Coin Stream', description: 'Earn coins silently over time, just like a ninja moving in the shadows!', onTap: (){
-                                  upgradesController.upgradeAttribute(userTelegramId.toString(), 'coin_per_second',context);
-                                }, imagePath: coinPerSecond, context: context,price: userData['hp']['costs'][userData['hp']['level']].toString());
+                                  upgradesController.upgradeAttribute(userTelegramId.toString(), 'coin_per_second',context,userData['coin_per_second']['costs'][userData['coin_per_second']['level']]);
+                                }, imagePath: coinPerSecond, context: context,price: userData['coin_per_second']['costs'][userData['coin_per_second']['level']].toString());
                               }),
                           const Divider(),
                           ListTile(
@@ -170,8 +171,8 @@ class UserAttributesScreen extends StatelessWidget {
                               ),
                               onTap: () {
                                 OpenBottomSheet.openBottomSheet(title: 'Shadow Energy', description: 'Harness the quiet strength of a ninja with each point of energy, fueling your journey through stealth and precision!', onTap: (){
-                                  upgradesController.upgradeAttribute(userTelegramId.toString(), 'energies',context);
-                                }, imagePath: ninjaEnergies, context: context,price: userData['hp']['costs'][userData['hp']['level']].toString());
+                                  upgradesController.upgradeAttribute(userTelegramId.toString(), 'energies',context, userData['energies']['costs'][userData['energies']['level']]);
+                                }, imagePath: ninjaEnergies, context: context,price: userData['energies']['costs'][userData['energies']['level']].toString());
                               }),
                         ],
                       ),
