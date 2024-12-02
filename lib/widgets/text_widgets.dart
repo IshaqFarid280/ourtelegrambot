@@ -13,7 +13,7 @@ Widget largeText({
 }) {
   return Text(
     title,
-    style: GoogleFonts.sansita(
+    style: GoogleFonts.lato(
         textStyle: TextStyle(
           color: color,
           fontWeight: fontWeight,
@@ -31,7 +31,7 @@ Widget mediumText({
 }) {
   return Text(
     title,
-    style: GoogleFonts.sansita(
+    style: GoogleFonts.lato(
         textStyle: TextStyle(
           color: color,
           fontWeight: fontWeight,
@@ -49,7 +49,7 @@ Widget smallText({
 }) {
   return Text(
     title,
-    style: GoogleFonts.sansita(
+    style: GoogleFonts.lato(
         textStyle: TextStyle(
           color: color,
           fontWeight: fontWeight,
@@ -82,7 +82,7 @@ class TextWidgets {
     Color color = whiteColor,
     FontWeight fontWeight = FontWeight.w400,
   }) {
-    return GoogleFonts.sansita(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
           color: color,
           fontWeight: fontWeight,

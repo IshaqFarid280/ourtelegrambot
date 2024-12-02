@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'dart:js' as js;
 import 'package:ourtelegrambot/const/colors.dart';
 
 import '../const/firebase_const.dart';
@@ -18,7 +19,29 @@ import '../const/firebase_const.dart';
 class TasksController extends GetxController {
   var isloadingIndicator = false.obs; // Observable for loading state
 
+  Future<String> resolveImageURL(String url) async {
+    try {
+      // Perform a HEAD request to resolve the redirected URL
+      var response = await http.head(Uri.parse(url));
+      if (response.statusCode == 302 || response.statusCode == 301) {
+        // If there's a redirect, use the 'location' header
+        return response.headers['location'] ?? url;
+      }
+      return url; // No redirect, return the original URL
+    } catch (e) {
+      print("Error resolving image URL: $e");
+      return url; // Fallback to the original URL in case of an error
+    }
+  }
 
+  void initializeTelegramBackButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('showBackButton');
+  }
+  void hideoutallButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('hideAllButtons');
+  }
   markTasksCompleted({required String collection,required String userId,
     required int  coinprice, required BuildContext context,required String docId}) async {
     try {

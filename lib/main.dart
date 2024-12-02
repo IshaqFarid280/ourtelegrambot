@@ -10,6 +10,7 @@ import 'package:ourtelegrambot/views/avatar_screen.dart';
 import 'package:ourtelegrambot/views/earn_taks_screen.dart';
 import 'package:ourtelegrambot/views/home_tab.dart';
 import 'package:get/get.dart';
+import 'package:js/js.dart' as js;
 import 'package:ourtelegrambot/views/leaderboard_screen.dart';
 import 'package:ourtelegrambot/views/upgrades_tab.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
@@ -69,8 +70,10 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
+
     WidgetsBinding.instance.addObserver(this);
+    // Show the Close Button when entering Home Screen
+
     _widgetOptions = <Widget>[
       HomeTab(),
       LeaderboardScreen(userid: userTelegramId.toString(),),
@@ -121,17 +124,17 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Card(
         elevation: 10,
-        color: primaryTextColor.withOpacity(0.5),
-        margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
+        color: primaryTextColor.withOpacity(0.3),
+        margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-              color: primaryTextColor.withOpacity(0.5),
+              color: primaryTextColor.withOpacity(0.9),
               borderRadius: BorderRadius.circular(18)),
-          height: MediaQuery.sizeOf(context).height * 0.07,
+          height: MediaQuery.sizeOf(context).height * 0.088,
           // width: MediaQuery.sizeOf(context).width * 0.95,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -121,9 +121,33 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
                               icon: Image.asset(coin, height: 30, width: 30),
                             ),
                             const SizedBox(width: 8.0),
-                            HudView(
-                              label: 'HP ${userData['hp']['total_hp']}',
-                              icon: Image.asset(health, height: 30, width: 30),
+                            Stack(
+                              children: [
+
+                                HudView(
+                                  label: 'HP ${userData['hp']['total_hp']}',
+                                  icon: Image.asset(health, height: 30, width: 30),
+                                ),
+                                Positioned(
+                                  top: 0,right: 0,
+                                  child: InkWell(
+
+
+                                    child
+                                        : CircleAvatar(
+
+                                      child: Icon(Icons.add, color: whiteColor, size: 20,),
+                                      radius: 17,
+                                      backgroundColor: whiteColor.withOpacity(0.15),
+
+                                    ),
+                                    onTap: (){
+                                      coinController.buyHp(userId: userTelegramId.toString(), context: context);
+
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(width: 8.0),
                             HudView(
@@ -186,8 +210,9 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
                               opacity: coinController.isTapped.value ? 0.8 : 1.0,
                               child: Image.asset(
                                 userData['avatar'],
-                                height: 270.0,
-                                width: 270.0,
+                                height: MediaQuery.of(context).size.height*0.55,
+
+                                width: MediaQuery.of(context).size.width*0.9,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -250,22 +275,42 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
                   CustomSized(height: 0.03),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: <Widget>[
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Obx(()=> Icon(coinController.iconData.value,color: iconColor,size: 35,)),
+                            CustomSized(height: 0.01),
+                            Obx(
+                                  ()=> AnimatedScale(
+                                duration: const Duration(milliseconds: 300),
+                                scale: coinController.isTapped.value ? 1.2 : 1.0,
+                                child: AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 300),
+                                  opacity: coinController.isTapped.value ? 0.8 : 1.0,
+                                  child: Text(coinController.energiesCurrent.value <= 0 ? '0':'${coinController.energiesCurrent.value}', style: TextStyle(color: coinController.isTapped.value ?  coinColors : whiteColor)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Image.asset(coin, height: 40, width: 40),
+                            Image.asset(coin, height: 35, width: 35),
                             CustomSized(height: 0, width: 0.02),
                             Obx(
-                              ()=> TweenAnimationBuilder<int>(
+                                  ()=> TweenAnimationBuilder<int>(
                                 tween: IntTween(
                                     begin: 0, end: coinController.coins.value),
                                 duration: const Duration(milliseconds: 500),
                                 builder: (context, value, child) {
                                   return Text(
-                                    'Coins: ${value}',
+                                    '${value}',
                                     style: const TextStyle(fontSize: 20),
                                   );
                                 },
@@ -273,38 +318,9 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
                             ),
                           ],
                         ),
-                        CustomSized(height: 0.03),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Obx(()=> Icon(coinController.iconData.value,color: iconColor,size: 50,)),
-                                CustomSized(height: 0.01),
-                                Obx(
-                                    ()=> AnimatedScale(
-                                    duration: const Duration(milliseconds: 300),
-                                    scale: coinController.isTapped.value ? 1.2 : 1.0,
-                                    child: AnimatedOpacity(
-                                      duration: const Duration(milliseconds: 300),
-                                      opacity: coinController.isTapped.value ? 0.8 : 1.0,
-                                      child: Text(coinController.energiesCurrent.value <= 0 ? '0':'${coinController.energiesCurrent.value}', style: TextStyle(color: coinController.isTapped.value ?  coinColors : whiteColor)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            CustomSized(width: 0.2, height: 0),
-                            CustomButton(
-                              title: '${'Buy HP (-${coinController.upgradeCost}'} coins)',
-                              onTap: () {
-                                coinController.buyHp(userId: userTelegramId.toString(), context: context);
-                              },
-                            ),
-                          ],
-                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.01,
+                        )
                       ],
                     ),
                   ),

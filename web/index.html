@@ -12,8 +12,6 @@
   <meta property="og:url" content="https://t.me/InfoHawkbot/Info_Hawk?startapp">
 
 
-
-
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     window.onload = function() {
@@ -55,9 +53,9 @@
         }
       }
     }
-  </script>
-  <script>
-    // Define a JavaScript function
+
+
+
     function showBackButton() {
       console.log('Telegram Back Button shown');
       if (typeof Telegram !== 'undefined') {
@@ -68,11 +66,14 @@
       }
     }
 
-    // You can define more JS functions here
-    function showAlert(message) {
-      alert(message);
+    function hideAllButtons() {
+      if (typeof Telegram !== 'undefined') {
+        Telegram.WebApp.MainButton.hide();
+        Telegram.WebApp.BackButton.hide();
+      }
     }
   </script>
+
 
   <base href="$FLUTTER_BASE_HREF">
 

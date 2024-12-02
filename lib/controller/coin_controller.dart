@@ -39,7 +39,11 @@ class CoinController extends GetxController {
 
   void initializeTelegramBackButton() {
     // Calling the 'showBackButton' function from JavaScript in the index.html
-    js.context.callMethod('showBackButton', []);
+    js.context.callMethod('showBackButton');
+  }
+  void hideoutallButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('hideAllButtons');
   }
 
   void _showAlert(String message) {

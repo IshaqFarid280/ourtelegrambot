@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
+import 'dart:js' as js;
 import 'dart:math';
 
 import '../const/firebase_const.dart';
@@ -17,6 +18,15 @@ class SpinWheelController extends GetxController {
     super.onClose();
   }
 
+
+  void initializeTelegramBackButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('showBackButton');
+  }
+  void hideoutallButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('hideAllButtons');
+  }
   // Update this function to increment the prize amount
   Future<void> increaseCoinsInGame({required String userId, required BuildContext context}) async {
     try {

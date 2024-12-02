@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
+import 'package:ourtelegrambot/controller/GameController.dart';
 
 import 'line_indicator.dart';
 import 'on_boarding_page.dart';
@@ -15,6 +17,26 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
+  final GameController controller = Get.put(GameController());
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller.initializeTelegramBackButton();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.hideoutallButton();
+  }
+
+  Future<bool> _handleBackNavigation() async {
+    Navigator.pop(context);
+    return false;
+  }
   int _currentIndex = 0;
 
   List<Widget> _buildPages() {
@@ -55,32 +77,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: _onPageChanged,
-              children: _buildPages(),
+    return WillPopScope(
+      onWillPop: _handleBackNavigation,
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                children: _buildPages(),
+              ),
             ),
-          ),
-          Positioned(
-            top: 130.0,
-            left: 0.0,
-            right: 0.0,
-            child: LineIndicator(
-              itemCount: 4,
-              currentIndex: _currentIndex,
+            Positioned(
+              top: 130.0,
+              left: 0.0,
+              right: 0.0,
+              child: LineIndicator(
+                itemCount: 4,
+                currentIndex: _currentIndex,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

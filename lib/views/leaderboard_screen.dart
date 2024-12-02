@@ -16,7 +16,7 @@ class LeaderboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Leaderboard'),
+        title: mediumText(title: 'Leaderboard', fontSize: 14.0),
       ),
       body: StreamBuilder<QuerySnapshot>(
        stream : FirebaseServices.getleaderboarddetails(),

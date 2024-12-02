@@ -16,7 +16,7 @@ class TelegramController extends GetxController {
   void onInit() {
     super.onInit();
 
-        getTelegramData();
+    getTelegramData();
 
 
   }
@@ -107,6 +107,7 @@ class TelegramController extends GetxController {
       var refferid = telegramData?['start_param']?.toString();
       var username = telegramData?['user']?['username'] ?? 'Unknown';
       var userprofileimagen = telegramData?['user']?['photo_url'];
+      print('the url before the null: $userprofileimagen');
       if (userId != null ) {
         userTelegramId = userId ;
         referid = refferid;
@@ -116,20 +117,26 @@ class TelegramController extends GetxController {
         print('the user referid before string: ${referid}');
         print('the user profile image id: ${userprofileiamge}');
         print('user referid after hiting string : ${referid?.toString}');
-        saveUserData(userId: userId, userName: username, referralCodes: referid!);
+        saveUserData(userId: userId, userName: username, referralCodes: refferid!, userImage: userprofileimagen!);
+        // initializeTelegramCloseButton();
       }
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
       userTelegramId = '1111111111111';
-      saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
+      userprofileiamge = 'https://t.me/i/userpic/320/nr3oP4LXdKc_exFSI9w2YWRKMtpSkqxzgxdkv3iHVnduOddQqMeh6QicVakRzOPX.svg';
+      saveUserData(userId: userTelegramId.toString(),
+          userImage: userprofileiamge!,
+          userName: 'Ishaqfarid1',
+          referralCodes: referid.toString());
+      // initializeTelegramCloseButton();
     }
 
   }
   // Function to initialize the Telegram WebApp
   static Map<String, dynamic>? initTelegramWebApp() {
     final result = js.context.callMethod('initTelegramWebApp');
-    debugPrint("result: $result");
+    print("result: $result");
     if (result != null) {
       // Convert JsObject to JSON string and then parse it to a Map
       String jsonString = js.context['JSON'].callMethod('stringify', [result]);
@@ -138,6 +145,12 @@ class TelegramController extends GetxController {
 
     return null;
   }
+
+  // void initializeTelegramCloseButton() {
+  //   // Calling the 'showBackButton' function from JavaScript in the index.html
+  //
+  //   js.context.callMethod('showCloseButton');
+  // }
   // Function to send data back to Telegram
   static void sendTelegramData(String data) {
     js.context.callMethod('sendTelegramData', [data]);
@@ -147,7 +160,7 @@ class TelegramController extends GetxController {
     js.context.callMethod('setMainButton', [text, isVisible]);
   }
   // Method to save initial user data
-  Future<void> saveUserData({required String userId, required String userName,
+  Future<void> saveUserData({required String userId, required String userName, required String userImage,
     required  String  referralCodes}) async {
     print('print th in saveuserdata fucntion: ${referralCodes}');
     DateTime now = DateTime.now();
@@ -172,7 +185,11 @@ class TelegramController extends GetxController {
         'my_avatars': FieldValue.arrayUnion(['assets/10.png']),
         'user_name': userName,
         'user_id': userId,
-        'coins': 5000000,
+        'user_image': userImage,
+
+        'avatar_name': 'Venom',
+        'my_avatars_names':  FieldValue.arrayUnion(['Venom']),
+        'coins': 50000,
         'lastSpinTime': customTimestamp,
         'invited_users': [],
         'tap_per_earn': {
@@ -233,7 +250,7 @@ class TelegramController extends GetxController {
               }
             }
           });
-              } catch (e) {
+        } catch (e) {
           // Catch any errors and show them in a Snackbar
           print('Error during referral process: $e');
         }

@@ -5,6 +5,7 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/firebase_const.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
+import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/widgets/CustomSized.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
@@ -25,12 +26,14 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
   @override
   void initState() {
     super.initState();
+    controller.initializeTelegramBackButton();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
   }
 
   @override
   void dispose() {
     _audioPlayer.dispose(); // Dispose of the audio player
+    controller.hideoutallButton();
     _confettiController.dispose();
     super.dispose();
   }
@@ -59,11 +62,11 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
     return WillPopScope(
       onWillPop: _handleBackNavigation,
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: true,
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   backgroundColor: Colors.transparent,
+        //   automaticallyImplyLeading: true,
+        // ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -8,7 +8,12 @@ class AvatarController extends GetxController {
   var selectedIndex = (-1).obs;
 
   // Method to change the avatar
-  changeAvatar({required String userId, required String avatar, required int index, required int price}) async {
+  changeAvatar({required String userId,
+    required String avatar,
+    required String avatarname,
+    required int index,
+    required int price
+  }) async {
     try {
       isLoading(true);
       selectedIndex.value = index;
@@ -27,6 +32,8 @@ class AvatarController extends GetxController {
           'avatar': avatar,
           'coins': FieldValue.increment(-price),
           'my_avatars': FieldValue.arrayUnion([avatar]),
+          'avatar_name':avatarname,
+          'my_avatars_names':  FieldValue.arrayUnion([avatarname]),
         });
         // Reset loading state
         isLoading(false);
@@ -59,10 +66,11 @@ class AvatarController extends GetxController {
   }
 
 
-  changeAvatarToAlreadyAvaliable({required String userId, required String avatar}) async {
+  changeAvatarToAlreadyAvaliable({required String userId, required String avatar, required String avatarname}) async {
     var userDoc = await fireStore.collection(user).doc(userId).get();
     await fireStore.collection(user).doc(userId).update({
       'avatar': avatar,
+      'avatar_name':avatarname,
     });
 }
 }

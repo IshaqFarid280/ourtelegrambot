@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
+import 'package:ourtelegrambot/controller/coin_controller.dart';
 import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/custom_sizedBox.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
@@ -17,6 +18,20 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   final GameController controller = Get.put(GameController());
 
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller.initializeTelegramBackButton();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.hideoutallButton();
+  }
+
   Future<bool> _handleBackNavigation() async {
     Navigator.pop(context);
     return false;
@@ -28,11 +43,7 @@ class _GameScreenState extends State<GameScreen> {
     return WillPopScope(
       onWillPop: _handleBackNavigation,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
+
         body: FutureBuilder<bool>(
           future: controller.canPlayGame(),
           builder: (context, snapshot) {
@@ -40,7 +51,28 @@ class _GameScreenState extends State<GameScreen> {
               return Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasData && snapshot.data == false) {
-              return Center(child: Text("You can play again in 24 hours!"));
+              return
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    ninjaHpNeed,
+                    width: MediaQuery.of(context).size.width*1,
+                  ),
+                  Sized(
+                    height: 0.03,
+                  ),
+                  mediumText(
+                      title:
+                      "You can now play in 24 hours.",
+                      fontSize: 15.0
+
+                  ),
+                ],
+              );
+
+
+
             }
             return Obx(() {
               return Column(

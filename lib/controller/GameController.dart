@@ -4,20 +4,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ourtelegrambot/const/colors.dart';
 import 'package:ourtelegrambot/const/images_path.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
-
+import 'dart:js' as js;
 import '../const/firebase_const.dart';
 
 class GameController extends GetxController {
 
 
+  void initializeTelegramBackButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('showBackButton');
+  }
+  void hideoutallButton() {
+    // Calling the 'showBackButton' function from JavaScript in the index.html
+    js.context.callMethod('hideAllButtons');
+  }
   RxList<dynamic> pictures = const [
     coin,
     coin,
     coin,
-    Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
-    Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
-    Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
-    Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
+    coin,
+    coin,
+    coin,
+    coin,
+    // Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
+    // Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
+    // Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
+    // Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
     Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
     Icon(Icons.cancel_outlined, size: 50, color: Colors.red),
   ].obs;
@@ -79,6 +91,8 @@ class GameController extends GetxController {
         "Insufficient Coins",
         "You need at least 500 coins to play again.",
         snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: redColor,
+        colorText: whiteColor,
       );
     }
   }
@@ -87,8 +101,8 @@ class GameController extends GetxController {
     Get.dialog(
       AlertDialog(
         backgroundColor: primaryTextColor,
-        title: smallText(title: "Play Again?",fontWeight: FontWeight.w700),
-        content: smallText(title: "Would you like to spend 500 coins to play again?",fontWeight: FontWeight.w400),
+        title: smallText(title: "Play Again?",fontWeight: FontWeight.w700, fontSize: 14.0 ),
+        content: smallText(title: "Would you like to spend 500 coins to play again?",fontWeight: FontWeight.w400, fontSize: 13.0),
         actions: [
           TextButton(
             onPressed: () {
@@ -107,6 +121,8 @@ class GameController extends GetxController {
                   "Insufficient Coins",
                   "You don't have enough coins.",
                   snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: redColor,
+                  colorText: whiteColor,
                 );
               }
             },

@@ -8,7 +8,7 @@ import 'package:ourtelegrambot/widgets/Custom_button.dart';
 import 'package:ourtelegrambot/widgets/text_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class VerificationScreen extends StatelessWidget {
+class VerificationScreen extends StatefulWidget {
   final String title;
   final int coinprice;
   final String url;
@@ -25,9 +25,27 @@ class VerificationScreen extends StatelessWidget {
   });
 
   @override
+  State<VerificationScreen> createState() => _VerificationScreenState();
+}
+
+class _VerificationScreenState extends State<VerificationScreen> {
+
+  final TasksController tasksController = Get.put(TasksController());
+
+  @override
+  void initState() {
+    super.initState();
+    tasksController.initializeTelegramBackButton();
+  }
+
+  @override
+  void dispose() {
+    tasksController.hideoutallButton();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var tasksController = Get.put(TasksController());
-    var controller = Get.put(TelegramController());
     final TextEditingController verificationInputController = TextEditingController();
     ValueNotifier<bool> isCodeCorrect = ValueNotifier<bool>(true);
 
@@ -53,15 +71,15 @@ class VerificationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              title: mediumText(title: title),
+              title: mediumText(title: widget.title),
               trailing: InkWell(
                 onTap: () async {
-                  final Uri taskUrl = Uri.parse(url);
+                  final Uri taskUrl = Uri.parse(widget.url);
                   if (await canLaunchUrl(taskUrl)) {
                     await launchUrl(taskUrl, mode: LaunchMode.externalApplication);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Could not open $url')),
+                      SnackBar(content: Text('Could not open ${widget.url}')),
                     );
                   }
                 },
@@ -127,14 +145,14 @@ class VerificationScreen extends StatelessWidget {
               titleColor: primaryTextColor,
               onTap: () {
                 // Check if the entered code matches the correct code when the button is tapped
-                if (code == verificationInputController.text) {
+                if (widget.code == verificationInputController.text) {
                   isCodeCorrect.value = true; // Correct code, validation passes
                   tasksController.markTasksCompletedwithpopNavigation(
                     collection: academicTasks,
-                    userId: controller.userId.value,
+                    userId: userTelegramId!,
                     context: context,
-                    docId: docid,
-                    coinprice: coinprice,
+                    docId: widget.docid,
+                    coinprice: widget.coinprice,
                   );
                   verificationInputController.clear();
                 } else {

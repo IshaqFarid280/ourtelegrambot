@@ -89,9 +89,15 @@ class UserAttributesScreen extends StatelessWidget {
                               ],
                             ),
                             onTap: () {
-                              OpenBottomSheet.openBottomSheet(title: 'Silent Strike Coins', description: 'Earn coins instantly with each tap, using the stealth and precision of a ninja!', onTap: (){
+                              OpenBottomSheet.openBottomSheet(
+                                  title: 'Silent Strike Coins',
+                                  description: 'Earn coins instantly with each tap, using the stealth and precision of a ninja!',
+                                  onTap: (){
                                 upgradesController.upgradeAttribute(userTelegramId.toString(), 'tap_per_earn',context);
-                              }, imagePath: coinPerTap, context: context,price: userData['tap_per_earn']['costs'][userData['tap_per_earn']['level']].toString());
+                              },
+                                  imagePath: coinPerTap,
+                                  context: context,
+                                  price: userData['tap_per_earn']['costs'][userData['tap_per_earn']['level']].toString());
                             },
                           ),
                           const Divider(),

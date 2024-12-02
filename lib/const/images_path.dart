@@ -19,6 +19,7 @@ const String ninjaAvatar = 'assets/judo.png';
 const String ninjaUpgrades = 'assets/blades.png';
 const String ninjaFiends = 'assets/katana.png';
 const String ninjaGames = 'assets/earn.png';
+const String tasksGames = 'assets/list.png';
 
 // avatar
 const String oneAvatar = 'assets/1.png';
@@ -79,7 +80,7 @@ var fillIcons = [
   ninjaHome,
   ninjaGames,
   ninjaUpgrades,
-  ninjaFiends,
+  tasksGames,
   ninjaAvatar,
 ];
 
@@ -151,3 +152,33 @@ var avatarPrice = [
   26000,
   27000,
 ];
+var avatarNames = [
+  "Blade",
+  "Fang",
+  "Viper",
+  "Ghost",
+  "Shadow",
+  "Claw",
+  "Rogue",
+  "Wrath",
+  "Steel",
+  "Venom",
+  "Ash",
+  "Eclipse",
+  "Strike",
+  "Wraith",
+  "Hawk",
+  "Storm",
+  "Reaper",
+  "Lotus",
+  "Dagger",
+  "Night",
+  "Frost",
+  "Flare",
+  "Shuriken",
+  "Phantom",
+  "Smoke",
+  "Edge",
+  "Rift",
+];
+
