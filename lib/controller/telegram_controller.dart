@@ -16,7 +16,7 @@ class TelegramController extends GetxController {
   void onInit() {
     super.onInit();
 
-    getTelegramData();
+        getTelegramData();
 
 
   }
@@ -107,7 +107,6 @@ class TelegramController extends GetxController {
       var refferid = telegramData?['start_param']?.toString();
       var username = telegramData?['user']?['username'] ?? 'Unknown';
       var userprofileimagen = telegramData?['user']?['photo_url'];
-      print('the url before the null: $userprofileimagen');
       if (userId != null ) {
         userTelegramId = userId ;
         referid = refferid;
@@ -117,26 +116,20 @@ class TelegramController extends GetxController {
         print('the user referid before string: ${referid}');
         print('the user profile image id: ${userprofileiamge}');
         print('user referid after hiting string : ${referid?.toString}');
-        saveUserData(userId: userId, userName: username, referralCodes: refferid!, userImage: userprofileimagen!);
-        // initializeTelegramCloseButton();
+        saveUserData(userId: userId, userName: username, referralCodes: referid!);
       }
       // userId = userId ;
     } else {
       print('Before else hiting: ${referid?.toString}');
       userTelegramId = '1111111111111';
-      userprofileiamge = 'https://t.me/i/userpic/320/nr3oP4LXdKc_exFSI9w2YWRKMtpSkqxzgxdkv3iHVnduOddQqMeh6QicVakRzOPX.svg';
-      saveUserData(userId: userTelegramId.toString(),
-          userImage: userprofileiamge!,
-          userName: 'Ishaqfarid1',
-          referralCodes: referid.toString());
-      // initializeTelegramCloseButton();
+      saveUserData(userId: userTelegramId.toString(), userName: 'Ishaqfarid1', referralCodes: referid.toString());
     }
 
   }
   // Function to initialize the Telegram WebApp
   static Map<String, dynamic>? initTelegramWebApp() {
     final result = js.context.callMethod('initTelegramWebApp');
-    print("result: $result");
+    debugPrint("result: $result");
     if (result != null) {
       // Convert JsObject to JSON string and then parse it to a Map
       String jsonString = js.context['JSON'].callMethod('stringify', [result]);
@@ -145,12 +138,6 @@ class TelegramController extends GetxController {
 
     return null;
   }
-
-  // void initializeTelegramCloseButton() {
-  //   // Calling the 'showBackButton' function from JavaScript in the index.html
-  //
-  //   js.context.callMethod('showCloseButton');
-  // }
   // Function to send data back to Telegram
   static void sendTelegramData(String data) {
     js.context.callMethod('sendTelegramData', [data]);
@@ -160,7 +147,7 @@ class TelegramController extends GetxController {
     js.context.callMethod('setMainButton', [text, isVisible]);
   }
   // Method to save initial user data
-  Future<void> saveUserData({required String userId, required String userName, required String userImage,
+  Future<void> saveUserData({required String userId, required String userName,
     required  String  referralCodes}) async {
     print('print th in saveuserdata fucntion: ${referralCodes}');
     DateTime now = DateTime.now();
@@ -181,51 +168,48 @@ class TelegramController extends GetxController {
       await data.set({
         'lastPlayed':customTimestamp,
         'is_online':false,
+        'last_Online':FieldValue.serverTimestamp(),
         'avatar': 'assets/10.png',
         'my_avatars': FieldValue.arrayUnion(['assets/10.png']),
         'user_name': userName,
         'user_id': userId,
-        'user_image': userImage,
-
-        'avatar_name': 'Venom',
-        'my_avatars_names':  FieldValue.arrayUnion(['Venom']),
-        'coins': 50000,
+        'coins': 10000,
         'lastSpinTime': customTimestamp,
         'invited_users': [],
         'tap_per_earn': {
-          'level': 1,
+          'level': 0,
           'value': 1,
           'costs': [
-            0, 1000, 3000, 6000, 12000, 24000, 48000, 96000, 150000, 180000,
+            1000, 3000, 6000, 12000, 24000, 48000, 96000, 150000, 180000,
             190000, 195000, 198000, 199000, 200000, 200000, 200000, 200000,
             200000, 200000, 200000
           ]
         },
         'hp': {
-          'level': 1,
+          'level': 0,
           'value': 1,
           'total_hp': 0,
           'costs': [
-            0, 1000, 5000, 10000, 20000, 40000, 80000, 120000, 180000, 220000,
+            1000, 5000, 10000, 20000, 40000, 80000, 120000, 180000, 220000,
             230000, 240000, 245000, 250000, 250000, 250000, 250000, 250000,
             250000, 250000, 250000
           ]
         },
         'coin_per_second': {
-          'level': 1,
+          'level': 0,
           'value': 1,
           'costs': [
-            0, 1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
+            1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
             240000, 250000, 270000, 290000, 295000, 300000, 300000, 300000,
             300000, 300000, 300000
           ]
         },
         "energies": {
-          "level": 1,
+          "level": 0,
           "value": 500,
           "max_energies": 500,
           "costs": [
-            0, 1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
+            1000, 5000, 10000, 20000, 40000, 80000, 120000, 160000, 220000,
             240000, 250000, 270000, 290000, 295000, 300000, 300000, 300000,
             300000, 300000, 300000
           ],
@@ -250,7 +234,7 @@ class TelegramController extends GetxController {
               }
             }
           });
-        } catch (e) {
+              } catch (e) {
           // Catch any errors and show them in a Snackbar
           print('Error during referral process: $e');
         }

@@ -79,7 +79,7 @@ class HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       LeaderboardScreen(userid: userTelegramId.toString(),),
       UserAttributesScreen(),
       TaskListScreen(),
-      AvatarScreen()
+      AvatarScreen(),
     ];
   }
 

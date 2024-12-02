@@ -36,6 +36,7 @@ class _HomeTabState extends State<HomeTab>  with  WidgetsBindingObserver {
   super.initState();
   WidgetsFlutterBinding.ensureInitialized();
   WidgetsBinding.instance.addObserver(this);
+  coinController.regenerateEnergy(userTelegramId.toString());
   }
 
   @override
